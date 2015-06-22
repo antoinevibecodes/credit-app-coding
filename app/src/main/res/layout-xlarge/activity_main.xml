@@ -1,0 +1,56 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/toolbar"/>
+
+    <LinearLayout
+        android:layout_weight="0.8"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical">
+        <FrameLayout
+            android:id="@+id/layoutContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                layout="@layout/driver_data_structure"/>
+
+            <include
+                android:id="@+id/progressbar"
+                layout="@layout/progressbar"
+                />
+            </FrameLayout>
+
+        </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_margin="@dimen/activity_margin"
+        android:layout_weight="0.2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/cameraBtn"
+            android:elevation="@dimen/button_rest_elevation"
+            android:layout_gravity="center|bottom"
+            android:layout_width="95dp"
+            android:layout_height="95dp"
+            android:text="@string/changePicture"
+            android:background="@drawable/button_style"
+            android:src="@drawable/camera32px"/>
+
+        </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">TTModificationApp</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+
+    <color name="primary">#ffc000</color>
+    <color name="secondary">#000000</color>
+    <color name="primary_dark">#000000</color>
+    <color name="accent">#9c27b0</color>
+    <color name="tabsScrollColor">#000000</color>
+    <color name="text_icons">#000000</color>
+
+
+    <string name="changePicture">New Picture</string>
+
+
+    <string name="driverIdText">0123456789</string>
+    <string name="firstNameText">Ivan</string>
+    <string name="lastNameText">Mba</string>
+    <string name="dobText">08/20/1992</string>
+</resources>
