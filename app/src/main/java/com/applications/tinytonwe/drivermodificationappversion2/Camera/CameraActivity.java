@@ -24,7 +24,6 @@ import com.applications.tinytonwe.drivermodificationappversion2.Validation.Valid
 public class CameraActivity extends AppCompatActivity implements PictureTakenNotification{
 
     private CameraModule cameraModule;
-    private ProgressBar progressBar;
 
     private FrameLayout cameraFrame;
 
@@ -42,7 +41,6 @@ public class CameraActivity extends AppCompatActivity implements PictureTakenNot
 
 
     private void registerListeners(){
-        progressBar = (ProgressBar)findViewById(R.id.progressbar);
 
         cameraFrame = (FrameLayout)findViewById(R.id.cameraFrame);
 

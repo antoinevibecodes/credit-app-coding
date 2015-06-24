@@ -7,5 +7,6 @@ public enum AppActions {
     CAMERA,
     CANCEL,
     FLIP_CAMERA,
-    TAKE_PICTURE;
+    TAKE_PICTURE,
+    SEND_PICTURE_TO_SERVER;
 }
