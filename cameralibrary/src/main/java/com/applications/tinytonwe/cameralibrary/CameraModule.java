@@ -42,12 +42,15 @@ public class CameraModule{
     private Bitmap originalImage;
     private Bitmap croppedImage;
 
+    private PictureTakenNotification pictureTakenNotification;
 
-    public CameraModule(Activity callingActivity, FrameLayout cameraView, boolean useCrop){
+
+    public CameraModule(Activity callingActivity, FrameLayout cameraView, boolean useCrop, PictureTakenNotification pictureTakenNotification){
         this.callingActivity = callingActivity;
         currentCamera = CurrentCamera.FRONT;
         this.cameraView = cameraView;
         this.useCrop = useCrop;
+        this.pictureTakenNotification = pictureTakenNotification;
     }
 
     public void setCropDimensions(float portraitCropPercentage, float landscapeCropPercentage){
@@ -250,6 +253,8 @@ public class CameraModule{
             cameraData.setOriginalBitmap(originalImage);
             if (this.useCrop)
                 cameraData.setCroppedBitmap(croppedImage);
+
+            pictureTakenNotification.pictureTaken();
         }
         catch (Exception e){
             e.printStackTrace();

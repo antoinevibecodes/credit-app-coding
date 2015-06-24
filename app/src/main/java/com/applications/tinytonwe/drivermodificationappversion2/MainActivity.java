@@ -46,20 +46,18 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         setContentView(R.layout.activity_main);
 
         server = new TestServer(this);
-
         registerListeners();
-        toolbar.setTitle("App Hub");
-        setSupportActionBar(toolbar);
-
-
-
 
     }
 
 
     private void registerListeners(){
-        progressBar = (ProgressBar)findViewById(R.id.progressbar);
+
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
+        toolbar.setTitle("App Hub");
+
+        progressBar = (ProgressBar)findViewById(R.id.progressbar);
+        setSupportActionBar(toolbar);
         driverData = (CardView)findViewById(R.id.cardDataTemplate);
         driverId = (TextView)findViewById(R.id.driverIdValue);
         firstName = (TextView)findViewById(R.id.firstNameValue);
@@ -82,12 +80,12 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
         switch (appActions){
             case CAMERA:
-                startCamearaActivity();
+                startCameraActivity();
                 break;
         }
     }
 
-    private void startCamearaActivity(){
+    private void startCameraActivity(){
         Intent cameraIntent = new Intent(this, CameraActivity.class);
         startActivity(cameraIntent);
     }

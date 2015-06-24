@@ -1,0 +1,124 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.applications.tinytonwe.drivermodificationappversion2.Validation.ValidationActivity">
+
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/toolbar"/>
+
+
+    <LinearLayout
+        android:layout_weight="0.7"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical">
+        <FrameLayout
+            android:id="@+id/layoutContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                layout="@layout/picture_card"/>
+
+            <include
+                android:id="@+id/progressbar"
+                layout="@layout/progressbar"
+                />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_margin="@dimen/activity_margin"
+        android:layout_weight="0.3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+
+        <LinearLayout
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:text="Cancel"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageButton
+                android:id="@+id/cancelBtn"
+                android:elevation="@dimen/button_rest_elevation"
+                android:layout_gravity="center"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:text="@string/changePicture"
+                android:background="@drawable/image_button_style"
+                android:src="@drawable/cancel"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:text="Camera"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageButton
+                android:id="@+id/retakeBtn"
+                android:elevation="@dimen/button_rest_elevation"
+                android:layout_gravity="center"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:text="@string/changePicture"
+                android:background="@drawable/image_button_style"
+                android:src="@drawable/camera64px"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:text="Send"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageButton
+                android:id="@+id/sendBtn"
+                android:elevation="@dimen/button_rest_elevation"
+                android:layout_gravity="center"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:text="@string/changePicture"
+                android:background="@drawable/image_button_style"
+                android:src="@drawable/send"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

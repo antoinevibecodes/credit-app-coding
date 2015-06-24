@@ -5,6 +5,11 @@
     android:layout_height="match_parent"
     tools:context="com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraActivity">
 
+    <include
+        android:id="@+id/progressbar"
+        layout="@layout/progressbar"
+        />
+
 <FrameLayout
     android:id="@+id/cameraFrame"
     android:layout_width="match_parent"

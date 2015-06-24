@@ -21,7 +21,7 @@
             android:layout_height="match_parent">
 
             <include
-                layout="@layout/driver_data_structure"/>
+                layout="@layout/driver_data_card"/>
 
             <include
                 android:id="@+id/progressbar"

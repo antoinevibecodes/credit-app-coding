@@ -6,6 +6,7 @@
 
 
     <color name="primary">#ffc000</color>
+    <color name="validation">#00b159</color>
     <color name="secondary">#000000</color>
     <color name="primary_dark">#000000</color>
     <color name="accent">#9c27b0</color>
@@ -21,4 +22,5 @@
     <string name="lastNameText">Mba</string>
     <string name="dobText">08/20/1992</string>
     <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_validation">ValidationActivity</string>
 </resources>

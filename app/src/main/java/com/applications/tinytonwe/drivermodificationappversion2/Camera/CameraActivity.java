@@ -1,6 +1,7 @@
 package com.applications.tinytonwe.drivermodificationappversion2.Camera;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,15 +10,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import com.applications.tinytonwe.cameralibrary.CameraModule;
+import com.applications.tinytonwe.cameralibrary.PictureTakenNotification;
+import com.applications.tinytonwe.cameralibrary.SingletonCameraData;
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
+import com.applications.tinytonwe.drivermodificationappversion2.AppData.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.MainActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
+import com.applications.tinytonwe.drivermodificationappversion2.Validation.ValidationActivity;
 
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends AppCompatActivity implements PictureTakenNotification{
 
     private CameraModule cameraModule;
+    private ProgressBar progressBar;
 
     private FrameLayout cameraFrame;
 
@@ -35,6 +42,8 @@ public class CameraActivity extends AppCompatActivity {
 
 
     private void registerListeners(){
+        progressBar = (ProgressBar)findViewById(R.id.progressbar);
+
         cameraFrame = (FrameLayout)findViewById(R.id.cameraFrame);
 
         cancelBtn = (ImageButton)findViewById(R.id.cancelBtn);
@@ -67,7 +76,7 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     private void startCamera(){
-        cameraModule = new CameraModule(this,cameraFrame,true);
+        cameraModule = new CameraModule(this,cameraFrame,true,this);
         cameraModule.startCameraPreview();
     }
 
@@ -96,7 +105,25 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     private void takePicture(){
-        cameraModule.takePicture();
+            cameraModule.takePicture();
     }
 
+    private void retrieveImages(){
+        AppData appData = AppData.getAppDataInstance();
+        SingletonCameraData singletonCameraData = SingletonCameraData.getUniqueInstance();
+
+        appData.setCroppedImage(singletonCameraData.getCroppedBitmap());
+        appData.setOriginalImage(singletonCameraData.getOriginalBitmap());
+    }
+
+    private void startValidationActivity(){
+        Intent validation = new Intent(this, ValidationActivity.class);
+        startActivity(validation);
+    }
+
+
+   public void pictureTaken(){
+       retrieveImages();
+       startValidationActivity();
+   }
 }

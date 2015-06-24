@@ -38,6 +38,10 @@
             android:name=".Camera.CameraActivity"
             android:label="@string/title_activity_camera" >
         </activity>
+        <activity
+            android:name=".Validation.ValidationActivity"
+            android:label="@string/title_activity_validation" >
+        </activity>
     </application>
 
 </manifest>
