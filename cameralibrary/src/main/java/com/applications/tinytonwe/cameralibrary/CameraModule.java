@@ -1,16 +1,12 @@
 package com.applications.tinytonwe.cameralibrary;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
-import android.net.Uri;
 import android.view.Surface;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 /**
  * Created by admin on 6/23/2015.
@@ -183,8 +179,8 @@ public class CameraModule{
                 //do something
                pictureTaken = new PictureTaken(data,cameraInUse,cameraOrientation.getValue());
                cameraData.setPictureTaken(pictureTaken);
-               processImage();
-               resetCamera();
+               storeImage();
+               camera.startPreview();
             }
         };
         return newPictureCallback;
@@ -243,7 +239,7 @@ public class CameraModule{
     }
 
 
-    public void processImage(){
+    public void storeImage(){
 
         try {
             PictureTaken currentPicture = cameraData.getPictureTaken();
