@@ -20,4 +20,5 @@
     <string name="firstNameText">Ivan</string>
     <string name="lastNameText">Mba</string>
     <string name="dobText">08/20/1992</string>
+    <string name="title_activity_camera">CameraActivity</string>
 </resources>

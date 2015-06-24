@@ -1,0 +1,49 @@
+<FrameLayout
+    android:id="@+id/cameraFrame"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:paddingBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true"
+            android:gravity="center">
+
+            <ImageButton
+                android:layout_margin="5dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/imagebutton"
+                android:src="@drawable/cancel64px"/>
+
+            <ImageButton
+                android:layout_margin="5dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/imagebutton"
+                android:src="@drawable/switch64px"/>
+
+            <ImageButton
+                android:layout_margin="5dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:background="@drawable/imagebutton"
+                android:src="@drawable/shutter64px"
+                />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+</FrameLayout>

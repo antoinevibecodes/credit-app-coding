@@ -49,7 +49,7 @@
             android:layout_height="95dp"
             android:text="@string/changePicture"
             android:background="@drawable/button_style"
-            android:src="@drawable/camera32px"/>
+            android:src="@drawable/camera64px"/>
 
         </LinearLayout>
 

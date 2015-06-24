@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TaskListener;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TestServer;
@@ -46,13 +47,20 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
         server = new TestServer(this);
 
-        progressBar = (ProgressBar)findViewById(R.id.progressbar);
-        toolbar = (Toolbar)findViewById(R.id.tool_bar);
+        registerListeners();
         toolbar.setTitle("App Hub");
         setSupportActionBar(toolbar);
 
-        driverData = (CardView)findViewById(R.id.cardDataTemplate);
 
+
+
+    }
+
+
+    private void registerListeners(){
+        progressBar = (ProgressBar)findViewById(R.id.progressbar);
+        toolbar = (Toolbar)findViewById(R.id.tool_bar);
+        driverData = (CardView)findViewById(R.id.cardDataTemplate);
         driverId = (TextView)findViewById(R.id.driverIdValue);
         firstName = (TextView)findViewById(R.id.firstNameValue);
         lastName = (TextView)findViewById(R.id.lastNameValue);
@@ -60,11 +68,29 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         cameraBtn = (ImageButton)findViewById(R.id.cameraBtn);
 
 
+        cameraBtn.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppActions appActions = AppActions.CAMERA;
+                buttonHandler(appActions);
+            }
+        });
     }
 
 
+    public void buttonHandler(AppActions appActions){
 
+        switch (appActions){
+            case CAMERA:
+                startCamearaActivity();
+                break;
+        }
+    }
 
+    private void startCamearaActivity(){
+        Intent cameraIntent = new Intent(this, CameraActivity.class);
+        startActivity(cameraIntent);
+    }
     public void onResume() {
 
         super.onResume();
