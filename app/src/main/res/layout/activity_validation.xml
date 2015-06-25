@@ -11,24 +11,48 @@
         layout="@layout/toolbar"/>
 
 
-    <LinearLayout
-        android:layout_weight="0.7"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical">
-        <include
-            layout="@layout/picture_card"/>
+        android:layout_height="match_parent">
 
         <include
             android:id="@+id/progressbar"
             layout="@layout/progressbar"
             />
 
+    <LinearLayout
+        android:id="@+id/layoutContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+        android:layout_weight="0.7"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical">
+        <FrameLayout
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <include
+            layout="@layout/picture_card"/>
+
+
+
+        <include
+            android:id="@+id/successCard"
+            layout="@layout/success_card"/>
+
+        <include
+            android:id="@+id/errorCard"
+            layout="@layout/error_card"/>
+        </FrameLayout>
     </LinearLayout>
 
 
 
-    <LinearLayout
+        <LinearLayout
         android:layout_margin="@dimen/activity_margin"
         android:layout_weight="0.3"
         android:layout_width="match_parent"
@@ -114,4 +138,7 @@
 
     </LinearLayout>
 
+    </LinearLayout>
+
+    </FrameLayout>
 </LinearLayout>

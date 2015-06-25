@@ -1,22 +1,17 @@
 package com.applications.tinytonwe.drivermodificationappversion2.Camera;
 
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 
 import com.applications.tinytonwe.cameralibrary.CameraModule;
 import com.applications.tinytonwe.cameralibrary.PictureTakenNotification;
 import com.applications.tinytonwe.cameralibrary.SingletonCameraData;
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
-import com.applications.tinytonwe.drivermodificationappversion2.AppData.AppData;
+import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.MainActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.Validation.ValidationActivity;

@@ -6,7 +6,8 @@
 
 
     <color name="primary">#ffc000</color>
-    <color name="validation">#00b159</color>
+    <color name="valid">#00b159</color>
+    <color name="invalid">#BF1E4B</color>
     <color name="secondary">#000000</color>
     <color name="primary_dark">#000000</color>
     <color name="accent">#9c27b0</color>

@@ -1,4 +1,4 @@
-package com.applications.tinytonwe.drivermodificationappversion2.AppData;
+package com.applications.tinytonwe.drivermodificationappversion2;
 
 import android.graphics.Bitmap;
 
@@ -12,6 +12,8 @@ public class AppData {
 
     private Bitmap croppedImage = null;
     private Bitmap originalImage = null;
+    private long cardIdReadLongValue = 0;
+    private String cardIdReadStringValue = "";
 
     public static AppData getAppDataInstance(){
         if(appDataInstance == null){
@@ -34,5 +36,21 @@ public class AppData {
 
     public Bitmap getOriginalImage(){
         return originalImage;
+    }
+
+    public void setCardIdReadLongValue(long cardIdReadLongValue){
+        this.cardIdReadLongValue = cardIdReadLongValue;
+    }
+
+    public void setCardIdReadStringValue(String cardIdReadStringValue){
+        this.cardIdReadStringValue = cardIdReadStringValue;
+    }
+
+    public long getCardIdReadLongValue(){
+        return this.cardIdReadLongValue;
+    }
+
+    public String getCardIdReadStringValue(){
+        return this.cardIdReadStringValue;
     }
 }

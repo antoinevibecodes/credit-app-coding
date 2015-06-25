@@ -1,26 +1,28 @@
 package com.applications.tinytonwe.drivermodificationappversion2.Validation;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.applications.tinytonwe.cameralibrary.SingletonCameraData;
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
-import com.applications.tinytonwe.drivermodificationappversion2.AppData.AppData;
+import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.MainActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TaskListener;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TestServer;
 
-public class ValidationActivity extends ActionBarActivity {
+public class ValidationActivity extends AppCompatActivity implements TaskListener {
 
     private Toolbar toolbar;
     private ProgressBar progressBar;
@@ -30,6 +32,15 @@ public class ValidationActivity extends ActionBarActivity {
     private ImageButton sendBtn;
 
     private ImageView pictureTaken;
+
+    private TestServer server;
+
+
+    private CardView successCard;
+    private CardView errorCard;
+    private CardView pictureCard;
+
+    private LinearLayout contentLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,11 +54,17 @@ public class ValidationActivity extends ActionBarActivity {
     private void registerListeners(){
         progressBar = (ProgressBar)findViewById(R.id.progressbar);
 
+        contentLayout = (LinearLayout)findViewById(R.id.layoutContent);
+
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
         toolbar.setTitle("Validation Process");
 
         pictureTaken = (ImageView)findViewById(R.id.pictureTaken);
+        pictureCard = (CardView)findViewById(R.id.cardPictureTemplate);
+
+        successCard = (CardView)findViewById(R.id.successCard);
+        errorCard = (CardView)findViewById(R.id.errorCard);
 
         cancelBtn = (ImageButton)findViewById(R.id.cancelBtn);
         retakeBtn = (ImageButton)findViewById(R.id.retakeBtn);
@@ -112,6 +129,32 @@ public class ValidationActivity extends ActionBarActivity {
 
     private void sendDataToServer(){
 
+
+        startServerRequest();
+        server.start();
+    }
+
+
+    @Override
+    public void onTaskFinished(Response response){
+
+        progressBar.setVisibility(View.GONE);
+
+        if(response.serverMessage.equalsIgnoreCase("success"))
+            successCard.setVisibility(View.VISIBLE);
+        else
+            errorCard.setVisibility(View.VISIBLE);
+
+        contentLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void startServerRequest(){
+        pictureCard.setVisibility(View.GONE);
+        successCard.setVisibility(View.GONE);
+        errorCard.setVisibility(View.GONE);
+        contentLayout.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        server = new TestServer(this,2);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

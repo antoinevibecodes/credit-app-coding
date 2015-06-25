@@ -10,4 +10,6 @@ public class Response {
     public String lastName;
     public String dateOfBirth;
     public boolean hasPicture;
+    public String serverMessage;
+    public int responseType;
 }

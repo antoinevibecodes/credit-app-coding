@@ -7,11 +7,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -40,18 +39,29 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     private TextView dobValue;
     private ImageButton cameraBtn;
 
+    private CardView promptCard;
+    private LinearLayout layoutContent;
+
+    private AppData appData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        server = new TestServer(this);
+        initializeVariables();
         registerListeners();
 
     }
 
+    private void initializeVariables(){
+        appData = AppData.getAppDataInstance();
+    }
 
     private void registerListeners(){
+
+        promptCard = (CardView)findViewById(R.id.promptCard);
+        layoutContent = (LinearLayout)findViewById(R.id.layoutContent);
 
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
         toolbar.setTitle("App Hub");
@@ -118,7 +128,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
                 prevCardReadByNFC =cardReadByNFC;
 
                 long driverId = convertIdToLong(cardReadByNFC);
-                server.setDriverRfId(driverId);
+                appData.setCardIdReadStringValue(cardReadByNFC);
+                appData.setCardIdReadLongValue(driverId);
                 startServerQuery();
 
             }
@@ -135,36 +146,37 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
     public void startServerQuery(){
         requestStarted();
-        server.start();
+        startRequest();
     }
 
     private void requestStarted(){
-        disableAllViews(true);
+        disableContentAndPromptViews();
         showWaitDialog(true);
     }
 
+    private void startRequest(){
+        server = new TestServer(this,1);
+        server.start();
+    }
     private void requestEnded(){
-        disableAllViews(false);
+        enableContentView();
         showWaitDialog(false);
     }
-    private void disableAllViews(boolean value){
-        if(value){
-            driverData.setVisibility(View.INVISIBLE);
-            cameraBtn.setVisibility(View.INVISIBLE);
-            cameraBtn.setEnabled(false);
-        }
-        else{
-            driverData.setVisibility(View.VISIBLE);
-            cameraBtn.setVisibility(View.VISIBLE);
-            cameraBtn.setEnabled(true);
-        }
+
+    private void disableContentAndPromptViews(){
+           layoutContent.setVisibility(View.GONE);
+            promptCard.setVisibility(View.GONE);
+    }
+
+    private void enableContentView(){
+        layoutContent.setVisibility(View.VISIBLE);
     }
 
     private void showWaitDialog(boolean value){
         if(value)
             progressBar.setVisibility(View.VISIBLE);
         else
-            progressBar.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.GONE);
     }
     @Override
     public void onTaskFinished(Response response){
@@ -183,27 +195,5 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         dobValue.setText(dob);
 
         requestEnded();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
