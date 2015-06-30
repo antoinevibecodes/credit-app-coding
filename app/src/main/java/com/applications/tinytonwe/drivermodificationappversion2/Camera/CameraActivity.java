@@ -1,30 +1,37 @@
 package com.applications.tinytonwe.drivermodificationappversion2.Camera;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
-import com.applications.tinytonwe.cameralibrary.CameraModule;
-import com.applications.tinytonwe.cameralibrary.PictureTakenNotification;
-import com.applications.tinytonwe.cameralibrary.SingletonCameraData;
+import com.applications.tinytonwe.cameralibrary.CameraPicture.CapturedPicture;
+import com.applications.tinytonwe.cameralibrary.CameraPreview.CameraPreview;
+import com.applications.tinytonwe.cameralibrary.CameraSettings.CameraSelected;
+import com.applications.tinytonwe.cameralibrary.CameraSettings.CameraSettings;
+import com.applications.tinytonwe.cameralibrary.CapturedPictureCallback;
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.MainActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.Validation.ValidationActivity;
 
-public class CameraActivity extends AppCompatActivity implements PictureTakenNotification{
+public class CameraActivity extends AppCompatActivity implements CapturedPictureCallback{
 
-    private CameraModule cameraModule;
+    private FrameLayout cameraView;
 
-    private FrameLayout cameraFrame;
+    private CapturedPicture capturedPicture_;
+    private CameraSettings cameraSettings_;
+    private CameraPreview cameraPreview_;
 
     private ImageButton cancelBtn;
     private ImageButton switchBtn;
     private ImageButton shutterBtn;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +44,14 @@ public class CameraActivity extends AppCompatActivity implements PictureTakenNot
 
     private void registerListeners(){
 
-        cameraFrame = (FrameLayout)findViewById(R.id.cameraFrame);
+        cameraView = (FrameLayout)findViewById(R.id.cameraFrame);
+
+        cameraSettings_ = new CameraSettings(this, CameraSelected.FRONT);
+        cameraSettings_.useOptimalPreviewSettings();
+
+        cameraPreview_ = new CameraPreview(this, cameraSettings_, cameraView);
+
+        capturedPicture_ = new CapturedPicture(cameraSettings_);
 
         cancelBtn = (ImageButton)findViewById(R.id.cancelBtn);
         switchBtn = (ImageButton)findViewById(R.id.switchBtn);
@@ -69,8 +83,7 @@ public class CameraActivity extends AppCompatActivity implements PictureTakenNot
     }
 
     private void startCamera(){
-        cameraModule = new CameraModule(this,cameraFrame,true,this);
-        cameraModule.startCameraPreview();
+        cameraPreview_.startPreview();
     }
 
     private void buttonHandler(AppActions appActions){
@@ -94,20 +107,13 @@ public class CameraActivity extends AppCompatActivity implements PictureTakenNot
     }
 
     private void flipCamera(){
-        cameraModule.flipCamera();
+        cameraPreview_.flipCamera();
     }
 
     private void takePicture(){
-            cameraModule.takePicture();
+            capturedPicture_.takePicture();
     }
 
-    private void retrieveImages(){
-        AppData appData = AppData.getAppDataInstance();
-        SingletonCameraData singletonCameraData = SingletonCameraData.getUniqueInstance();
-
-        appData.setCroppedImage(singletonCameraData.getCroppedBitmap());
-        appData.setOriginalImage(singletonCameraData.getOriginalBitmap());
-    }
 
     private void startValidationActivity(){
         Intent validation = new Intent(this, ValidationActivity.class);
@@ -115,8 +121,11 @@ public class CameraActivity extends AppCompatActivity implements PictureTakenNot
     }
 
 
-   public void pictureTaken(){
-       retrieveImages();
-       startValidationActivity();
-   }
+    public void pictureTaken(Bitmap originalImage, Bitmap croppedImage){
+
+        AppData appData = AppData.getAppDataInstance();
+
+        appData.setCroppedImage(croppedImage);
+        appData.setOriginalImage(originalImage);
+    }
 }
