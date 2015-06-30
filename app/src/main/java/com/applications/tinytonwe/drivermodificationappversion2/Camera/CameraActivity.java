@@ -124,8 +124,9 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
     public void pictureTaken(Bitmap originalImage, Bitmap croppedImage){
 
         AppData appData = AppData.getAppDataInstance();
-
         appData.setCroppedImage(croppedImage);
         appData.setOriginalImage(originalImage);
+
+        startValidationActivity();
     }
 }

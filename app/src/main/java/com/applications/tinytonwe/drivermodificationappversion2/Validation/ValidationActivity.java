@@ -98,7 +98,7 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
 
     private void displayPictureTaken(){
         AppData appData = AppData.getAppDataInstance();
-        pictureTaken.setImageBitmap(appData.getCroppedImage());
+        pictureTaken.setImageBitmap(appData.getOriginalImage());
     }
 
 
