@@ -2,55 +2,74 @@ package com.applications.tinytonwe.drivermodificationappversion2;
 
 import android.graphics.Bitmap;
 
+import java.io.ByteArrayOutputStream;
+
 
 /**
  * Created by admin on 6/24/2015.
  */
 public class AppData {
 
-    public static AppData appDataInstance;
+    public static AppData appDataInstance_;
 
-    private Bitmap croppedImage = null;
-    private Bitmap originalImage = null;
-    private long cardIdReadLongValue = 0;
-    private String cardIdReadStringValue = "";
+    private Bitmap croppedImage_ = null;
+    private Bitmap originalImage_ = null;
+    private long cardIdReadLongValue_ = 0;
+    private String cardIdReadStringValue_ = "";
 
-    public static AppData getAppDataInstance(){
-        if(appDataInstance == null){
-            appDataInstance = new AppData();
+    private long driverId_ = 0;
+
+    public static AppData getAppDataInstance_(){
+        if(appDataInstance_ == null){
+            appDataInstance_ = new AppData();
         }
-        return appDataInstance;
+        return appDataInstance_;
     }
 
-    public void setCroppedImage(Bitmap croppedImage){
-        this.croppedImage = croppedImage;
+    public void setDriverId(long driverId){
+        driverId_ = driverId;
     }
 
-    public void setOriginalImage(Bitmap originalImage){
-        this.originalImage = originalImage;
+    public long getDriverId_(){
+        return driverId_;
+    }
+    public void setCroppedImage_(Bitmap croppedImage_){
+        this.croppedImage_ = croppedImage_;
     }
 
-    public Bitmap getCroppedImage(){
-        return croppedImage;
+    public void setOriginalImage_(Bitmap originalImage_){
+        this.originalImage_ = originalImage_;
     }
 
-    public Bitmap getOriginalImage(){
-        return originalImage;
+    public Bitmap getCroppedImage_(){
+        return croppedImage_;
     }
 
-    public void setCardIdReadLongValue(long cardIdReadLongValue){
-        this.cardIdReadLongValue = cardIdReadLongValue;
+    public Bitmap getOriginalImage_(){
+        return originalImage_;
     }
 
-    public void setCardIdReadStringValue(String cardIdReadStringValue){
-        this.cardIdReadStringValue = cardIdReadStringValue;
+    public void setCardIdReadLongValue_(long cardIdReadLongValue_){
+        this.cardIdReadLongValue_ = cardIdReadLongValue_;
     }
 
-    public long getCardIdReadLongValue(){
-        return this.cardIdReadLongValue;
+    public void setCardIdReadStringValue_(String cardIdReadStringValue_){
+        this.cardIdReadStringValue_ = cardIdReadStringValue_;
     }
 
-    public String getCardIdReadStringValue(){
-        return this.cardIdReadStringValue;
+    public long getCardIdReadLongValue_(){
+        return this.cardIdReadLongValue_;
+    }
+
+    public String getCardIdReadStringValue_(){
+        return this.cardIdReadStringValue_;
+    }
+
+    public byte[] getPictureData(){
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        croppedImage_.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 }

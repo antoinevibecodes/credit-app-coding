@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     }
 
     private void initializeVariables(){
-        appData = AppData.getAppDataInstance();
+        appData = AppData.getAppDataInstance_();
     }
 
     private void registerListeners(){
@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
                 prevCardReadByNFC =cardReadByNFC;
 
                 long driverId = convertIdToLong(cardReadByNFC);
-                appData.setCardIdReadStringValue(cardReadByNFC);
-                appData.setCardIdReadLongValue(driverId);
+                appData.setCardIdReadStringValue_(cardReadByNFC);
+                appData.setCardIdReadLongValue_(driverId);
                 startServerQuery();
 
             }

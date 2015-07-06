@@ -14,7 +14,7 @@ public class TestServer extends ServerInterface {
 
     public TestServer(TaskListener activity, int requestType){
         super(activity);
-        appData = AppData.getAppDataInstance();
+        appData = AppData.getAppDataInstance_();
         request = new Request();
         this.requestType = requestType;
     }
@@ -22,7 +22,7 @@ public class TestServer extends ServerInterface {
 
     public void start(){
 
-        this.request.rfidUidL = appData.getCardIdReadLongValue();
+        this.request.rfidUidL = appData.getCardIdReadLongValue_();
         this.execute(request);
     }
 

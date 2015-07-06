@@ -24,4 +24,9 @@
     <string name="dobText">08/20/1992</string>
     <string name="title_activity_camera">CameraActivity</string>
     <string name="title_activity_validation">ValidationActivity</string>
+
+
+    <string name="serverUploadUrl">http://tt-server.azurewebsites.net/api/admission/UploadDriverPicture</string>
+    <string name="connectionTimeoutDuration">5000</string>
+    <string name="responseTimeoutDuration">5000</string>
 </resources>

@@ -86,7 +86,7 @@ public class CapturedPicture {
             Bitmap decodeImage = BitmapFactory.decodeByteArray(picture.getPictureData(), 0, picture.getPictureData().length);
             correctDisplayAndRotate(decodeImage, cameraOrientation, cameraUsed);
             cameraData.setOriginalBitmap(originalImage);
-
+            cameraData.setCroppedBitmap(croppedImage);
             //Notify whoever subscribes that he can now access the taken picture
             capturedPictureCallback_.pictureTaken(originalImage,croppedImage);
         }

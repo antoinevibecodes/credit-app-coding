@@ -18,6 +18,7 @@ import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.MainActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TaskListener;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TestServer;
@@ -33,7 +34,7 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
 
     private ImageView pictureTaken;
 
-    private TestServer server;
+    private RealServer server;
 
 
     private CardView successCard;
@@ -97,8 +98,8 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
     }
 
     private void displayPictureTaken(){
-        AppData appData = AppData.getAppDataInstance();
-        pictureTaken.setImageBitmap(appData.getOriginalImage());
+        AppData appData = AppData.getAppDataInstance_();
+        pictureTaken.setImageBitmap(appData.getCroppedImage_());
     }
 
 
@@ -154,7 +155,7 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
         errorCard.setVisibility(View.GONE);
         contentLayout.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        server = new TestServer(this,2);
+        server = new RealServer(this,this,2);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

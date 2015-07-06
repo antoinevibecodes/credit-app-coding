@@ -13,6 +13,7 @@ import com.applications.tinytonwe.cameralibrary.CameraPreview.CameraPreview;
 import com.applications.tinytonwe.cameralibrary.CameraSettings.CameraSelected;
 import com.applications.tinytonwe.cameralibrary.CameraSettings.CameraSettings;
 import com.applications.tinytonwe.cameralibrary.CapturedPictureCallback;
+import com.applications.tinytonwe.cameralibrary.CropView.CropWindow;
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.MainActivity;
@@ -26,6 +27,7 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
     private CapturedPicture capturedPicture_;
     private CameraSettings cameraSettings_;
     private CameraPreview cameraPreview_;
+    private CropWindow cropWindow_;
 
     private ImageButton cancelBtn;
     private ImageButton switchBtn;
@@ -52,6 +54,8 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
         cameraPreview_ = new CameraPreview(this, cameraSettings_, cameraView);
 
         capturedPicture_ = new CapturedPicture(cameraSettings_);
+
+        cropWindow_ = new CropWindow(this, 0.5f, "#ffffff",cameraView);
 
         cancelBtn = (ImageButton)findViewById(R.id.cancelBtn);
         switchBtn = (ImageButton)findViewById(R.id.switchBtn);
@@ -123,9 +127,9 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
 
     public void pictureTaken(Bitmap originalImage, Bitmap croppedImage){
 
-        AppData appData = AppData.getAppDataInstance();
-        appData.setCroppedImage(croppedImage);
-        appData.setOriginalImage(originalImage);
+        AppData appData = AppData.getAppDataInstance_();
+        appData.setCroppedImage_(croppedImage);
+        appData.setOriginalImage_(originalImage);
 
         startValidationActivity();
     }
