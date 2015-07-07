@@ -55,7 +55,7 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
 
         capturedPicture_ = new CapturedPicture(cameraSettings_);
 
-        cropWindow_ = new CropWindow(this, 0.5f, "#ffffff",cameraView);
+        cropWindow_ = new CropWindow(this, 0.5f, "#ffc000",cameraView);
 
         cancelBtn = (ImageButton)findViewById(R.id.cancelBtn);
         switchBtn = (ImageButton)findViewById(R.id.switchBtn);
@@ -88,6 +88,7 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
 
     private void startCamera(){
         cameraPreview_.startPreview();
+        cropWindow_.displayCropWindow();
     }
 
     private void buttonHandler(AppActions appActions){
