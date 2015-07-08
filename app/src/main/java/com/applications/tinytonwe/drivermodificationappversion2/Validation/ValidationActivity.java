@@ -5,13 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
@@ -24,21 +23,20 @@ import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunicat
 
 public class ValidationActivity extends AppCompatActivity implements TaskListener {
 
-    private Toolbar toolbar;
     private ProgressBar progressBar;
 
-    private ImageButton cancelBtn;
-    private ImageButton retakeBtn;
-    private ImageButton sendBtn;
+    private ImageView pictureTaken_;
+    ImageButton exitBtn;
+    ImageButton cameraBtn;
+    ImageButton sendBtn;
 
-    private ImageView pictureTaken;
+    private RealServer server_;
 
-    private RealServer server;
-
-
-    private CardView successCard;
-    private CardView errorCard;
-    private CardView pictureCard;
+    private CardView successCard_;
+    private CardView errorCard_;
+    private TextView errorMessage_;
+    private CardView pictureCard_;
+    private LinearLayout cardDataArea_;
 
     private LinearLayout contentLayout;
     @Override
@@ -56,21 +54,24 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
 
         contentLayout = (LinearLayout)findViewById(R.id.layoutContent);
 
-        toolbar = (Toolbar)findViewById(R.id.tool_bar);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.tool_bar);
         toolbar = (Toolbar)findViewById(R.id.tool_bar);
         toolbar.setTitle("Validation Process");
 
-        pictureTaken = (ImageView)findViewById(R.id.pictureTaken);
-        pictureCard = (CardView)findViewById(R.id.cardPictureTemplate);
+        pictureTaken_ = (ImageView)findViewById(R.id.pictureTaken);
+        pictureCard_ = (CardView)findViewById(R.id.cardPictureTemplate);
 
-        successCard = (CardView)findViewById(R.id.successCard);
-        errorCard = (CardView)findViewById(R.id.errorCard);
+        successCard_ = (CardView)findViewById(R.id.successCard);
+        errorCard_ = (CardView)findViewById(R.id.errorCard);
+        errorMessage_ = (TextView)findViewById(R.id.errorMessage);
 
-        cancelBtn = (ImageButton)findViewById(R.id.cancelBtn);
-        retakeBtn = (ImageButton)findViewById(R.id.retakeBtn);
+        cardDataArea_ = (LinearLayout)findViewById(R.id.cardDataArea);
+
+        exitBtn = (ImageButton)findViewById(R.id.cancelBtn);
+        cameraBtn = (ImageButton)findViewById(R.id.retakeBtn);
         sendBtn = (ImageButton)findViewById(R.id.sendBtn);
 
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
+        exitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AppActions appActions = AppActions.CANCEL;
@@ -78,7 +79,7 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
             }
         });
 
-        retakeBtn.setOnClickListener(new View.OnClickListener() {
+        cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AppActions appActions = AppActions.CAMERA;
@@ -98,7 +99,7 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
 
     private void displayPictureTaken(){
         AppData appData = AppData.getAppDataInstance_();
-        pictureTaken.setImageBitmap(appData.getCroppedImage_());
+        pictureTaken_.setImageBitmap(appData.getCroppedImage_());
     }
 
 
@@ -111,7 +112,7 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
                 startCameraActivity();
                 break;
             case SEND_PICTURE_TO_SERVER:
-                sendDataToServer();
+                startServerRequest();
                 break;
         }
     }
@@ -127,54 +128,40 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
         startActivity(cameraIntent);
     }
 
-    private void sendDataToServer(){
 
-
-        startServerRequest();
+    private void startServerRequest(){
+        pictureCard_.setVisibility(View.GONE);
+        successCard_.setVisibility(View.GONE);
+        errorCard_.setVisibility(View.GONE);
+        contentLayout.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        server_ = new RealServer(this);
+        RealServer.Upload upload = server_.new Upload();
     }
 
-
-    @Override
     public void onTaskFinished(Response response){
 
         progressBar.setVisibility(View.GONE);
 
-        if(response.responseMessage.equalsIgnoreCase("success"))
-            successCard.setVisibility(View.VISIBLE);
+        if(response.responseOk)
+            requestEndedResponseOk();
         else
-            errorCard.setVisibility(View.VISIBLE);
+            requestEndedResponseError(response.responseMessage);
+    }
 
+    private void requestEndedResponseOk(){
+        successCard_.setVisibility(View.VISIBLE);
         contentLayout.setVisibility(View.VISIBLE);
+        cardDataArea_.setVisibility(View.INVISIBLE);
+
+        exitBtn.setEnabled(true);
+        cameraBtn.setEnabled(false);
+        sendBtn.setEnabled(false);
     }
 
-    private void startServerRequest(){
-        pictureCard.setVisibility(View.GONE);
-        successCard.setVisibility(View.GONE);
-        errorCard.setVisibility(View.GONE);
-        contentLayout.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
-        server = new RealServer(this);
-        RealServer.Upload upload = server.new Upload();
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_validation, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    private void requestEndedResponseError(String errorMessage){
+        errorMessage_.setText(errorMessage);
+        errorCard_.setVisibility(View.VISIBLE);
+        contentLayout.setVisibility(View.VISIBLE);
     }
 }

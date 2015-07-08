@@ -178,12 +178,9 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         driverImage_.setImageBitmap(appData_.getDriverImage());
 
         enableContentView();
-        showWaitDialog(false);
     }
 
     private void requestEndedResponseError(String errorMessage){
-        showWaitDialog(false);
-
         //Show error card prompting to retry
         errorMessage_.setText(errorMessage);
         errorCard_.setVisibility(View.VISIBLE);
@@ -208,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     @Override
     public void onTaskFinished(Response response){
 
+        showWaitDialog(false);
 
         if(response.responseOk)
             requestEndedResponseOk();
