@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,28 +26,27 @@ import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunicat
 
 public class MainActivity extends AppCompatActivity implements TaskListener{
 
-    private Toolbar toolbar;
-    private ProgressBar progressBar;
+    private Toolbar toolbar_;
+    private ProgressBar progressBar_;
+    private CardView errorCard_;
+    private TextView errorMessage_;
 
-    private FrameLayout contentLayout;
-    private CardView driverData;
+    private String cardReadByNFC_ = "";
+    private String prevCardReadByNFC_ = "";
 
-    private String cardReadByNFC = "";
-    private String prevCardReadByNFC = "";
+    private RealServer server_;
 
-    private RealServer server;
+    private TextView driverId_;
+    private TextView firstName_;
+    private TextView lastName_;
+    private TextView dobValue_;
+    private ImageView driverImage_;
+    private ImageButton cameraBtn_;
 
-    private TextView driverId;
-    private TextView firstName;
-    private TextView lastName;
-    private TextView dobValue;
-    private ImageView driverImage;
-    private ImageButton cameraBtn;
+    private CardView promptCard_;
+    private LinearLayout layoutContent_;
 
-    private CardView promptCard;
-    private LinearLayout layoutContent;
-
-    private AppData appData;
+    private AppData appData_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,33 +55,36 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
         initializeVariables();
         registerListeners();
-
     }
 
     private void initializeVariables(){
-        appData = AppData.getAppDataInstance_();
+        appData_ = AppData.getAppDataInstance_();
+        appData_.reset();
     }
 
     private void registerListeners(){
 
-        promptCard = (CardView)findViewById(R.id.promptCard);
-        layoutContent = (LinearLayout)findViewById(R.id.layoutContent);
+        promptCard_ = (CardView)findViewById(R.id.promptCard);
+        layoutContent_ = (LinearLayout)findViewById(R.id.layoutContent);
 
-        toolbar = (Toolbar)findViewById(R.id.tool_bar);
-        toolbar.setTitle("App Hub");
+        toolbar_ = (Toolbar)findViewById(R.id.tool_bar);
+        toolbar_.setTitle("App Hub");
 
-        progressBar = (ProgressBar)findViewById(R.id.progressbar);
-        setSupportActionBar(toolbar);
-        driverData = (CardView)findViewById(R.id.cardDataTemplate);
-        driverId = (TextView)findViewById(R.id.driverIdValue);
-        firstName = (TextView)findViewById(R.id.firstNameValue);
-        lastName = (TextView)findViewById(R.id.lastNameValue);
-        dobValue = (TextView)findViewById(R.id.dobValue);
-        driverImage = (ImageView)findViewById(R.id.driverImage);
-        cameraBtn = (ImageButton)findViewById(R.id.cameraBtn);
+        errorCard_ = (CardView)findViewById(R.id.errorCard);
+        errorMessage_ = (TextView)findViewById(R.id.errorMessage);
+
+        progressBar_ = (ProgressBar)findViewById(R.id.progressbar);
+        setSupportActionBar(toolbar_);
+        CardView driverData = (CardView)findViewById(R.id.cardDataTemplate);
+        driverId_ = (TextView)findViewById(R.id.driverIdValue);
+        firstName_ = (TextView)findViewById(R.id.firstNameValue);
+        lastName_ = (TextView)findViewById(R.id.lastNameValue);
+        dobValue_ = (TextView)findViewById(R.id.dobValue);
+        driverImage_ = (ImageView)findViewById(R.id.driverImage);
+        cameraBtn_ = (ImageButton)findViewById(R.id.cameraBtn);
 
 
-        cameraBtn.setOnClickListener( new View.OnClickListener() {
+        cameraBtn_.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AppActions appActions = AppActions.CAMERA;
@@ -92,8 +93,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         });
     }
 
-
-    public void buttonHandler(AppActions appActions){
+    private void buttonHandler(AppActions appActions){
 
         switch (appActions){
             case CAMERA:
@@ -106,9 +106,11 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         Intent cameraIntent = new Intent(this, CameraActivity.class);
         startActivity(cameraIntent);
     }
+
     public void onResume() {
 
         super.onResume();
+        appData_.reset();
 
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
             //get the tag id
@@ -125,19 +127,19 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
                 String b3X = String.format("%02x", tagUid[3] & 0xff);
 
                 //set global variable
-                cardReadByNFC = b3X + b2X + b1X + b0X;
+                cardReadByNFC_ = b3X + b2X + b1X + b0X;
 
                 //To avoid intent firing with previous values when device wakes from sleep
-                if(prevCardReadByNFC.equals(cardReadByNFC)) {
+                if(prevCardReadByNFC_.equals(cardReadByNFC_)) {
                     //resetAll();
                     return;
                 }
-                prevCardReadByNFC =cardReadByNFC;
+                prevCardReadByNFC_ = cardReadByNFC_;
 
-                long driverId = convertIdToLong(cardReadByNFC);
-                appData.setCardIdReadStringValue_(cardReadByNFC);
-                appData.setCardIdReadLongValue_(driverId);
-                startServerQuery();
+                long driverId = convertIdToLong(cardReadByNFC_);
+                appData_.setCardIdReadStringValue_(cardReadByNFC_);
+                appData_.setCardIdReadLongValue_(driverId);
+                queryServer();
 
             }
             catch(Exception ex)
@@ -151,28 +153,29 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         return (Long.parseLong(hexId,16));
     }
 
-    public void startServerQuery(){
-        requestStarted();
+    private void queryServer(){
+        prepareRequest();
         startRequest();
     }
 
-    private void requestStarted(){
+    private void prepareRequest(){
         disableContentAndPromptViews();
         showWaitDialog(true);
     }
 
     private void startRequest(){
-        server = new RealServer(this);
+        server_ = new RealServer(this);
         RealServer.GetDriverInformation getDriverInformation =
-                server.new GetDriverInformation();
+                server_.new GetDriverInformation();
     }
+
     private void requestEndedResponseOk(){
 
-        driverId.setText(Long.toString(appData.getDriverId_()));
-        firstName.setText(appData.getDriverFirstName());
-        lastName.setText(appData.getDriverLastName());
-        dobValue.setText(appData.getDob());
-        driverImage.setImageBitmap(appData.getDriverImage());
+        driverId_.setText(Long.toString(appData_.getDriverId_()));
+        firstName_.setText(appData_.getDriverFirstName());
+        lastName_.setText(appData_.getDriverLastName());
+        dobValue_.setText(appData_.getDob());
+        driverImage_.setImageBitmap(appData_.getDriverImage());
 
         enableContentView();
         showWaitDialog(false);
@@ -182,25 +185,25 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         showWaitDialog(false);
 
         //Show error card prompting to retry
-
-        //temporal code
-        Toast.makeText(this,errorMessage,Toast.LENGTH_LONG).show();
+        errorMessage_.setText(errorMessage);
+        errorCard_.setVisibility(View.VISIBLE);
     }
 
     private void disableContentAndPromptViews(){
-           layoutContent.setVisibility(View.GONE);
-            promptCard.setVisibility(View.GONE);
+            errorCard_.setVisibility(View.GONE);
+            layoutContent_.setVisibility(View.GONE);
+            promptCard_.setVisibility(View.GONE);
     }
 
     private void enableContentView(){
-        layoutContent.setVisibility(View.VISIBLE);
+        layoutContent_.setVisibility(View.VISIBLE);
     }
 
     private void showWaitDialog(boolean value){
         if(value)
-            progressBar.setVisibility(View.VISIBLE);
+            progressBar_.setVisibility(View.VISIBLE);
         else
-            progressBar.setVisibility(View.GONE);
+            progressBar_.setVisibility(View.GONE);
     }
     @Override
     public void onTaskFinished(Response response){

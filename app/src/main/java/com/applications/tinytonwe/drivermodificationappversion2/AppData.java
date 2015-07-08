@@ -19,7 +19,7 @@ public class AppData {
     private String driverFirstName_ = null;
     private String driverLastName_ = null;
     private String dob_ = null;
-    private Bitmap driverImage_;
+    private Bitmap driverImage_ = null;
 
     private long driverId_ = 0;
 
@@ -108,5 +108,17 @@ public class AppData {
 
     public String getDob(){
         return dob_;
+    }
+
+    public void reset(){
+        croppedImage_ = null;
+        originalImage_ = null;
+        cardIdReadLongValue_ = 0;
+        cardIdReadStringValue_ = "";
+        driverFirstName_ = null;
+        driverLastName_ = null;
+        dob_ = null;
+        driverImage_ = null;
+        driverId_ = 0;
     }
 }

@@ -25,6 +25,11 @@
             layout="@layout/progressbar"
             />
 
+        <include
+            android:id="@+id/errorCard"
+            layout="@layout/error_card"
+            />
+
         <LinearLayout
             android:visibility="gone"
             android:id="@+id/layoutContent"

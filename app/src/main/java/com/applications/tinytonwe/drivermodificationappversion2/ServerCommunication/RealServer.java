@@ -84,7 +84,7 @@ public class RealServer extends ServerInterface {
                 //Getting the response
 
                 HttpResponse httpResponse = httpClient.execute(httpPost);
-                return analyzeServerResponse(httpResponse);
+                return analyzeServerResponseForPictureUpload(httpResponse);
 
             }
             catch (Exception e){
@@ -111,6 +111,35 @@ public class RealServer extends ServerInterface {
                 ex.printStackTrace();
                 return null;
             }
+        }
+
+        private Response analyzeServerResponseForPictureUpload(HttpResponse httpResponse){
+            Response response = new Response();
+            response.responseOk = false;
+
+            try{
+                int statusCode = httpResponse.getStatusLine().getStatusCode();
+
+                switch (statusCode){
+                    case 200:
+                        response.responseOk = true;
+                        break;
+                    case 404:
+                        response.responseMessage = "404 Not Found Error";
+                        break;
+                    case 500:
+                        response.responseMessage = "500 Internal Server Error";
+                        break;
+                    default:
+                        response.responseMessage = "Unknown Error";
+                        break;
+                }
+            }
+            catch (Exception e){
+                response.responseMessage = "Communication Error";
+            }
+
+            return response;
         }
     }
 
@@ -146,7 +175,7 @@ public class RealServer extends ServerInterface {
 
                 HttpResponse httpResponse = httpClient.execute(httpPost);
 
-                return analyzeServerResponse(httpResponse);
+                return analyzeServerResponseForDriverData(httpResponse);
             }
             catch (Exception e){
                 e.printStackTrace();
@@ -177,83 +206,76 @@ public class RealServer extends ServerInterface {
             }
         }
 
+        private Response analyzeServerResponseForDriverData(HttpResponse httpResponse){
+            Response response = new Response();
+            response.responseOk = false;
 
-    }
+            try{
+                int statusCode = httpResponse.getStatusLine().getStatusCode();
 
-    private Response analyzeServerResponse(HttpResponse httpResponse){
-        Response response = new Response();
-        response.responseOk = false;
+                switch (statusCode){
+                    case 200:
+                        response.responseOk = true;
+                        //
+                        //Get Json object received from server
+                        //
+                        HttpEntity entity = httpResponse.getEntity();
+                        InputStream is = entity.getContent();
+                        String receivedJsonString = convertInputStreamToString(is);
+                        is.close();
+                        //
+                        //
 
-        try{
-            int statusCode = httpResponse.getStatusLine().getStatusCode();
+                        //Get the information contained within the Json object
+                        JSONObject jsonObjectReceived = new JSONObject(receivedJsonString);
 
-            switch (statusCode){
-                case 200:
-                    response.responseOk = true;
-                    //
-                    //Get Json object received from server
-                    //
-                    HttpEntity entity = httpResponse.getEntity();
-                    InputStream is = entity.getContent();
-                    String receivedJsonString = convertInputStreamToString(is);
-                    is.close();
-                    //
-                    //
-
-                    //Get the information contained within the Json object
-                    JSONObject jsonObjectReceived = new JSONObject(receivedJsonString);
-
-                    appData.setDriverId((long)jsonObjectReceived.get("DriverId"));
-                    appData.setDriverFirstName(jsonObjectReceived.getString("FirstName"));
-                    appData.setDriverLastName(jsonObjectReceived.getString("LastName"));
-                    appData.setDriverDob(jsonObjectReceived.getString("DateOfBirth"));
+                        appData.setDriverId((long)jsonObjectReceived.get("DriverId"));
+                        appData.setDriverFirstName(jsonObjectReceived.getString("FirstName"));
+                        appData.setDriverLastName(jsonObjectReceived.getString("LastName"));
+                        appData.setDriverDob(jsonObjectReceived.getString("DateOfBirth"));
 
 
-                    //Getting the image of the driver
-                    String url = "http://i.ytimg.com/vi/qqon8BQTcK0/maxresdefault.jpg";
-                    Bitmap bitmap;
-                    Drawable d;
-                    try {
-                        InputStream imageInputStream = (InputStream) new URL(url).getContent();
-                        d = Drawable.createFromStream(imageInputStream, "src name");
-                        bitmap = ((BitmapDrawable)d).getBitmap();
-                        appData.setDriverImage(bitmap);
-                    } catch (Exception e) {
-                        d = context_.getResources().getDrawable(R.drawable.notfound);
-                        bitmap = ((BitmapDrawable)d).getBitmap();
-                        appData.setDriverImage(bitmap);
-                    }
-                    //
-                    //
-
-
-                    break;
-                case 404:
-                    response.responseMessage = "404 Not Found Error";
-                    break;
-                case 500:
-                    response.responseMessage = "500 Internal Server Error";
-                    break;
-                default:
-                    response.responseMessage = "Unknown Error";
-                    break;
+                        //Getting the image of the driver
+                        String url = "http://i.ytimg.com/vi/qqon8BQTcK0/maxresdefault.jpg";
+                        Bitmap bitmap;
+                        Drawable d;
+                        try {
+                            InputStream imageInputStream = (InputStream) new URL(url).getContent();
+                            d = Drawable.createFromStream(imageInputStream, "src name");
+                            bitmap = ((BitmapDrawable)d).getBitmap();
+                            appData.setDriverImage(bitmap);
+                        } catch (Exception e) {
+                            d = context_.getResources().getDrawable(R.drawable.notfound);
+                            bitmap = ((BitmapDrawable)d).getBitmap();
+                            appData.setDriverImage(bitmap);
+                        }
+                        //
+                        //
+                        break;
+                    case 404:
+                        response.responseMessage = "404 Not Found Error";
+                        break;
+                    case 500:
+                        response.responseMessage = "500 Internal Server Error";
+                        break;
+                    default:
+                        response.responseMessage = "Unknown Error";
+                        break;
+                }
             }
-        }
-        catch (Exception e){
+            catch (Exception e){
                 response.responseMessage = "Communication Error";
+            }
+
+            return response;
         }
 
-        return response;
+
     }
 
-    /**
-     * This class takes in an input stream of characters and returns a single string
-     * @param inputStream This represents the input stream from which the reading
-     *                    will take place
-     * @return String This is the input stream of characters converted into a stream
-     * @throws java.io.IOException This exception will be thrown in case there is a problem
-     * occurs reading the input stream
-     */
+
+
+
     private static String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line = "";
