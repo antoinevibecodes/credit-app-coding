@@ -16,12 +16,11 @@ import android.widget.ProgressBar;
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraActivity;
-import com.applications.tinytonwe.drivermodificationappversion2.MainActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.Main.MainActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TaskListener;
-import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TestServer;
 
 public class ValidationActivity extends AppCompatActivity implements TaskListener {
 
@@ -132,7 +131,6 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
 
 
         startServerRequest();
-        server.start();
     }
 
 
@@ -141,7 +139,7 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
 
         progressBar.setVisibility(View.GONE);
 
-        if(response.serverMessage.equalsIgnoreCase("success"))
+        if(response.responseMessage.equalsIgnoreCase("success"))
             successCard.setVisibility(View.VISIBLE);
         else
             errorCard.setVisibility(View.VISIBLE);
@@ -155,7 +153,8 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
         errorCard.setVisibility(View.GONE);
         contentLayout.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        server = new RealServer(this,this,2);
+        server = new RealServer(this);
+        RealServer.Upload upload = server.new Upload();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -16,6 +16,10 @@ public class AppData {
     private Bitmap originalImage_ = null;
     private long cardIdReadLongValue_ = 0;
     private String cardIdReadStringValue_ = "";
+    private String driverFirstName_ = null;
+    private String driverLastName_ = null;
+    private String dob_ = null;
+    private Bitmap driverImage_;
 
     private long driverId_ = 0;
 
@@ -33,6 +37,7 @@ public class AppData {
     public long getDriverId_(){
         return driverId_;
     }
+
     public void setCroppedImage_(Bitmap croppedImage_){
         this.croppedImage_ = croppedImage_;
     }
@@ -71,5 +76,37 @@ public class AppData {
         croppedImage_.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         return byteArray;
+    }
+
+    public void setDriverFirstName(String driverFirstName){
+            driverFirstName_ = driverFirstName;
+    }
+
+    public void setDriverLastName(String driverLastName){
+        driverLastName = driverLastName_;
+    }
+
+    public void setDriverDob(String dob){
+        dob_ = dob;
+    }
+
+    public void setDriverImage(Bitmap driverImage){
+        driverImage_ = driverImage;
+    }
+
+    public Bitmap getDriverImage(){
+        return driverImage_;
+    }
+
+    public String getDriverFirstName(){
+        return driverFirstName_;
+    }
+
+    public String getDriverLastName(){
+        return driverLastName_;
+    }
+
+    public String getDob(){
+        return dob_;
     }
 }

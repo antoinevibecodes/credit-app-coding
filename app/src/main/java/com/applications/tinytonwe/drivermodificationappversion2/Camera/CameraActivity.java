@@ -16,7 +16,7 @@ import com.applications.tinytonwe.cameralibrary.CapturedPictureCallback;
 import com.applications.tinytonwe.cameralibrary.CropView.CropWindow;
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
-import com.applications.tinytonwe.drivermodificationappversion2.MainActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.Main.MainActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.Validation.ValidationActivity;
 

@@ -1,4 +1,4 @@
-package com.applications.tinytonwe.drivermodificationappversion2;
+package com.applications.tinytonwe.drivermodificationappversion2.Main;
 
 import android.content.Intent;
 import android.nfc.NfcAdapter;
@@ -10,14 +10,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
+import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.R;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TaskListener;
-import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TestServer;
 
 
 public class MainActivity extends AppCompatActivity implements TaskListener{
@@ -31,12 +36,13 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     private String cardReadByNFC = "";
     private String prevCardReadByNFC = "";
 
-    private TestServer server;
+    private RealServer server;
 
     private TextView driverId;
     private TextView firstName;
     private TextView lastName;
     private TextView dobValue;
+    private ImageView driverImage;
     private ImageButton cameraBtn;
 
     private CardView promptCard;
@@ -73,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         firstName = (TextView)findViewById(R.id.firstNameValue);
         lastName = (TextView)findViewById(R.id.lastNameValue);
         dobValue = (TextView)findViewById(R.id.dobValue);
+        driverImage = (ImageView)findViewById(R.id.driverImage);
         cameraBtn = (ImageButton)findViewById(R.id.cameraBtn);
 
 
@@ -155,12 +162,29 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     }
 
     private void startRequest(){
-        server = new TestServer(this,1);
-        server.start();
+        server = new RealServer(this);
+        RealServer.GetDriverInformation getDriverInformation =
+                server.new GetDriverInformation();
     }
-    private void requestEnded(){
+    private void requestEndedResponseOk(){
+
+        driverId.setText(Long.toString(appData.getDriverId_()));
+        firstName.setText(appData.getDriverFirstName());
+        lastName.setText(appData.getDriverLastName());
+        dobValue.setText(appData.getDob());
+        driverImage.setImageBitmap(appData.getDriverImage());
+
         enableContentView();
         showWaitDialog(false);
+    }
+
+    private void requestEndedResponseError(String errorMessage){
+        showWaitDialog(false);
+
+        //Show error card prompting to retry
+
+        //temporal code
+        Toast.makeText(this,errorMessage,Toast.LENGTH_LONG).show();
     }
 
     private void disableContentAndPromptViews(){
@@ -182,18 +206,10 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     public void onTaskFinished(Response response){
 
 
-        String id = response.driverId + "";
-        driverId.setText(id);
+        if(response.responseOk)
+            requestEndedResponseOk();
+        else
+            requestEndedResponseError(response.responseMessage);
 
-        String fName = response.firstName;
-        firstName.setText(fName);
-
-        String lName = response.lastName;
-        lastName.setText(lName);
-
-        String dob = response.dateOfBirth;
-        dobValue.setText(dob);
-
-        requestEnded();
     }
 }

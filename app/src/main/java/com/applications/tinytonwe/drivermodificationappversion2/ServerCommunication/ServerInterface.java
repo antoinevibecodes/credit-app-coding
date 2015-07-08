@@ -1,23 +1,32 @@
 package com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 
 /**
- * Created by admin on 6/19/2015.
+ * Created by admin on 7/8/2015.
  */
-public abstract class ServerInterface extends AsyncTask<Request, Void, Response>{
+public abstract class ServerInterface {
 
+    protected TaskListener callingActivity_;
 
-    TaskListener mainActivity;
-
-    public ServerInterface(TaskListener activity)
-    {
-        this.mainActivity = activity;
+    public ServerInterface(Activity callingActivity){
+        callingActivity_ = (TaskListener)callingActivity;
     }
 
-    protected void onPostExecute(Response response)
-    {
-        mainActivity.onTaskFinished(response);
+    public abstract class UploadPicture extends AsyncTask<Request,Void,Response>{
+
+        protected void onPostExecute(Response response)
+        {
+            callingActivity_.onTaskFinished(response);
+        }
     }
 
+    public abstract class RequestDriverInfo extends AsyncTask<Request,Void, Response>{
+
+        protected void onPostExecute(Response response)
+        {
+            callingActivity_.onTaskFinished(response);
+        }
+    }
 }

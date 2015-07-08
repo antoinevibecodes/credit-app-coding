@@ -5,6 +5,7 @@ package com.applications.tinytonwe.drivermodificationappversion2.ServerCommunica
  */
 public class Request {
     public long rfidUidL;
+    public String rfidUidS;
     public long DriverId;
     public String url;
     public int connectionTimeoutDuration;
