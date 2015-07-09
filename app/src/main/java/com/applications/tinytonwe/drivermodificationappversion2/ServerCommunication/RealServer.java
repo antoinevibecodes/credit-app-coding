@@ -229,10 +229,11 @@ public class RealServer extends ServerInterface {
                         //Get the information contained within the Json object
                         JSONObject jsonObjectReceived = new JSONObject(receivedJsonString);
 
-                        appData.setDriverId((long)jsonObjectReceived.get("DriverId"));
+                        appData.setDriverId(Long.parseLong(jsonObjectReceived.getString("DriverId")));
                         appData.setDriverFirstName(jsonObjectReceived.getString("FirstName"));
                         appData.setDriverLastName(jsonObjectReceived.getString("LastName"));
                         appData.setDriverDob(jsonObjectReceived.getString("DateOfBirth"));
+
 
 
                         //Getting the image of the driver

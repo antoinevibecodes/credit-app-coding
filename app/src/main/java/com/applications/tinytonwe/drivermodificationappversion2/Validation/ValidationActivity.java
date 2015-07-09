@@ -38,6 +38,7 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
     private CardView pictureCard_;
     private LinearLayout cardDataArea_;
 
+
     private LinearLayout contentLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,17 +152,20 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
 
     private void requestEndedResponseOk(){
         successCard_.setVisibility(View.VISIBLE);
+        errorCard_.setVisibility(View.INVISIBLE);
         contentLayout.setVisibility(View.VISIBLE);
-        cardDataArea_.setVisibility(View.INVISIBLE);
 
-        exitBtn.setEnabled(true);
-        cameraBtn.setEnabled(false);
-        sendBtn.setEnabled(false);
+        LinearLayout cameraLayout = (LinearLayout)findViewById(R.id.camera_btn_layout);
+        LinearLayout sendLayout = (LinearLayout)findViewById(R.id.send_btn_layout);
+
+        cameraLayout.setVisibility(View.GONE);
+        sendLayout.setVisibility(View.GONE);
     }
 
     private void requestEndedResponseError(String errorMessage){
         errorMessage_.setText(errorMessage);
         errorCard_.setVisibility(View.VISIBLE);
+        successCard_.setVisibility(View.INVISIBLE);
         contentLayout.setVisibility(View.VISIBLE);
     }
 }

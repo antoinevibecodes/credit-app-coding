@@ -2,7 +2,15 @@ package com.applications.tinytonwe.drivermodificationappversion2;
 
 import android.graphics.Bitmap;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.io.ByteArrayOutputStream;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 
 /**
@@ -83,11 +91,23 @@ public class AppData {
     }
 
     public void setDriverLastName(String driverLastName){
-        driverLastName = driverLastName_;
+        driverLastName_ = driverLastName;
     }
 
     public void setDriverDob(String dob){
-        dob_ = dob;
+
+        try {
+            DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss");
+            DateTime dt = dtf.parseDateTime(dob);
+            java.util.Date date = dt.toDate();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            String newDate = simpleDateFormat.format(date);
+
+            dob_ = newDate;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void setDriverImage(Bitmap driverImage){
