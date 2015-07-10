@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
@@ -26,7 +25,7 @@ import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunicat
 
 public class MainActivity extends AppCompatActivity implements TaskListener{
 
-    private Toolbar toolbar_;
+
     private ProgressBar progressBar_;
     private CardView errorCard_;
     private TextView errorMessage_;
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     private TextView lastName_;
     private TextView dobValue_;
     private ImageView driverImage_;
-    private ImageButton cameraBtn_;
+
 
     private CardView promptCard_;
     private LinearLayout layoutContent_;
@@ -53,11 +52,11 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initializeVariables();
+        initializeActivity();
         registerListeners();
     }
 
-    private void initializeVariables(){
+    private void initializeActivity(){
         appData_ = AppData.getAppDataInstance_();
         appData_.reset();
     }
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         promptCard_ = (CardView)findViewById(R.id.promptCard);
         layoutContent_ = (LinearLayout)findViewById(R.id.layoutContent);
 
-        toolbar_ = (Toolbar)findViewById(R.id.tool_bar);
+        Toolbar toolbar_ = (Toolbar)findViewById(R.id.tool_bar);
         toolbar_.setTitle("App Hub");
 
         errorCard_ = (CardView)findViewById(R.id.errorCard);
@@ -76,13 +75,14 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         progressBar_ = (ProgressBar)findViewById(R.id.progressbar);
         setSupportActionBar(toolbar_);
         CardView driverData = (CardView)findViewById(R.id.cardDataTemplate);
+
         driverId_ = (TextView)findViewById(R.id.driverIdValue);
         firstName_ = (TextView)findViewById(R.id.firstNameValue);
         lastName_ = (TextView)findViewById(R.id.lastNameValue);
         dobValue_ = (TextView)findViewById(R.id.dobValue);
         driverImage_ = (ImageView)findViewById(R.id.driverImage);
-        cameraBtn_ = (ImageButton)findViewById(R.id.cameraBtn);
 
+        ImageButton cameraBtn_ = (ImageButton)findViewById(R.id.cameraBtn);
 
         cameraBtn_.setOnClickListener(new View.OnClickListener() {
             @Override

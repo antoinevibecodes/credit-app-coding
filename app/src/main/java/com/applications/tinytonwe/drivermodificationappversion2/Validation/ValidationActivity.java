@@ -36,7 +36,6 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
     private CardView errorCard_;
     private TextView errorMessage_;
     private CardView pictureCard_;
-    private LinearLayout cardDataArea_;
 
 
     private LinearLayout contentLayout;
@@ -56,7 +55,6 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
         contentLayout = (LinearLayout)findViewById(R.id.layoutContent);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.tool_bar);
-        toolbar = (Toolbar)findViewById(R.id.tool_bar);
         toolbar.setTitle("Validation Process");
 
         pictureTaken_ = (ImageView)findViewById(R.id.pictureTaken);
@@ -65,8 +63,6 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
         successCard_ = (CardView)findViewById(R.id.successCard);
         errorCard_ = (CardView)findViewById(R.id.errorCard);
         errorMessage_ = (TextView)findViewById(R.id.errorMessage);
-
-        cardDataArea_ = (LinearLayout)findViewById(R.id.cardDataArea);
 
         exitBtn = (ImageButton)findViewById(R.id.cancelBtn);
         cameraBtn = (ImageButton)findViewById(R.id.retakeBtn);
@@ -107,26 +103,15 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
     private void buttonHandler(AppActions appActions){
         switch (appActions){
             case CANCEL:
-                startHomeActivity();
+                startActivity(new Intent(this, MainActivity.class));
                 break;
             case CAMERA:
-                startCameraActivity();
+                startActivity(new Intent(this, CameraActivity.class));
                 break;
             case SEND_PICTURE_TO_SERVER:
                 startServerRequest();
                 break;
         }
-    }
-
-
-    private void startHomeActivity(){
-        Intent homeIntent = new Intent(this, MainActivity.class);
-        startActivity(homeIntent);
-    }
-
-    private void startCameraActivity(){
-        Intent cameraIntent = new Intent(this, CameraActivity.class);
-        startActivity(cameraIntent);
     }
 
 

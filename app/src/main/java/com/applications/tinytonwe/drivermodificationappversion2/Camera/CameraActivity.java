@@ -22,17 +22,12 @@ import com.applications.tinytonwe.drivermodificationappversion2.Validation.Valid
 
 public class CameraActivity extends AppCompatActivity implements CapturedPictureCallback{
 
-    private FrameLayout cameraView;
+
 
     private CapturedPicture capturedPicture_;
     private CameraSettings cameraSettings_;
     private CameraPreview cameraPreview_;
     private CropWindow cropWindow_;
-
-    private ImageButton cancelBtn;
-    private ImageButton switchBtn;
-    private ImageButton shutterBtn;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +41,7 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
 
     private void registerListeners(){
 
-        cameraView = (FrameLayout)findViewById(R.id.cameraFrame);
+        FrameLayout cameraView = (FrameLayout)findViewById(R.id.cameraFrame);
 
         cameraSettings_ = new CameraSettings(this, CameraSelected.FRONT);
         cameraSettings_.useOptimalPreviewSettings();
@@ -57,9 +52,9 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
 
         cropWindow_ = new CropWindow(this, 0.5f, "#ffc000",cameraView);
 
-        cancelBtn = (ImageButton)findViewById(R.id.cancelBtn);
-        switchBtn = (ImageButton)findViewById(R.id.switchBtn);
-        shutterBtn = (ImageButton)findViewById(R.id.shutterBtn);
+        ImageButton cancelBtn = (ImageButton)findViewById(R.id.cancelBtn);
+        ImageButton switchBtn = (ImageButton)findViewById(R.id.switchBtn);
+        ImageButton shutterBtn = (ImageButton)findViewById(R.id.shutterBtn);
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
