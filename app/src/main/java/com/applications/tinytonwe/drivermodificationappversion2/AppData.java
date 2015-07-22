@@ -81,6 +81,7 @@ public class AppData {
     public byte[] getPictureData(){
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        croppedImage_ = Bitmap.createScaledBitmap(croppedImage_,400,400,false);
         croppedImage_.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         return byteArray;

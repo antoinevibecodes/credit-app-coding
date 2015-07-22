@@ -193,14 +193,19 @@ public class CameraSettings {
         switch (quality){
             case HIGH:
                 selectedPreviewSize = 0;
+                break;
             case MEDIUM_HIGH:
                 selectedPreviewSize = 1;
+                break;
             case MEDIUM:
                 selectedPreviewSize = 2;
+                break;
             case MEDIUM_LOW:
                 selectedPreviewSize = 3;
+                break;
             case LOW:
                 selectedPreviewSize = 4;
+                break;
         }
 
         if(selectedPreviewSize < sizeCount)

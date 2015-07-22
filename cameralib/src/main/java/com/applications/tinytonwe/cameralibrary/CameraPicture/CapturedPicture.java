@@ -40,6 +40,7 @@ public class CapturedPicture {
     }
 
     public void takePicture(){
+
         if(cameraSettings_.canCameraAutoFocus())
             myCamera_.autoFocus(autoFocusCallback_());
         else

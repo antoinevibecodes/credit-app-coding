@@ -11,4 +11,5 @@ public class Request {
     public int connectionTimeoutDuration;
     public int responseTimeoutDuration;
     public byte[] PictureData;
+    public boolean useRfid;
 }

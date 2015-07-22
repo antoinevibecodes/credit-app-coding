@@ -143,12 +143,23 @@ public class RealServer extends ServerInterface {
         }
     }
 
-    public class GetDriverInformation extends RequestDriverInfo{
 
-        public GetDriverInformation(){
+
+
+    public class GetDriverInformation extends RequestDriverInfoViaRfid {
+
+        public GetDriverInformation(boolean useRfid){
             request.url = requestDriverUrl;
-            request.rfidUidL = appData.getCardIdReadLongValue_();
-            request.rfidUidS = appData.getCardIdReadStringValue_();
+            request.useRfid = useRfid;
+
+            if(useRfid) {
+                request.rfidUidL = appData.getCardIdReadLongValue_();
+                request.rfidUidS = appData.getCardIdReadStringValue_();
+            }
+            else{
+                request.DriverId = appData.getDriverId_();
+            }
+
             this.execute(request);
         }
 
@@ -163,8 +174,13 @@ public class RealServer extends ServerInterface {
                 HttpConnectionParams.setConnectionTimeout(parameters, request.connectionTimeoutDuration);
                 HttpConnectionParams.setSoTimeout(parameters, request.responseTimeoutDuration);
 
+
+                StringEntity dataToSend;
                 //get the data
-                StringEntity dataToSend = prepareJsonObjects(request.rfidUidL, request.rfidUidS);
+                if(request.useRfid)
+                   dataToSend = prepareJsonObjects(request.rfidUidL, request.rfidUidS);
+                else
+                    dataToSend = prepareJsonObjects(request.DriverId);
 
                 //send the data
                 HttpPost httpPost = new HttpPost(request.url);
@@ -206,6 +222,26 @@ public class RealServer extends ServerInterface {
             }
         }
 
+
+        private StringEntity prepareJsonObjects(long driverId){
+            try {
+                JSONObject rfidData = new JSONObject();
+
+                rfidData.put("HasDriverId", true);
+                rfidData.put("DriverId", driverId);
+                rfidData.put("HasRfidUidL", false);
+                rfidData.put("RfidUidL", 0);
+                rfidData.put("HasRfidUidS", false);
+                rfidData.put("RfidUidS", "");
+
+                return new StringEntity(rfidData.toString());
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            }
+        }
+
         private Response analyzeServerResponseForDriverData(HttpResponse httpResponse){
             Response response = new Response();
             response.responseOk = false;
@@ -237,7 +273,7 @@ public class RealServer extends ServerInterface {
 
 
                         //Getting the image of the driver
-                        String url = "http://i.ytimg.com/vi/qqon8BQTcK0/maxresdefault.jpg";
+                        String url = context_.getResources().getString(R.string.serverRequestGetDriverPictureUrl).toString()+appData.getDriverId_();
                         Bitmap bitmap;
                         Drawable d;
                         try {
@@ -273,7 +309,6 @@ public class RealServer extends ServerInterface {
 
 
     }
-
 
 
 

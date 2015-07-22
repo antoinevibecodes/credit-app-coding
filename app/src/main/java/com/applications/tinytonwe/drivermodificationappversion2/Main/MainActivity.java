@@ -1,5 +1,7 @@
 package com.applications.tinytonwe.drivermodificationappversion2.Main;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -8,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
 
     private ProgressBar progressBar_;
-    private CardView errorCard_;
     private TextView errorMessage_;
 
     private String cardReadByNFC_ = "";
@@ -41,9 +45,12 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     private TextView dobValue_;
     private ImageView driverImage_;
 
-
-    private CardView promptCard_;
+    private LinearLayout promptCardsLayout_;
+    private LinearLayout errorCardLayout_;
     private LinearLayout layoutContent_;
+
+    private final int QUERY_RFID = 0;
+    private final int QUERY_DRIVERID = 1;
 
     private AppData appData_;
 
@@ -63,13 +70,16 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
     private void registerListeners(){
 
-        promptCard_ = (CardView)findViewById(R.id.promptCard);
+        promptCardsLayout_ = (LinearLayout)findViewById(R.id.promptCardsLayout);
         layoutContent_ = (LinearLayout)findViewById(R.id.layoutContent);
 
         Toolbar toolbar_ = (Toolbar)findViewById(R.id.tool_bar);
         toolbar_.setTitle("App Hub");
 
-        errorCard_ = (CardView)findViewById(R.id.errorCard);
+        CardView errorCard = (CardView)findViewById(R.id.errorCard);
+        errorCard.setVisibility(View.VISIBLE);
+        errorCardLayout_ = (LinearLayout)findViewById(R.id.errorCardLayout);
+        errorCardLayout_.setVisibility(View.GONE);
         errorMessage_ = (TextView)findViewById(R.id.errorMessage);
 
         progressBar_ = (ProgressBar)findViewById(R.id.progressbar);
@@ -87,8 +97,25 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         cameraBtn_.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppActions appActions = AppActions.CAMERA;
-                buttonHandler(appActions);
+                buttonHandler(AppActions.CAMERA);
+            }
+        });
+
+        Button sendDriverIdBtn = (Button)findViewById(R.id.sendDriverId);
+
+        sendDriverIdBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonHandler(AppActions.PROCESS_ID_ENTERED);
+            }
+        });
+
+        ImageButton backBtn = (ImageButton)findViewById(R.id.backBtn);
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonHandler(AppActions.BACK_TO_HOME_SCREEN);
             }
         });
     }
@@ -97,14 +124,35 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
         switch (appActions){
             case CAMERA:
-                startCameraActivity();
+                startActivity(new Intent(this, CameraActivity.class));
+                break;
+            case PROCESS_ID_ENTERED:
+                processDriverId();
+                break;
+            case BACK_TO_HOME_SCREEN:
+                this.recreate();
                 break;
         }
     }
 
-    private void startCameraActivity(){
-        Intent cameraIntent = new Intent(this, CameraActivity.class);
-        startActivity(cameraIntent);
+
+    private void processDriverId() {
+
+        EditText driverIdString = (EditText)findViewById(R.id.driverID);
+
+        //Dismissing the keyboard
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(driverIdString.getWindowToken(), 0);
+
+
+        try{
+            long driverId = Long.parseLong(driverIdString.getText().toString());
+            appData_.setDriverId(driverId);
+            startServerRequest(QUERY_DRIVERID);
+        }
+        catch (Exception e){
+
+        }
     }
 
     public void onResume() {
@@ -139,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
                 long driverId = convertIdToLong(cardReadByNFC_);
                 appData_.setCardIdReadStringValue_(cardReadByNFC_);
                 appData_.setCardIdReadLongValue_(driverId);
-                queryServer();
+                startServerRequest(QUERY_RFID);
 
             }
             catch(Exception ex)
@@ -153,20 +201,25 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         return (Long.parseLong(hexId,16));
     }
 
-    private void queryServer(){
-        prepareRequest();
-        startRequest();
-    }
 
     private void prepareRequest(){
         disableContentAndPromptViews();
         showWaitDialog(true);
     }
 
-    private void startRequest(){
+    private void startServerRequest(int queryType){
+        prepareRequest();
         server_ = new RealServer(this);
-        RealServer.GetDriverInformation getDriverInformation =
-                server_.new GetDriverInformation();
+        RealServer.GetDriverInformation getDriverInformation;
+
+        switch (queryType) {
+            case QUERY_RFID:
+                getDriverInformation = server_.new GetDriverInformation(true);
+                break;
+            case QUERY_DRIVERID:
+                getDriverInformation = server_.new GetDriverInformation(false);
+                break;
+        }
     }
 
     private void requestEndedResponseOk(){
@@ -183,13 +236,13 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     private void requestEndedResponseError(String errorMessage){
         //Show error card prompting to retry
         errorMessage_.setText(errorMessage);
-        errorCard_.setVisibility(View.VISIBLE);
+        errorCardLayout_.setVisibility(View.VISIBLE);
     }
 
     private void disableContentAndPromptViews(){
-            errorCard_.setVisibility(View.GONE);
+            errorCardLayout_.setVisibility(View.GONE);
             layoutContent_.setVisibility(View.GONE);
-            promptCard_.setVisibility(View.GONE);
+            promptCardsLayout_.setVisibility(View.GONE);
     }
 
     private void enableContentView(){

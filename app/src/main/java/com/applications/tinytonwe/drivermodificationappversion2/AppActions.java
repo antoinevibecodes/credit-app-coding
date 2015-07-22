@@ -5,6 +5,8 @@ package com.applications.tinytonwe.drivermodificationappversion2;
  */
 public enum AppActions {
     CAMERA,
+    PROCESS_ID_ENTERED,
+    BACK_TO_HOME_SCREEN,
     CANCEL,
     FLIP_CAMERA,
     TAKE_PICTURE,

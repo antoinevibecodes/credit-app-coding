@@ -12,6 +12,7 @@ import com.applications.tinytonwe.cameralibrary.CameraPicture.CapturedPicture;
 import com.applications.tinytonwe.cameralibrary.CameraPreview.CameraPreview;
 import com.applications.tinytonwe.cameralibrary.CameraSettings.CameraSelected;
 import com.applications.tinytonwe.cameralibrary.CameraSettings.CameraSettings;
+import com.applications.tinytonwe.cameralibrary.CameraSettings.Quality;
 import com.applications.tinytonwe.cameralibrary.CapturedPictureCallback;
 import com.applications.tinytonwe.cameralibrary.CropView.CropWindow;
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
@@ -45,6 +46,8 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
 
         cameraSettings_ = new CameraSettings(this, CameraSelected.FRONT);
         cameraSettings_.useOptimalPreviewSettings();
+        cameraSettings_.setCameraPictureQuality(Quality.MEDIUM_HIGH);
+        cameraSettings_.enableAutoFocus();
 
         cameraPreview_ = new CameraPreview(this, cameraSettings_, cameraView);
 
@@ -59,24 +62,21 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppActions appActions = AppActions.CANCEL;
-                buttonHandler(appActions);
+                buttonHandler(AppActions.CANCEL);
             }
         });
 
         switchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppActions appActions = AppActions.FLIP_CAMERA;
-                buttonHandler(appActions);
+                buttonHandler(AppActions.FLIP_CAMERA);
             }
         });
 
         shutterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppActions appActions = AppActions.TAKE_PICTURE;
-                buttonHandler(appActions);
+                buttonHandler(AppActions.TAKE_PICTURE);
             }
         });
     }
@@ -89,36 +89,18 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
     private void buttonHandler(AppActions appActions){
         switch(appActions){
             case CANCEL:
-                cancelProcess();
+                startActivity(new Intent(this, MainActivity.class));
                 break;
             case FLIP_CAMERA:
-                flipCamera();
+                cameraPreview_.flipCamera();
                 break;
             case  TAKE_PICTURE:
-                takePicture();
+                capturedPicture_ = new CapturedPicture(cameraSettings_);
+                capturedPicture_.takePicture();
                 break;
         }
     }
 
-
-    private void cancelProcess(){
-        Intent previousActivity = new Intent(this, MainActivity.class);
-        startActivity(previousActivity);
-    }
-
-    private void flipCamera(){
-        cameraPreview_.flipCamera();
-    }
-
-    private void takePicture(){
-            capturedPicture_.takePicture();
-    }
-
-
-    private void startValidationActivity(){
-        Intent validation = new Intent(this, ValidationActivity.class);
-        startActivity(validation);
-    }
 
 
     public void pictureTaken(Bitmap originalImage, Bitmap croppedImage){
@@ -127,6 +109,6 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
         appData.setCroppedImage_(croppedImage);
         appData.setOriginalImage_(originalImage);
 
-        startValidationActivity();
+        startActivity(new Intent(this, ValidationActivity.class));
     }
 }

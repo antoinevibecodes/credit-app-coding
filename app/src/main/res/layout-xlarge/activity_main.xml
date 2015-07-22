@@ -15,19 +15,54 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/promptCard"
-            layout="@layout/prompt_card"
-            />
+        <LinearLayout
+            android:id="@+id/promptCardsLayout"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include
+                android:id="@+id/promptDriverIdCard"
+                layout="@layout/prompt_driver_id_card"
+                />
+
+            <include
+                android:id="@+id/promptCard"
+                layout="@layout/prompt_tap_card"
+                />
+
+        </LinearLayout>
 
         <include
             android:id="@+id/progressbar"
             layout="@layout/progressbar"
             />
 
-        <include
-            android:id="@+id/errorCard"
-            layout="@layout/error_card"/>
+        <LinearLayout
+            android:id="@+id/errorCardLayout"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="400dp">
+
+            <include
+                android:id="@+id/errorCard"
+                layout="@layout/error_card"
+                />
+
+            <ImageButton
+                android:baselineAlignBottom="true"
+                android:id="@+id/backBtn"
+                android:elevation="@dimen/button_rest_elevation"
+                android:layout_gravity="center"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:text="@string/changePicture"
+                android:background="@drawable/image_button_style"
+                android:src="@drawable/back64px"/>
+        </LinearLayout>
 
         <LinearLayout
             android:visibility="gone"

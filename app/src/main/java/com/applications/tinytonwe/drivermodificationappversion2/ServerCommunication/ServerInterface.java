@@ -22,11 +22,12 @@ public abstract class ServerInterface {
         }
     }
 
-    public abstract class RequestDriverInfo extends AsyncTask<Request,Void, Response>{
+    public abstract class RequestDriverInfoViaRfid extends AsyncTask<Request,Void, Response>{
 
         protected void onPostExecute(Response response)
         {
             callingActivity_.onTaskFinished(response);
         }
     }
+
 }
