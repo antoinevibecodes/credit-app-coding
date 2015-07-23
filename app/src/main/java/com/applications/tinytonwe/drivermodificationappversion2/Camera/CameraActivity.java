@@ -36,7 +36,11 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
         setContentView(R.layout.activity_camera);
 
         registerListeners();
-        startCamera();
+
+
+        //preparing camera
+        cameraModule = new CameraModule(this,cameraFrame,true,this);
+        cameraModule.startCameraPreview();
     }
 
 
