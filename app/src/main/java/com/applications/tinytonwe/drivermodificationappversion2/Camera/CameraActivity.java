@@ -93,6 +93,7 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
                 break;
             case FLIP_CAMERA:
                 cameraPreview_.flipCamera();
+                cameraSettings_.enableAutoFocus();
                 break;
             case  TAKE_PICTURE:
                 capturedPicture_.takePicture();
