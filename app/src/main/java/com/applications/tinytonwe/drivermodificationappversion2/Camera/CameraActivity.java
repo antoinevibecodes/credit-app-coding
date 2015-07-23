@@ -95,7 +95,6 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
                 cameraPreview_.flipCamera();
                 break;
             case  TAKE_PICTURE:
-                capturedPicture_ = new CapturedPicture(cameraSettings_);
                 capturedPicture_.takePicture();
                 break;
         }

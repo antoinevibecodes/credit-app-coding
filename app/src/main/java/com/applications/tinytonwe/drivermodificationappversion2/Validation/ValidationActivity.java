@@ -37,6 +37,8 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
     private TextView errorMessage_;
     private CardView pictureCard_;
 
+    private Toolbar toolbar_;
+
 
     private LinearLayout contentLayout;
     @Override
@@ -54,8 +56,8 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
 
         contentLayout = (LinearLayout)findViewById(R.id.layoutContent);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.tool_bar);
-        toolbar.setTitle("Validation Process");
+        toolbar_ = (Toolbar)findViewById(R.id.tool_bar);
+        toolbar_.setTitle("Review & Submit Information");
 
         pictureTaken_ = (ImageView)findViewById(R.id.pictureTaken);
         pictureCard_ = (CardView)findViewById(R.id.cardPictureTemplate);

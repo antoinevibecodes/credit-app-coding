@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         layoutContent_ = (LinearLayout)findViewById(R.id.layoutContent);
 
         Toolbar toolbar_ = (Toolbar)findViewById(R.id.tool_bar);
-        toolbar_.setTitle("App Hub");
+        toolbar_.setTitle("Collect TinyTowne Driver ID");
 
         CardView errorCard = (CardView)findViewById(R.id.errorCard);
         errorCard.setVisibility(View.VISIBLE);

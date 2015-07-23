@@ -17,7 +17,6 @@ import com.applications.tinytonwe.cameralibrary.LibData;
 public class CapturedPicture {
 
     private CameraSettings cameraSettings_;
-    private Camera myCamera_;
 
     private Activity activity_;
     private CapturedPictureCallback capturedPictureCallback_;
@@ -31,7 +30,6 @@ public class CapturedPicture {
 
     public CapturedPicture(CameraSettings cameraSettings){
         cameraSettings_ = cameraSettings;
-        myCamera_ = cameraSettings_.getMyCamera_();
 
         activity_ = cameraSettings_.getCallingActivity_();
         capturedPictureCallback_ = (CapturedPictureCallback)activity_;
@@ -42,9 +40,9 @@ public class CapturedPicture {
     public void takePicture(){
 
         if(cameraSettings_.canCameraAutoFocus())
-            myCamera_.autoFocus(autoFocusCallback_());
+            cameraSettings_.getMyCamera_().autoFocus(autoFocusCallback_());
         else
-            myCamera_.takePicture(null, null, pictureCallback_());
+            cameraSettings_.getMyCamera_().takePicture(null, null, pictureCallback_());
     }
 
 
