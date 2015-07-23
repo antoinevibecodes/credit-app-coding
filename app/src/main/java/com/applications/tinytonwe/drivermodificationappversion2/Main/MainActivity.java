@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initializeActivity();
-        registerListeners();
+        //initializeActivity();
+        //registerListeners();
     }
 
     private void initializeActivity(){

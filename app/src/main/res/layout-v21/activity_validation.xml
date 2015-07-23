@@ -10,6 +10,7 @@
         android:id="@+id/tool_bar"
         layout="@layout/toolbar"/>
 
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -26,7 +27,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/cardDataArea"
+        android:id="@+id/cardDataArea"
         android:layout_weight="0.7"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -35,20 +36,17 @@
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+        <include
+            layout="@layout/picture_card"/>
 
-            <include
-                layout="@layout/picture_card"/>
+        <include
+            android:id="@+id/successCard"
+            layout="@layout/success_card"/>
 
-            <include
-                android:id="@+id/successCard"
-                layout="@layout/success_card"/>
-
-            <include
-                android:id="@+id/errorCard"
-                layout="@layout/error_card"/>
-
+        <include
+            android:id="@+id/errorCard"
+            layout="@layout/error_card"/>
         </FrameLayout>
-
     </LinearLayout>
 
 
@@ -78,6 +76,7 @@
 
             <ImageButton
                 android:id="@+id/cancelBtn"
+                android:elevation="@dimen/button_rest_elevation"
                 android:layout_gravity="center"
                 android:layout_width="95dp"
                 android:layout_height="95dp"
@@ -95,22 +94,22 @@
             android:orientation="vertical"
             android:gravity="center">
 
-            <TextView
-                android:text="Camera"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <TextView
+            android:text="Camera"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-            <ImageButton
-                android:id="@+id/retakeBtn"
-                android:elevation="@dimen/button_rest_elevation"
-                android:layout_gravity="center"
-                android:layout_width="95dp"
-                android:layout_height="95dp"
-                android:text="@string/changePicture"
-                android:background="@drawable/image_button_style"
-                android:src="@drawable/camera64px"/>
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/retakeBtn"
+            android:elevation="@dimen/button_rest_elevation"
+            android:layout_gravity="center"
+            android:layout_width="95dp"
+            android:layout_height="95dp"
+            android:text="@string/changePicture"
+            android:background="@drawable/image_button_style"
+            android:src="@drawable/camera64px"/>
+    </LinearLayout>
 
 
         <LinearLayout
@@ -129,6 +128,7 @@
 
             <ImageButton
                 android:id="@+id/sendBtn"
+                android:elevation="@dimen/button_rest_elevation"
                 android:layout_gravity="center"
                 android:layout_width="95dp"
                 android:layout_height="95dp"
@@ -140,9 +140,7 @@
 
     </LinearLayout>
 
-        </LinearLayout>
-
+    </LinearLayout>
 
     </FrameLayout>
-
 </LinearLayout>

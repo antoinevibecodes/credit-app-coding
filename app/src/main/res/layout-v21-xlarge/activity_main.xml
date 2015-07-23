@@ -21,16 +21,16 @@
             android:layout_gravity="center"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        <include
-            android:id="@+id/promptDriverIdCard"
-            layout="@layout/prompt_driver_id_card"
-            />
+            android:layout_height="wrap_content">
+            <include
+                android:id="@+id/promptDriverIdCard"
+                layout="@layout/prompt_driver_id_card"
+                />
 
-        <include
-            android:id="@+id/promptCard"
-            layout="@layout/prompt_tap_card"
-            />
+            <include
+                android:id="@+id/promptCard"
+                layout="@layout/prompt_tap_card"
+                />
 
         </LinearLayout>
 
@@ -47,20 +47,21 @@
             android:layout_width="match_parent"
             android:layout_height="400dp">
 
-        <include
-            android:id="@+id/errorCard"
-            layout="@layout/error_card"
-            />
+            <include
+                android:id="@+id/errorCard"
+                layout="@layout/error_card"
+                />
 
             <ImageButton
+                android:baselineAlignBottom="true"
                 android:id="@+id/backBtn"
+                android:elevation="@dimen/button_rest_elevation"
                 android:layout_gravity="center"
                 android:layout_width="95dp"
                 android:layout_height="95dp"
                 android:text="@string/changePicture"
                 android:background="@drawable/image_button_style"
                 android:src="@drawable/back64px"/>
-
         </LinearLayout>
 
         <LinearLayout
@@ -69,21 +70,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-                <LinearLayout
-                    android:layout_weight="0.7"
+            <LinearLayout
+                android:layout_weight="0.7"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical">
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:orientation="vertical">
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                    android:layout_height="match_parent">
 
-                        <include
-                            layout="@layout/driver_data_card"/>
+                    <include
+                        layout="@layout/driver_data_card"/>
 
-                        </FrameLayout>
+                </FrameLayout>
 
-                </LinearLayout>
+            </LinearLayout>
 
 
             <LinearLayout
@@ -96,6 +97,7 @@
 
                 <ImageButton
                     android:id="@+id/cameraBtn"
+                    android:elevation="@dimen/button_rest_elevation"
                     android:layout_gravity="center"
                     android:layout_width="95dp"
                     android:layout_height="95dp"

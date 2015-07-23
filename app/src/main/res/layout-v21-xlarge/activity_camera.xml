@@ -1,0 +1,56 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraActivity">
+
+
+<FrameLayout
+    android:id="@+id/cameraFrame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:paddingBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/cancelBtn"
+                android:layout_margin="20dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:background="@drawable/image_button_style"
+                android:src="@drawable/cancel"/>
+
+            <ImageButton
+                android:id="@+id/switchBtn"
+                android:layout_margin="20dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:background="@drawable/image_button_style"
+                android:src="@drawable/switchcamera"/>
+
+            <ImageButton
+                android:id="@+id/shutterBtn"
+                android:layout_margin="20dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:background="@drawable/image_button_style"
+                android:src="@drawable/shutter64px"
+                />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+</FrameLayout>

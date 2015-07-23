@@ -54,6 +54,7 @@
 
             <ImageButton
                 android:id="@+id/backBtn"
+                android:elevation="@dimen/button_rest_elevation"
                 android:layout_gravity="center"
                 android:layout_width="95dp"
                 android:layout_height="95dp"
@@ -96,6 +97,7 @@
 
                 <ImageButton
                     android:id="@+id/cameraBtn"
+                    android:elevation="@dimen/button_rest_elevation"
                     android:layout_gravity="center"
                     android:layout_width="95dp"
                     android:layout_height="95dp"

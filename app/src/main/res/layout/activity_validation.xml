@@ -102,7 +102,6 @@
 
         <ImageButton
             android:id="@+id/retakeBtn"
-            android:elevation="@dimen/button_rest_elevation"
             android:layout_gravity="center"
             android:layout_width="95dp"
             android:layout_height="95dp"
@@ -128,7 +127,6 @@
 
             <ImageButton
                 android:id="@+id/sendBtn"
-                android:elevation="@dimen/button_rest_elevation"
                 android:layout_gravity="center"
                 android:layout_width="95dp"
                 android:layout_height="95dp"
