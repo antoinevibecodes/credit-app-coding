@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DriverModificationAppVersion2.iml" filepath="$PROJECT_DIR$/DriverModificationAppVersion2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DriverModification.iml" filepath="$PROJECT_DIR$/DriverModification.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/cameralib/cameralib.iml" filepath="$PROJECT_DIR$/cameralib/cameralib.iml" />
     </modules>
   </component>
 </project>
-

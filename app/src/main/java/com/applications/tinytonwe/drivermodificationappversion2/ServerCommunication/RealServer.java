@@ -101,7 +101,7 @@ public class RealServer extends ServerInterface {
             try {
                 JSONObject pictureInfo = new JSONObject();
 
-                pictureInfo.put("DriverId", 1);
+                pictureInfo.put("DriverId", driverId);
                 String base64Encoded = Base64.encodeToString(pictureData, Base64.DEFAULT);
                 pictureInfo.put("PictureData", base64Encoded);
 
