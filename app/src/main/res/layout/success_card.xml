@@ -6,39 +6,41 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/activity_margin">
+    android:layout_margin="5dp">
 
     <LinearLayout
         android:layout_gravity="center"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="120dp">
+        android:orientation="vertical"
+        android:layout_height="230dp">
 
         <LinearLayout
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:gravity="center">
         <ImageView
             android:id="@+id/successImage"
-            android:layout_width="100dp"
+            android:layout_width="95dp"
             android:layout_gravity="center"
-            android:layout_height="100dp"
+            android:layout_height="95dp"
             android:background="@drawable/valid"
             android:src="@drawable/send"/>
         </LinearLayout>
 
     <LinearLayout
+        android:layout_marginTop="5dp"
         android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="start"
-            android:text="Sucess !"/>
+            android:textSize="20sp"
+            android:gravity="start"/>
         </LinearLayout>
     </LinearLayout>
 

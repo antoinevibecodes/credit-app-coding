@@ -3,6 +3,7 @@ package com.applications.tinytonwe.drivermodificationappversion2.Main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.DisplayErrorMessages;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
@@ -59,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //initializeActivity();
-        //registerListeners();
+        initializeActivity();
+        registerListeners();
     }
 
     private void initializeActivity(){
@@ -83,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         errorMessage_ = (TextView)findViewById(R.id.errorMessage);
 
         progressBar_ = (ProgressBar)findViewById(R.id.progressbar);
+        progressBar_.getIndeterminateDrawable().setColorFilter(0xFFFFC000, PorterDuff.Mode.SRC_ATOP);
+
         setSupportActionBar(toolbar_);
         CardView driverData = (CardView)findViewById(R.id.cardDataTemplate);
 
@@ -151,14 +155,30 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
             startServerRequest(QUERY_DRIVERID);
         }
         catch (Exception e){
-
+            //Invalid Id entered
+            displayErrorMessage(MErrors.INVALID_ID_ENTERED);
         }
     }
+
+
+    public void displayErrorMessage(MErrors sErrors){
+
+        String message = "";
+        switch (sErrors){
+            case INVALID_ID_ENTERED:
+                message = "Enter digits only";
+                break;
+        }
+
+        DisplayErrorMessages.displayError(this, message);
+
+    }
+
 
     public void onResume() {
 
         super.onResume();
-        appData_.reset();
+        AppData.getAppDataInstance_().reset();
 
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
             //get the tag id
