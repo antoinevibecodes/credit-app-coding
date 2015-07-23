@@ -2,6 +2,7 @@ package com.applications.tinytonwe.cameralibrary.CameraPreview;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -10,6 +11,7 @@ import android.widget.FrameLayout;
 
 import com.applications.tinytonwe.cameralibrary.CameraSettings.CameraSettings;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -83,12 +85,30 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             //Setting the camera's optimal preview size based on size of view to contain it
             //
             Camera.Parameters parameters = myCamera_.getParameters();
-            List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
 
+            //Setting the preview size
+            List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
             Camera.Size optimalPreviewSize = getOptimalPreviewSize(supportedPreviewSizes, width_, height_);
             parameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);
 
-            myCamera_.setParameters(parameters);
+            //setting the picture size
+            List<Camera.Size> supportedPictureSizes = parameters.getSupportedPictureSizes();
+            parameters.setPictureSize(supportedPictureSizes.get(0).width, supportedPictureSizes.get(0).height);
+
+
+            //setting autofocus if applicable
+            List<String> focusModes = parameters.getSupportedFocusModes();
+            for (int loop = 0; loop < focusModes.size(); loop++) {
+                if (focusModes.get(loop).equals("continuous-picture")) {
+                    parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                    return;
+                }
+            }
+
+            //setting picture mode
+            parameters.setSceneMode(Camera.Parameters.SCENE_MODE_PORTRAIT);
+
+                myCamera_.setParameters(parameters);
         }
     }
 

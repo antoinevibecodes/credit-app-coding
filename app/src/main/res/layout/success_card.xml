@@ -23,24 +23,27 @@
             android:gravity="center">
         <ImageView
             android:id="@+id/successImage"
-            android:layout_width="95dp"
+            android:layout_width="75dp"
             android:layout_gravity="center"
-            android:layout_height="95dp"
+            android:layout_height="75dp"
             android:background="@drawable/valid"
             android:src="@drawable/send"/>
         </LinearLayout>
 
     <LinearLayout
+        android:layout_gravity="center"
         android:layout_marginTop="5dp"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="20sp"
-            android:gravity="start"/>
+            android:gravity="center"
+            android:textColor="#000000"
+            android:text="Operation Successful"/>
         </LinearLayout>
     </LinearLayout>
 

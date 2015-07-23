@@ -39,7 +39,8 @@ public class CapturedPicture {
 
     public void takePicture(){
 
-        if(cameraSettings_.canCameraAutoFocus())
+        String focusMode = cameraSettings_.getMyCamera_().getParameters().getFocusMode();
+        if(focusMode.equals("auto") || focusMode.equals("continuous-picture"))
             cameraSettings_.getMyCamera_().autoFocus(autoFocusCallback_());
         else
             cameraSettings_.getMyCamera_().takePicture(null, null, pictureCallback_());
@@ -82,7 +83,10 @@ public class CapturedPicture {
             CameraSelected cameraUsed = ((picture.getCameraUsed() == 0) ? CameraSelected.BACK : CameraSelected.FRONT);
             int cameraOrientation = picture.getCameraOrientation();
 
-            Bitmap decodeImage = BitmapFactory.decodeByteArray(picture.getPictureData(), 0, picture.getPictureData().length);
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inSampleSize = 4;
+            Bitmap decodeImage = BitmapFactory.decodeByteArray(picture.getPictureData(), 0, picture.getPictureData().length, o);
+
             correctDisplayAndRotate(decodeImage, cameraOrientation, cameraUsed);
             cameraData.setOriginalBitmap(originalImage);
             cameraData.setCroppedBitmap(croppedImage);
@@ -95,7 +99,6 @@ public class CapturedPicture {
 
     }
 
-
     public Bitmap getOriginalImage(){
         return originalImage;
     }
@@ -103,6 +106,8 @@ public class CapturedPicture {
     public Bitmap getCroppedImage(){
         return croppedImage;
     }
+
+
     private void correctDisplayAndRotate(Bitmap bitmapToRotate, int cameraOrientation, CameraSelected cameraUsed){
         Matrix matrix = new Matrix();
         int angle = 0;
@@ -118,7 +123,12 @@ public class CapturedPicture {
         if(angle != -9999)
             matrix.postRotate(angle);
 
-        originalImage = Bitmap.createBitmap(bitmapToRotate, 0, 0, bitmapToRotate.getWidth(), bitmapToRotate.getHeight(), matrix, true);
+        try {
+            originalImage = Bitmap.createBitmap(bitmapToRotate, 0, 0, bitmapToRotate.getWidth(), bitmapToRotate.getHeight(), matrix, true);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
         if(cameraData.isCropSet())
             croppedImage =  cropImage(originalImage);

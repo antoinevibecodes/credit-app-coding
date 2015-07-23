@@ -74,7 +74,9 @@
                 android:text="Exit"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="18dp"/>
 
             <ImageButton
                 android:id="@+id/cancelBtn"
@@ -100,7 +102,9 @@
                 android:text="Camera"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="18dp"/>
 
             <ImageButton
                 android:id="@+id/retakeBtn"
@@ -126,7 +130,9 @@
                 android:text="Send"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="18dp"/>
 
             <ImageButton
                 android:id="@+id/sendBtn"

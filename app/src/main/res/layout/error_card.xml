@@ -23,14 +23,15 @@
         android:gravity="center">
         <ImageView
             android:id="@+id/errorImage"
-            android:layout_width="95dp"
-            android:layout_height="95dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_gravity="center"
             android:background="@drawable/invalid"
             android:src="@drawable/cancel"/>
     </LinearLayout>
 
     <LinearLayout
+        android:layout_gravity="center"
         android:layout_marginTop="5dp"
         android:layout_weight="1"
         android:layout_width="match_parent"
@@ -39,11 +40,13 @@
 
         <TextView
             android:id="@+id/errorMessage"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="start"
-            android:textSize="20sp"/>
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:text="Operation Successful"/>
         </LinearLayout>
     </LinearLayout>
 

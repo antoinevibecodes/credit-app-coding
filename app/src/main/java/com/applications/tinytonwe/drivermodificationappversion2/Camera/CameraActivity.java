@@ -29,18 +29,13 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
     private CameraSettings cameraSettings_;
     private CameraPreview cameraPreview_;
     private CropWindow cropWindow_;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
         registerListeners();
-
-
-        //preparing camera
-        cameraModule = new CameraModule(this,cameraFrame,true,this);
-        cameraModule.startCameraPreview();
+        startCamera();
     }
 
 
@@ -50,14 +45,12 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
 
         cameraSettings_ = new CameraSettings(this, CameraSelected.FRONT);
         cameraSettings_.useOptimalPreviewSettings();
-        cameraSettings_.setCameraPictureQuality(Quality.MEDIUM_HIGH);
-        cameraSettings_.enableAutoFocus();
 
         cameraPreview_ = new CameraPreview(this, cameraSettings_, cameraView);
 
         capturedPicture_ = new CapturedPicture(cameraSettings_);
 
-        cropWindow_ = new CropWindow(this, 0.5f, "#ffc000",cameraView);
+        cropWindow_ = new CropWindow(this, 0.8f, "#ffc000",cameraView);
 
         ImageButton cancelBtn = (ImageButton)findViewById(R.id.cancelBtn);
         ImageButton switchBtn = (ImageButton)findViewById(R.id.switchBtn);
@@ -97,7 +90,6 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
                 break;
             case FLIP_CAMERA:
                 cameraPreview_.flipCamera();
-                cameraSettings_.enableAutoFocus();
                 break;
             case  TAKE_PICTURE:
                 capturedPicture_.takePicture();
