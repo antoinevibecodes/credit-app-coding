@@ -24,6 +24,7 @@ import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunicat
 public class ValidationActivity extends AppCompatActivity implements TaskListener {
 
     private ProgressBar progressBar;
+    private LinearLayout waitLayout_;
 
     private ImageView pictureTaken_;
     ImageButton exitBtn;
@@ -53,6 +54,7 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
 
     private void registerListeners(){
         progressBar = (ProgressBar)findViewById(R.id.progressbar);
+        waitLayout_ = (LinearLayout)findViewById(R.id.waitLayout);
 
         contentLayout = (LinearLayout)findViewById(R.id.layoutContent);
 
@@ -122,14 +124,14 @@ public class ValidationActivity extends AppCompatActivity implements TaskListene
         successCard_.setVisibility(View.GONE);
         errorCard_.setVisibility(View.GONE);
         contentLayout.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
+        waitLayout_.setVisibility(View.VISIBLE);
         server_ = new RealServer(this);
         RealServer.Upload upload = server_.new Upload();
     }
 
     public void onTaskFinished(Response response){
 
-        progressBar.setVisibility(View.GONE);
+        waitLayout_.setVisibility(View.GONE);
 
         if(response.responseOk)
             requestEndedResponseOk();

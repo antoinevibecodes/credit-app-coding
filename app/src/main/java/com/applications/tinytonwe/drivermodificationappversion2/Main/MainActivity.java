@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
 
     private ProgressBar progressBar_;
+    private LinearLayout waitLayout_;
     private TextView errorMessage_;
 
     private String cardReadByNFC_ = "";
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
         promptCardsLayout_ = (LinearLayout)findViewById(R.id.promptCardsLayout);
         layoutContent_ = (LinearLayout)findViewById(R.id.layoutContent);
+        waitLayout_ = (LinearLayout)findViewById(R.id.waitLayout);
 
         Toolbar toolbar_ = (Toolbar)findViewById(R.id.tool_bar);
         toolbar_.setTitle("Collect TinyTowne Driver ID");
@@ -271,9 +273,9 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
     private void showWaitDialog(boolean value){
         if(value)
-            progressBar_.setVisibility(View.VISIBLE);
+            waitLayout_.setVisibility(View.VISIBLE);
         else
-            progressBar_.setVisibility(View.GONE);
+            waitLayout_.setVisibility(View.GONE);
     }
     @Override
     public void onTaskFinished(Response response){
