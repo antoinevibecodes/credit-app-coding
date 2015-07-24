@@ -29,6 +29,6 @@
     <string name="serverUploadUrl">http://172.16.4.101:81/api/admission/UploadDriverPicture</string>
     <string name="serverRequestDriverUrl">http://172.16.4.101:81/api/Entitlements/GetDriver</string>
     <string name="serverRequestGetDriverPictureUrl">http://172.16.4.101:81/api/transactions/GetScaledDriverPicture?DriverId=</string>
-    <string name="connectionTimeoutDuration">5000</string>
-    <string name="responseTimeoutDuration">5000</string>
+    <string name="connectionTimeoutDuration">30000</string>
+    <string name="responseTimeoutDuration">30000</string>
 </resources>

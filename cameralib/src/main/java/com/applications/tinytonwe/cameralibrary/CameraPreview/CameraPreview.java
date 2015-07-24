@@ -40,8 +40,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public void startPreview(){
         this.getHolder().addCallback(this);
-
-        cameraView_.removeAllViews();
         cameraView_.addView(this);
     }
 
@@ -81,34 +79,68 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private void setOptimalParameters(){
 
         if(cameraSettings_.useOptimalPreviewSettings()) {
-            //
-            //Setting the camera's optimal preview size based on size of view to contain it
-            //
-            Camera.Parameters parameters = myCamera_.getParameters();
 
-            //Setting the preview size
-            List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
-            Camera.Size optimalPreviewSize = getOptimalPreviewSize(supportedPreviewSizes, width_, height_);
-            parameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);
-
-            //setting the picture size
-            List<Camera.Size> supportedPictureSizes = parameters.getSupportedPictureSizes();
-            parameters.setPictureSize(supportedPictureSizes.get(0).width, supportedPictureSizes.get(0).height);
+            try {
+                //
+                //Setting the camera's optimal preview size based on size of view to contain it
+                //
+                Camera.Parameters parameters = myCamera_.getParameters();
 
 
-            //setting autofocus if applicable
-            List<String> focusModes = parameters.getSupportedFocusModes();
-            for (int loop = 0; loop < focusModes.size(); loop++) {
-                if (focusModes.get(loop).equals("continuous-picture")) {
-                    parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-                    return;
+                //
+                //Setting the preview size
+                //
+                List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
+                Camera.Size optimalPreviewSize = getOptimalPreviewSize(supportedPreviewSizes, width_, height_);
+                parameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);
+                //
+
+                //
+                //setting the picture size
+                //
+                List<Camera.Size> supportedPictureSizes = parameters.getSupportedPictureSizes();
+                parameters.setPictureSize(supportedPictureSizes.get(0).width, supportedPictureSizes.get(0).height);
+                //
+
+                //
+                //setting autofocus if applicable
+                //
+                List<String> focusModes = parameters.getSupportedFocusModes();
+                for (int loop = 0; loop < focusModes.size(); loop++) {
+                    if (focusModes.get(loop).equals("continuous-picture")) {
+                        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                        return;
+                    }
                 }
-            }
 
-            //setting picture mode
-            parameters.setSceneMode(Camera.Parameters.SCENE_MODE_PORTRAIT);
+                //
+                //setting picture mode
+                //
+                List<String> sceneModes = parameters.getSupportedSceneModes();
+                boolean pictureModeSet = false;
+                for (int loop = 0; loop < sceneModes.size(); loop++) {
+                    if (sceneModes.get(loop).equals("hdr")) {
+                        parameters.setSceneMode(Camera.Parameters.SCENE_MODE_HDR);
+                        pictureModeSet = true;
+                        return;
+                    }
+                }
+                if(!pictureModeSet){
+                    for (int loop = 0; loop < sceneModes.size(); loop++) {
+                        if (sceneModes.get(loop).equals("auto")) {
+                            parameters.setSceneMode(Camera.Parameters.SCENE_MODE_AUTO);
+                            return;
+                        }
+                    }
+                }
+
+                //
 
                 myCamera_.setParameters(parameters);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 

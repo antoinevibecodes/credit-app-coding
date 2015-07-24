@@ -45,7 +45,12 @@ public class CropWindow extends View {
 
 
     public void displayCropWindow(){
-        cameraView_.addView(this);
+        try {
+            cameraView_.addView(this);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
