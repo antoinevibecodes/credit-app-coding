@@ -9,7 +9,7 @@ public class Picture {
     private int cameraOrientation;
 
     public Picture(byte[] pictureData, int cameraUsed, int cameraOrientation){
-        this.pictureData = pictureData;
+        this.pictureData = pictureData.clone();
         this.cameraUsed = cameraUsed;
         this.cameraOrientation = cameraOrientation;
     }

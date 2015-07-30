@@ -1,17 +1,13 @@
 package com.applications.tinytonwe.cameralibrary.CameraPreview;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Rect;
 import android.hardware.Camera;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.applications.tinytonwe.cameralibrary.CameraSettings.CameraSettings;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -91,49 +87,18 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 //Setting the preview size
                 //
                 List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
-                Camera.Size optimalPreviewSize = getOptimalPreviewSize(supportedPreviewSizes, width_, height_);
-                parameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);
+                Camera.Size optimalPreviewSize = getOptimalSize(supportedPreviewSizes, width_, height_);
+                int optimalPreviewWidth = optimalPreviewSize.width;
+                int optimalPreviewHeight = optimalPreviewSize.height;
+                parameters.setPreviewSize(optimalPreviewWidth, optimalPreviewHeight);
                 //
 
                 //
                 //setting the picture size
                 //
                 List<Camera.Size> supportedPictureSizes = parameters.getSupportedPictureSizes();
-                parameters.setPictureSize(supportedPictureSizes.get(0).width, supportedPictureSizes.get(0).height);
-                //
-
-                //
-                //setting autofocus if applicable
-                //
-                List<String> focusModes = parameters.getSupportedFocusModes();
-                for (int loop = 0; loop < focusModes.size(); loop++) {
-                    if (focusModes.get(loop).equals("continuous-picture")) {
-                        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-                        return;
-                    }
-                }
-
-                //
-                //setting picture mode
-                //
-                List<String> sceneModes = parameters.getSupportedSceneModes();
-                boolean pictureModeSet = false;
-                for (int loop = 0; loop < sceneModes.size(); loop++) {
-                    if (sceneModes.get(loop).equals("hdr")) {
-                        parameters.setSceneMode(Camera.Parameters.SCENE_MODE_HDR);
-                        pictureModeSet = true;
-                        return;
-                    }
-                }
-                if(!pictureModeSet){
-                    for (int loop = 0; loop < sceneModes.size(); loop++) {
-                        if (sceneModes.get(loop).equals("auto")) {
-                            parameters.setSceneMode(Camera.Parameters.SCENE_MODE_AUTO);
-                            return;
-                        }
-                    }
-                }
-
+                Camera.Size optimalPictureSize = getOptimalSize(supportedPictureSizes, optimalPreviewWidth, optimalPreviewHeight);
+                parameters.setPictureSize(optimalPictureSize.width, optimalPictureSize.height);
                 //
 
                 myCamera_.setParameters(parameters);
@@ -170,7 +135,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         setMeasuredDimension(width_, height_);
     }
 
-    private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
+    private Camera.Size getOptimalSize(List<Camera.Size> sizes, int w, int h) {
         final double ASPECT_TOLERANCE = 0.1;
         double targetRatio=(double)h / w;
 

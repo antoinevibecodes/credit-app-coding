@@ -11,6 +11,8 @@ import com.applications.tinytonwe.cameralibrary.CameraSettings.CameraSettings;
 import com.applications.tinytonwe.cameralibrary.CapturedPictureCallback;
 import com.applications.tinytonwe.cameralibrary.LibData;
 
+import java.io.ByteArrayInputStream;
+
 /**
  * Created by admin on 6/26/2015.
  */
@@ -82,10 +84,16 @@ public class CapturedPicture {
         try {
             CameraSelected cameraUsed = ((picture.getCameraUsed() == 0) ? CameraSelected.BACK : CameraSelected.FRONT);
             int cameraOrientation = picture.getCameraOrientation();
+            byte [] pictureArray = picture.getPictureData().clone();
 
             BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inSampleSize = 4;
-            Bitmap decodeImage = BitmapFactory.decodeByteArray(picture.getPictureData(), 0, picture.getPictureData().length, o);
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeByteArray(pictureArray, 0, pictureArray.length,o);
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = calculateInSampleSize(o);
+            Bitmap decodeImage = BitmapFactory.decodeByteArray(pictureArray, 0, pictureArray.length,options);
+
 
             correctDisplayAndRotate(decodeImage, cameraOrientation, cameraUsed);
             cameraData.setOriginalBitmap(originalImage);
@@ -97,6 +105,32 @@ public class CapturedPicture {
             e.printStackTrace();
         }
 
+    }
+
+
+    public static int calculateInSampleSize( BitmapFactory.Options options) {
+
+        int reqSize = 1280;
+
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqSize || width > reqSize) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqSize
+                    && (halfWidth / inSampleSize) > reqSize) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
     public Bitmap getOriginalImage(){
@@ -189,5 +223,7 @@ public class CapturedPicture {
 
         return angle;
     }
+
+
 
 }
