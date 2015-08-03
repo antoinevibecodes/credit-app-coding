@@ -1,6 +1,5 @@
 package com.applications.tinytonwe.drivermodificationappversion2.Main;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -15,15 +14,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
-import com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.DisplayErrorMessages;
+import com.applications.tinytonwe.drivermodificationappversion2.SelectOption.OptionsActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
@@ -42,15 +40,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
     private RealServer server_;
 
-    private TextView driverId_;
-    private TextView firstName_;
-    private TextView lastName_;
-    private TextView dobValue_;
-    private ImageView driverImage_;
-
     private LinearLayout promptCardsLayout_;
     private LinearLayout errorCardLayout_;
-    private LinearLayout layoutContent_;
 
     private final int QUERY_RFID = 0;
     private final int QUERY_DRIVERID = 1;
@@ -74,11 +65,10 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     private void registerListeners(){
 
         promptCardsLayout_ = (LinearLayout)findViewById(R.id.promptCardsLayout);
-        layoutContent_ = (LinearLayout)findViewById(R.id.layoutContent);
         waitLayout_ = (LinearLayout)findViewById(R.id.waitLayout);
 
         Toolbar toolbar_ = (Toolbar)findViewById(R.id.tool_bar);
-        toolbar_.setTitle("Collect TinyTowne Driver ID");
+        toolbar_.setTitle("Enter TinyTowne ID");
 
         CardView errorCard = (CardView)findViewById(R.id.errorCard);
         errorCard.setVisibility(View.VISIBLE);
@@ -90,22 +80,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         progressBar_.getIndeterminateDrawable().setColorFilter(0xFFFFC000, PorterDuff.Mode.SRC_ATOP);
 
         setSupportActionBar(toolbar_);
-        CardView driverData = (CardView)findViewById(R.id.cardDataTemplate);
-
-        driverId_ = (TextView)findViewById(R.id.driverIdValue);
-        firstName_ = (TextView)findViewById(R.id.firstNameValue);
-        lastName_ = (TextView)findViewById(R.id.lastNameValue);
-        dobValue_ = (TextView)findViewById(R.id.dobValue);
-        driverImage_ = (ImageView)findViewById(R.id.driverImage);
-
-        ImageButton cameraBtn_ = (ImageButton)findViewById(R.id.cameraBtn);
-
-        cameraBtn_.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonHandler(AppActions.CAMERA);
-            }
-        });
 
         Button sendDriverIdBtn = (Button)findViewById(R.id.sendDriverId);
 
@@ -129,9 +103,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     private void buttonHandler(AppActions appActions){
 
         switch (appActions){
-            case CAMERA:
-                startActivity(new Intent(this, CameraActivity.class));
-                break;
             case PROCESS_ID_ENTERED:
                 processDriverId();
                 break;
@@ -146,11 +117,9 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     private void processDriverId() {
 
         EditText driverIdString = (EditText)findViewById(R.id.driverID);
-
         //Dismissing the keyboard
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(driverIdString.getWindowToken(), 0);
-
 
         try{
             long driverId = Long.parseLong(driverIdString.getText().toString());
@@ -246,14 +215,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     }
 
     private void requestEndedResponseOk(){
-
-        driverId_.setText(Long.toString(appData_.getDriverId_()));
-        firstName_.setText(appData_.getDriverFirstName());
-        lastName_.setText(appData_.getDriverLastName());
-        dobValue_.setText(appData_.getDob());
-        driverImage_.setImageBitmap(appData_.getDriverImage());
-
-        enableContentView();
+        startActivity(new Intent(this, OptionsActivity.class));
     }
 
     private void requestEndedResponseError(String errorMessage){
@@ -264,12 +226,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
     private void disableContentAndPromptViews(){
             errorCardLayout_.setVisibility(View.GONE);
-            layoutContent_.setVisibility(View.GONE);
             promptCardsLayout_.setVisibility(View.GONE);
-    }
-
-    private void enableContentView(){
-        layoutContent_.setVisibility(View.VISIBLE);
     }
 
     private void showWaitDialog(boolean value){

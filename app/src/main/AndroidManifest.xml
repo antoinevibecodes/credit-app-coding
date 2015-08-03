@@ -35,14 +35,18 @@
                 android:resource="@xml/nfc_tech_filter" />
         </activity>
         <activity
-            android:noHistory="true"
             android:name=".Camera.CameraActivity"
-            android:label="@string/title_activity_camera" >
+            android:label="@string/title_activity_camera"
+            android:noHistory="true" >
         </activity>
         <activity
-            android:noHistory="true"
             android:name=".Validation.ValidationActivity"
-            android:label="@string/title_activity_validation" >
+            android:label="@string/title_activity_validation"
+            android:noHistory="true" >
+        </activity>
+        <activity
+            android:name=".SelectOption.OptionsActivity"
+            android:label="@string/title_activity_options" >
         </activity>
     </application>
 
