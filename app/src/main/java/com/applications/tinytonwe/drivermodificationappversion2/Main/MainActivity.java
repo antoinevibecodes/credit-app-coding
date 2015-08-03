@@ -136,7 +136,8 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
                 processDriverId();
                 break;
             case BACK_TO_HOME_SCREEN:
-                this.recreate();
+                this.finish();
+                startActivity(new Intent(this,MainActivity.class));
                 break;
         }
     }
