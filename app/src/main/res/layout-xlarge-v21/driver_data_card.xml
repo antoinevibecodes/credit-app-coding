@@ -13,10 +13,10 @@
            android:layout_height="wrap_content"
            android:orientation="horizontal">
 
-
                <ImageView
-                   android:layout_width="450dp"
-                   android:layout_height="450dp"
+                   android:layout_gravity="center"
+                   android:layout_width="300dp"
+                   android:layout_height="300dp"
                    android:scaleType="fitCenter"
                    android:id="@+id/driverImage"
                    android:src="@drawable/temp_image"/>
@@ -26,6 +26,7 @@
 
 
                <TableLayout
+                   android:layout_gravity="center"
                    android:gravity="center"
                    android:layout_width="match_parent"
                    android:layout_height="match_parent"
