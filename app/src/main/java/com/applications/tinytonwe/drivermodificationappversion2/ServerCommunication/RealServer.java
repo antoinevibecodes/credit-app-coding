@@ -264,12 +264,7 @@ public class RealServer extends ServerInterface {
 
                         //Get the information contained within the Json object
                         JSONObject jsonObjectReceived = new JSONObject(receivedJsonString);
-
-                        appData.setDriverId(Long.parseLong(jsonObjectReceived.getString("DriverId")));
-                        appData.setDriverFirstName(jsonObjectReceived.getString("FirstName"));
-                        appData.setDriverLastName(jsonObjectReceived.getString("LastName"));
-                        appData.setDriverDob(jsonObjectReceived.getString("DateOfBirth"));
-
+                        retrieveInformation(jsonObjectReceived);
 
 
                         //Getting the image of the driver
@@ -321,5 +316,37 @@ public class RealServer extends ServerInterface {
 
         inputStream.close();
         return result;
+    }
+
+    private void retrieveInformation(JSONObject jsonObjectReceived){
+        try {
+            appData.setDriverId(Long.parseLong(jsonObjectReceived.getString("DriverId")));
+            appData.setDriverFirstName(jsonObjectReceived.getString("FirstName"));
+            appData.setDriverLastName(jsonObjectReceived.getString("LastName"));
+            appData.setDriverDob(jsonObjectReceived.getString("DateOfBirth"));
+
+            appData.setTotalCredits(jsonObjectReceived.getString("Credits"));
+
+            JSONObject general = jsonObjectReceived.getJSONObject("General");
+            appData.setGeneralCredits(general.getString("Credits"));
+
+            JSONObject food = jsonObjectReceived.getJSONObject("Food");
+            appData.setFoodCredits(food.getString("Credits"));
+
+            JSONObject trafficTrack = jsonObjectReceived.getJSONObject("TrafficTrack");
+            appData.setTrafficTrackCredits(trafficTrack.getString("Credits"));
+
+            JSONObject tinyTrack = jsonObjectReceived.getJSONObject("TinyTrack");
+            appData.setTinyTrackCredits(tinyTrack.getString("Credits"));
+
+            JSONObject train = jsonObjectReceived.getJSONObject("Train");
+            appData.setTrainCredits(train.getString("Credits"));
+
+            JSONObject arcade = jsonObjectReceived.getJSONObject("Arcade");
+            appData.setArcadeCredits(arcade.getString("Credits"));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

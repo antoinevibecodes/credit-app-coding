@@ -13,37 +13,26 @@
 
 
     <LinearLayout
-        android:layout_weight="0.5"
+        android:layout_weight="0.9"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical">
-        <FrameLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <include
                 layout="@layout/driver_data_card"/>
 
-        </FrameLayout>
+            <include
+                layout="@layout/credits_card"/>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_margin="@dimen/activity_margin"
-        android:layout_weight="0.5"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <ImageButton
-            android:id="@+id/cameraBtn"
-            android:layout_gravity="center"
-            android:layout_width="95dp"
-            android:layout_height="95dp"
-            android:text="@string/changePicture"
-            android:background="@drawable/image_button_style"
-            android:src="@drawable/camera64px"/>
+        </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 

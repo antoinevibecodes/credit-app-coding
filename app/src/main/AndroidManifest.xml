@@ -37,7 +37,7 @@
         <activity
             android:name=".Camera.CameraActivity"
             android:label="@string/title_activity_camera"
-            android:noHistory="true" >
+            android:noHistory="true">
         </activity>
         <activity
             android:name=".Validation.ValidationActivity"
@@ -46,7 +46,9 @@
         </activity>
         <activity
             android:name=".SelectOption.OptionsActivity"
-            android:label="@string/title_activity_options" >
+            android:label="@string/title_activity_options"
+            android:parentActivityName=".Main.MainActivity"
+            android:noHistory="true">
         </activity>
     </application>
 

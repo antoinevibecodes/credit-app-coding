@@ -29,6 +29,15 @@ public class AppData {
     private String dob_ = null;
     private Bitmap driverImage_ = null;
 
+    private String totalCredits_ = null;
+    private String generalCredits_ = null;
+    private String foodCredits_ = null;
+    private String trafficTrackCredits_ = null;
+    private String tinyTrackCredits_ = null;
+    private String trainCredits_ = null;
+    private String arcadeCredits_ = null;
+
+
     private long driverId_ = 0;
 
     public static AppData getAppDataInstance_(){
@@ -131,6 +140,63 @@ public class AppData {
         return dob_;
     }
 
+    public void setTotalCredits(String totalCredits){
+        totalCredits_ = totalCredits;
+    }
+
+    public void setGeneralCredits(String generalCredits){
+        generalCredits_ = generalCredits;
+    }
+
+    public void setFoodCredits(String foodCredits){
+        foodCredits_ = foodCredits;
+    }
+
+    public void setTrafficTrackCredits(String trafficTrackCredits){
+        trafficTrackCredits_ = trafficTrackCredits;
+    }
+
+    public void setTinyTrackCredits(String tinyTrackCredits){
+        tinyTrackCredits_ = tinyTrackCredits;
+    }
+
+    public void setTrainCredits(String trainCredits){
+        trainCredits_ = trainCredits;
+    }
+
+    public void setArcadeCredits(String arcadeCredits){
+        arcadeCredits_ = arcadeCredits;
+    }
+
+    public String getTotalCredits(){
+        return totalCredits_;
+    }
+
+    public String getGeneralCredits(){
+        return generalCredits_;
+    }
+
+    public String getFoodCredits(){
+        return foodCredits_;
+    }
+
+    public String getTrafficTrackCredits(){
+        return trafficTrackCredits_;
+    }
+
+    public String getTinyTrackCredits(){
+        return tinyTrackCredits_;
+    }
+
+    public String getTrainCredits(){
+        return trainCredits_;
+    }
+
+    public String getArcadeCredits(){
+        return arcadeCredits_;
+    }
+
+
     public void reset(){
         croppedImage_ = null;
         originalImage_ = null;
@@ -141,5 +207,14 @@ public class AppData {
         dob_ = null;
         driverImage_ = null;
         driverId_ = 0;
+
+        totalCredits_ = null;
+        generalCredits_ = null;
+        foodCredits_ = null;
+        trafficTrackCredits_ = null;
+        tinyTrackCredits_ = null;
+        trainCredits_ = null;
+        arcadeCredits_ = null;
+
     }
 }
