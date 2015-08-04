@@ -29,6 +29,8 @@
     <string name="serverUploadUrl">http://tt-server.azurewebsites.net/api/admission/UploadDriverPicture</string>
     <string name="serverRequestDriverUrl">http://tt-server.azurewebsites.net/api/Entitlements/GetDriver</string>
     <string name="serverRequestGetDriverPictureUrl">http://tt-server.azurewebsites.net/api/transactions/GetScaledDriverPicture?DriverId=</string>
+    <string name="serverChargeCardUrl">http://tt-server.azurewebsites.net/api/entitlements/chargecard</string>
+
     <string name="connectionTimeoutDuration">20000</string>
     <string name="responseTimeoutDuration">20000</string>
     <string name="title_activity_options">OptionsActivity</string>

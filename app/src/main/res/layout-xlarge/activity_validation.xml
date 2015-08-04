@@ -78,33 +78,6 @@
 
 
         <LinearLayout
-            android:id="@+id/exit_btn_layout"
-            android:layout_weight="0.5"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <TextView
-                android:text="Exit"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:textSize="18dp"/>
-
-            <ImageButton
-                android:id="@+id/cancelBtn"
-                android:layout_gravity="center"
-                android:layout_width="95dp"
-                android:layout_height="95dp"
-                android:text="@string/changePicture"
-                android:background="@drawable/image_button_style"
-                android:src="@drawable/cancel"/>
-        </LinearLayout>
-
-
-        <LinearLayout
             android:id="@+id/camera_btn_layout"
             android:layout_weight="0.5"
             android:layout_width="0dp"

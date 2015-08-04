@@ -30,4 +30,12 @@ public abstract class ServerInterface {
         }
     }
 
+    public abstract class ChargeDriverCard extends AsyncTask<Request,Void, Response>{
+
+        protected void onPostExecute(Response response)
+        {
+            callingActivity_.onTaskFinished(response);
+        }
+    }
+
 }

@@ -39,7 +39,7 @@ public class OptionsActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(this.getResources().getDrawable(R.drawable.ic_arrow_back_black_36dp));
         toolbar.inflateMenu(R.menu.menu_options);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void initialize(){

@@ -60,6 +60,9 @@ public class SendPictureActivity extends AppCompatActivity implements TaskListen
 
         toolbar_ = (Toolbar)findViewById(R.id.tool_bar);
         toolbar_.setTitle("Review & Submit Information");
+        toolbar_.setNavigationIcon(this.getResources().getDrawable(R.drawable.ic_arrow_back_black_36dp));
+        setSupportActionBar(toolbar_);
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         pictureTaken_ = (ImageView)findViewById(R.id.pictureTaken);
         pictureCard_ = (CardView)findViewById(R.id.cardPictureTemplate);
@@ -68,17 +71,8 @@ public class SendPictureActivity extends AppCompatActivity implements TaskListen
         errorCard_ = (CardView)findViewById(R.id.errorCard);
         errorMessage_ = (TextView)findViewById(R.id.errorMessage);
 
-        exitBtn = (ImageButton)findViewById(R.id.cancelBtn);
         cameraBtn = (ImageButton)findViewById(R.id.retakeBtn);
         sendBtn = (ImageButton)findViewById(R.id.sendBtn);
-
-        exitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AppActions appActions = AppActions.CANCEL;
-                buttonHandler(appActions);
-            }
-        });
 
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,9 +100,6 @@ public class SendPictureActivity extends AppCompatActivity implements TaskListen
 
     private void buttonHandler(AppActions appActions){
         switch (appActions){
-            case CANCEL:
-                startActivity(new Intent(this, MainActivity.class));
-                break;
             case CAMERA:
                 startActivity(new Intent(this, CameraActivity.class));
                 break;

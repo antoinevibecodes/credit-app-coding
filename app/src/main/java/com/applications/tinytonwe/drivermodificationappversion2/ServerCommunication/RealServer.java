@@ -35,6 +35,7 @@ public class RealServer extends ServerInterface {
 
     private String uploadPictureUrl;
     private String requestDriverUrl;
+    private String chargeCardUrl;
 
     private Context context_;
 
@@ -51,6 +52,7 @@ public class RealServer extends ServerInterface {
 
         uploadPictureUrl = context_.getResources().getString(R.string.serverUploadUrl).toString();
         requestDriverUrl = context_.getResources().getString(R.string.serverRequestDriverUrl).toString();
+        chargeCardUrl = context_.getResources().getString(R.string.serverChargeCardUrl).toString();
     }
 
     public class Upload extends UploadPicture{
@@ -142,8 +144,6 @@ public class RealServer extends ServerInterface {
             return response;
         }
     }
-
-
 
 
     public class GetDriverInformation extends RequestDriverInfoViaRfid {
@@ -306,7 +306,6 @@ public class RealServer extends ServerInterface {
     }
 
 
-
     private static String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line = "";
@@ -317,6 +316,7 @@ public class RealServer extends ServerInterface {
         inputStream.close();
         return result;
     }
+
 
     private void retrieveInformation(JSONObject jsonObjectReceived){
         try {
@@ -348,5 +348,131 @@ public class RealServer extends ServerInterface {
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+
+    public class ChargeCard extends ChargeDriverCard {
+
+        public ChargeCard(EntitlementTypes entitlementType, boolean force) {
+            request.url = chargeCardUrl;
+            request.DriverId = appData.getDriverId_();
+            request.force = force;
+            request.entitlementType = entitlementType;
+            this.execute(request);
+        }
+
+        protected Response doInBackground(Request... requests) {
+
+            try {
+
+                Request request = requests[0];
+                //create http client
+                DefaultHttpClient httpClient;
+                httpClient = new DefaultHttpClient();
+                HttpParams parameters = httpClient.getParams();
+                HttpConnectionParams.setConnectionTimeout(parameters, request.connectionTimeoutDuration);
+                HttpConnectionParams.setSoTimeout(parameters, request.responseTimeoutDuration);
+
+                //get the data
+                StringEntity dataToSend = prepareJsonObjects(request.rfidUidL, request.entitlementType, request.force);
+
+                //send the data
+                HttpPost httpPost = new HttpPost(request.url);
+                httpPost.setEntity(dataToSend);
+                httpPost.setHeader("Accept", "application/json");
+                httpPost.setHeader("Content-type", "application/json");
+
+                //Getting the response
+                HttpResponse httpResponse = httpClient.execute(httpPost);
+
+                return analyzeServerResponse(httpResponse);
+            } catch (Exception e) {
+                Response response = new Response();
+                response.responseOk = false;
+                response.responseMessage = "Communication Error Occurred";
+                return response;
+            }
+        }
+
+
+        public Response analyzeServerResponse(HttpResponse httpResponse) {
+            Response response = new Response();
+
+            try {
+                //Verify the status code received if possible i.e no timeout occured
+                int statusCode = httpResponse.getStatusLine().getStatusCode();
+                response.responseOk = false;
+
+                //In case an OK response was received
+                if (statusCode == 200) {
+                    HttpEntity entity = httpResponse.getEntity();
+                    InputStream is = entity.getContent();
+                    String receivedJsonString = convertInputStreamToString(is);
+                    is.close();
+
+                    //analyze Json
+                    JSONObject jsonObjectReceived = new JSONObject(receivedJsonString);
+                    response.responseOk = (boolean) jsonObjectReceived.get("CanPlay");
+                    response.responseMessage = jsonObjectReceived.getString("Message");
+
+                    //Null is being returned whenever there are not enough credits
+                    if (response.responseMessage.equals("null"))
+                        response.responseMessage = "Cannot Play. Not enough Credits";
+
+                }
+                //In case the status code is 404, you already know there was a negative response/problem, so set status to false
+                else if (statusCode == 404) {
+                    response.responseMessage = "404 error";
+                } else if (statusCode == 500) {
+                    response.responseMessage = "500 error";
+                } else {
+                    response.responseMessage = "other error";
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                response.responseOk = false;
+                response.responseMessage = "Error processing server response";
+
+            }
+
+            return response;
+        }
+
+
+        public StringEntity prepareJsonObjects(long rfidUidL, EntitlementTypes entitlementType, boolean forceUseCredits) {
+            try {
+                JSONObject jsonEntitlementObject = new JSONObject();
+                jsonEntitlementObject.put("HasDriverId", false);
+                jsonEntitlementObject.put("DriverId", 0);
+                jsonEntitlementObject.put("HasRfidUidL", true);
+                jsonEntitlementObject.put("RfidUidL", rfidUidL);
+                jsonEntitlementObject.put("HasRfidUidS", false);
+                jsonEntitlementObject.put("RfidUidS", "");
+
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("DriverIdentification", jsonEntitlementObject);
+                jsonObject.put("Update", true);
+                jsonObject.put("EntitlementTypeId", entitlementType.getEnumValue());
+                jsonObject.put("ForceUseOfCredits", forceUseCredits);
+
+                return new StringEntity(jsonObject.toString());
+
+            } catch (Exception ex) {
+                return null;
+            }
+        }
+
+        private String convertInputStreamToString(InputStream inputStream) throws IOException {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            String line = "";
+            String result = "";
+            while ((line = bufferedReader.readLine()) != null)
+                result += line;
+
+            inputStream.close();
+            return result;
+        }
+
     }
 }
