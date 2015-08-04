@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="AppTheme.Base">
         <!-- Customize your theme here. -->
+        <item name="android:actionOverflowButtonStyle">@style/OverFlow</item>
     </style>
 
 </resources>

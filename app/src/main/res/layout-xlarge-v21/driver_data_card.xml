@@ -4,13 +4,14 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         android:layout_margin="@dimen/activity_margin">
 
        <LinearLayout
            android:padding="@dimen/activity_padding"
+           android:gravity="center"
            android:layout_width="match_parent"
-           android:layout_height="wrap_content"
+           android:layout_height="match_parent"
            android:orientation="horizontal">
 
                <ImageView
@@ -97,22 +98,6 @@
                            android:text="@string/dobText"/>
 
                    </TableRow>
-
-                   <TableRow
-                   android:gravity="center"
-                   android:layout_weight="1"
-                   android:layout_width="match_parent"
-                   android:layout_height="0dp">
-
-                   <TextView
-                       style="@android:style/TextAppearance.Material.Medium"
-                       android:textColor="#000000"
-                       android:textAlignment="textStart"
-                       android:layout_height="match_parent"
-                       android:layout_width="match_parent"
-                       android:id="@+id/dateSignedValue"/>
-
-               </TableRow>
 
                    </TableLayout>
 

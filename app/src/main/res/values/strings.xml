@@ -32,4 +32,5 @@
     <string name="connectionTimeoutDuration">20000</string>
     <string name="responseTimeoutDuration">20000</string>
     <string name="title_activity_options">OptionsActivity</string>
+    <string name="title_activity_process_credits">ProcessCreditsActivity</string>
 </resources>

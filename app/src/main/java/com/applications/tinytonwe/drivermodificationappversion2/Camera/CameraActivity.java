@@ -12,14 +12,13 @@ import com.applications.tinytonwe.cameralibrary.CameraPicture.CapturedPicture;
 import com.applications.tinytonwe.cameralibrary.CameraPreview.CameraPreview;
 import com.applications.tinytonwe.cameralibrary.CameraSettings.CameraSelected;
 import com.applications.tinytonwe.cameralibrary.CameraSettings.CameraSettings;
-import com.applications.tinytonwe.cameralibrary.CameraSettings.Quality;
 import com.applications.tinytonwe.cameralibrary.CapturedPictureCallback;
 import com.applications.tinytonwe.cameralibrary.CropView.CropWindow;
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
-import com.applications.tinytonwe.drivermodificationappversion2.Main.MainActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
-import com.applications.tinytonwe.drivermodificationappversion2.Validation.ValidationActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.SelectOption.OptionsActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.SendPicture.SendPictureActivity;
 
 public class CameraActivity extends AppCompatActivity implements CapturedPictureCallback{
 
@@ -86,7 +85,7 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
     private void buttonHandler(AppActions appActions){
         switch(appActions){
             case CANCEL:
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, OptionsActivity.class));
                 break;
             case FLIP_CAMERA:
                 cameraPreview_.flipCamera();
@@ -105,6 +104,6 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
         appData.setCroppedImage_(croppedImage);
         appData.setOriginalImage_(originalImage);
 
-        startActivity(new Intent(this, ValidationActivity.class));
+        startActivity(new Intent(this, SendPictureActivity.class));
     }
 }

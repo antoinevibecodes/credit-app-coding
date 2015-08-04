@@ -1,4 +1,4 @@
-package com.applications.tinytonwe.drivermodificationappversion2.Validation;
+package com.applications.tinytonwe.drivermodificationappversion2.SendPicture;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +21,7 @@ import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunicat
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TaskListener;
 
-public class ValidationActivity extends AppCompatActivity implements TaskListener {
+public class SendPictureActivity extends AppCompatActivity implements TaskListener {
 
     private ProgressBar progressBar;
     private LinearLayout waitLayout_;

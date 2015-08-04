@@ -216,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
     private void requestEndedResponseOk(){
         startActivity(new Intent(this, OptionsActivity.class));
+        this.finish();
     }
 
     private void requestEndedResponseError(String errorMessage){
@@ -245,5 +246,9 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         else
             requestEndedResponseError(response.responseMessage);
 
+    }
+
+    public void onBackPressed(){
+        this.finish();
     }
 }
