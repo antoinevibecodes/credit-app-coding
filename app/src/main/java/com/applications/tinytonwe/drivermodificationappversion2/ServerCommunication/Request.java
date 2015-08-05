@@ -13,5 +13,5 @@ public class Request {
     public byte[] PictureData;
     public boolean useRfid;
     public boolean force;
-    public EntitlementTypes entitlementType;
+    public int entitlementType;
 }

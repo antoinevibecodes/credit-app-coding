@@ -353,7 +353,7 @@ public class RealServer extends ServerInterface {
 
     public class ChargeCard extends ChargeDriverCard {
 
-        public ChargeCard(EntitlementTypes entitlementType, boolean force) {
+        public ChargeCard(int entitlementType, boolean force) {
             request.url = chargeCardUrl;
             request.DriverId = appData.getDriverId_();
             request.force = force;
@@ -440,7 +440,7 @@ public class RealServer extends ServerInterface {
         }
 
 
-        public StringEntity prepareJsonObjects(long rfidUidL, EntitlementTypes entitlementType, boolean forceUseCredits) {
+        public StringEntity prepareJsonObjects(long rfidUidL, int entitlementType, boolean forceUseCredits) {
             try {
                 JSONObject jsonEntitlementObject = new JSONObject();
                 jsonEntitlementObject.put("HasDriverId", false);
@@ -453,7 +453,7 @@ public class RealServer extends ServerInterface {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("DriverIdentification", jsonEntitlementObject);
                 jsonObject.put("Update", true);
-                jsonObject.put("EntitlementTypeId", entitlementType.getEnumValue());
+                jsonObject.put("EntitlementTypeId", entitlementType);
                 jsonObject.put("ForceUseOfCredits", forceUseCredits);
 
                 return new StringEntity(jsonObject.toString());

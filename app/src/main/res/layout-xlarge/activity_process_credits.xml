@@ -6,11 +6,42 @@
     android:orientation="vertical"
     tools:context="com.applications.tinytonwe.drivermodificationappversion2.ProcessCredits.ProcessCreditsActivity">
 
+    <include
+        android:id="@+id/process_tool_bar"
+        layout="@layout/toolbar"/>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include
+            android:id="@+id/successCard"
+            layout="@layout/success_card"
+            />
+
+        <include
+            android:id="@+id/errorCard"
+            layout="@layout/error_card"
+            />
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/waitLayout">
+
+            <include
+                android:id="@+id/waitCard"
+                layout="@layout/wait_card"
+                />
+
+            <include
+                android:id="@+id/progressbar"
+                layout="@layout/progressbar"
+                />
+        </LinearLayout>
     </FrameLayout>
 
 

@@ -2,38 +2,70 @@ package com.applications.tinytonwe.drivermodificationappversion2.ProcessCredits;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.applications.tinytonwe.drivermodificationappversion2.R;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TaskListener;
 
-public class ProcessCreditsActivity extends ActionBarActivity {
+public class ProcessCreditsActivity extends AppCompatActivity implements TaskListener {
+
+
+    private LinearLayout waitLayout;
+    private CardView successCard;
+    private CardView errorCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_process_credits);
+
+        waitLayout = (LinearLayout)findViewById(R.id.waitLayout);
+        successCard = (CardView)findViewById(R.id.successCard);
+        errorCard = (CardView)findViewById(R.id.errorCard);
+
+        Bundle bundle = this.getIntent().getExtras();
+
+        String firstName = bundle.getString("firstName");
+        String lastName = bundle.getString("lastName");
+        boolean force = bundle.getBoolean("force");
+        int entitlementType = bundle.getInt("entitlementType");
+
+
+        Toolbar toolbar = (Toolbar)findViewById(R.id.process_tool_bar);
+        toolbar.setTitle(firstName + " " + lastName);
+        toolbar.setNavigationIcon(this.getResources().getDrawable(R.drawable.ic_arrow_back_black_36dp));
+        setSupportActionBar(toolbar);
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        RealServer server_ = new RealServer(this);
+        RealServer.ChargeCard chargeCard;
+        chargeCard = server_.new ChargeCard(entitlementType,force);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_process_credits, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    public void onTaskFinished(Response response){
+
+        waitLayout.setVisibility(View.GONE);
+
+        if(response.responseOk){
+            TextView success = (TextView)findViewById(R.id.successMessage);
+            success.setText(response.responseMessage);
+            successCard.setVisibility(View.VISIBLE);
         }
-
-        return super.onOptionsItemSelected(item);
+        else {
+            TextView error = (TextView)findViewById(R.id.errorMessage);
+            error.setText(response.responseMessage);
+            errorCard.setVisibility(View.VISIBLE);
+        }
     }
 }

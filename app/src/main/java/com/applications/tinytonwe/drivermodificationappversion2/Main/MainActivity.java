@@ -1,14 +1,19 @@
 package com.applications.tinytonwe.drivermodificationappversion2.Main;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PorterDuff;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.nfc.tech.NfcA;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -37,8 +42,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
     private String cardReadByNFC_ = "";
     private String prevCardReadByNFC_ = "";
-
-    private RealServer server_;
 
     private LinearLayout promptCardsLayout_;
     private EditText driverIdString;
@@ -201,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
     private void startServerRequest(int queryType){
         prepareRequest();
-        server_ = new RealServer(this);
+        RealServer server_ = new RealServer(this);
         RealServer.GetDriverInformation getDriverInformation;
 
         switch (queryType) {
@@ -253,6 +256,26 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         else
             requestEndedResponseError(response.responseMessage);
 
+    }
+
+    public void onNewIntent(Intent intent){
+
+        //I set the lauchmode to singleTask in the manifest
+        //so this is why I am able to intecept a new instace
+        //of the activity which wishes to be created in this method
+
+
+
+        //I clear the stack of the current activity which wishes to be
+        //created so that android will permit its creation since I set
+        //my lauch mode to singeTask
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        //I can now start the intent as I am sure all its old instances
+        // will first be destroyed
+        startActivity(intent);
     }
 
     public void onBackPressed(){

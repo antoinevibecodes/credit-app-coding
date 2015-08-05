@@ -18,24 +18,31 @@ import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.Main.MainActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.ProcessCredits.ProcessCreditsActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.EntitlementTypes;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TaskListener;
 
 public class OptionsActivity extends AppCompatActivity {
 
     private Context context_;
+    private String firstName_;
+    private String lastName_;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
         context_ = this;
 
-        registerListeners();
         initialize();
+        registerListeners();
     }
 
     private void registerListeners(){
         Toolbar toolbar = (Toolbar)findViewById(R.id.tool_bar);
-        toolbar.setTitle("Select Option");
+        toolbar.setTitle(firstName_ + " " + lastName_);
         toolbar.setNavigationIcon(this.getResources().getDrawable(R.drawable.ic_arrow_back_black_36dp));
         toolbar.inflateMenu(R.menu.menu_options);
         setSupportActionBar(toolbar);
@@ -43,11 +50,11 @@ public class OptionsActivity extends AppCompatActivity {
     }
 
     private void initialize(){
-        TextView driverId_ = (TextView)findViewById(R.id.driverIdValue);
-        TextView firstName_ = (TextView)findViewById(R.id.firstNameValue);
-        TextView lastName_ = (TextView)findViewById(R.id.lastNameValue);
-        TextView dobValue_ = (TextView)findViewById(R.id.dobValue);
-        ImageView driverImage_ = (ImageView)findViewById(R.id.driverImage);
+        TextView driverId = (TextView)findViewById(R.id.driverIdValue);
+        TextView firstName = (TextView)findViewById(R.id.firstNameValue);
+        TextView lastName = (TextView)findViewById(R.id.lastNameValue);
+        TextView dobValue = (TextView)findViewById(R.id.dobValue);
+        ImageView driverImage = (ImageView)findViewById(R.id.driverImage);
 
         TextView totalCredits = (TextView)findViewById(R.id.totalCredits);
         TextView generalCredits = (TextView)findViewById(R.id.generalCredits);
@@ -59,11 +66,17 @@ public class OptionsActivity extends AppCompatActivity {
 
         AppData appData = AppData.getAppDataInstance_();
 
-        driverId_.setText(Long.toString(appData.getDriverId_()));
-        firstName_.setText(appData.getDriverFirstName());
-        lastName_.setText(appData.getDriverLastName());
-        dobValue_.setText(appData.getDob());
-        driverImage_.setImageBitmap(appData.getDriverImage());
+        firstName_ = appData.getDriverFirstName();
+        lastName_ = appData.getDriverLastName();
+
+        firstName.setText(firstName_);
+        lastName.setText(lastName_);
+
+        driverId.setText(Long.toString(appData.getDriverId_()));
+        firstName.setText(appData.getDriverFirstName());
+        lastName.setText(appData.getDriverLastName());
+        dobValue.setText(appData.getDob());
+        driverImage.setImageBitmap(appData.getDriverImage());
 
         totalCredits.setText(appData.getTotalCredits());
         generalCredits.setText(appData.getGeneralCredits());
@@ -95,20 +108,38 @@ public class OptionsActivity extends AppCompatActivity {
                 startActivity(new Intent(this, CameraActivity.class));
                 return true;
             case R.id.train:
+                processEntitlementRequest(EntitlementTypes.TRAIN, false);
                 return true;
             case R.id.trainForce:
+                processEntitlementRequest(EntitlementTypes.TRAIN, true);
                 return true;
             case R.id.track:
+                processEntitlementRequest(EntitlementTypes.TRAFFICTRACK, false);
                 return true;
             case R.id.trackForce:
+                processEntitlementRequest(EntitlementTypes.TRAFFICTRACK, true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    private void processEntitlementRequest(EntitlementTypes entitlementType, boolean force){
+
+        Intent intent = new Intent(this, ProcessCreditsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("force", force);
+        bundle.putInt("entitlementType", entitlementType.getEnumValue());
+        bundle.putString("firstName",firstName_);
+        bundle.putString("lastName", lastName_);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+
     public void onBackPressed(){
         this.finish();
         startActivity(new Intent(this,MainActivity.class));
     }
+
 }

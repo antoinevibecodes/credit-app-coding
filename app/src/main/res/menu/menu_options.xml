@@ -16,24 +16,24 @@
 
     <item
         android:id="@+id/train"
-        android:title="Train"
+        android:title="Train (3 Credits)"
         app:showAsAction="never" />
 
 
     <item
         android:id="@+id/trainForce"
-        android:title="Train Force"
+        android:title="Train Force (3 Credits)"
         app:showAsAction="never" />
 
 
     <item
         android:id="@+id/track"
-        android:title="Track"
+        android:title="Track (5 Credits)"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/trackForce"
-        android:title="Track Force"
+        android:title="Track Force (5 Credits)"
         app:showAsAction="never"/>
 
 </menu>
