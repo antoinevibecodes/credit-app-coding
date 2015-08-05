@@ -106,4 +106,9 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
 
         startActivity(new Intent(this, SendPictureActivity.class));
     }
+
+    public void onBackPressed(){
+        this.finish();
+        startActivity(new Intent(this,OptionsActivity.class));
+    }
 }

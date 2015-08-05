@@ -106,4 +106,9 @@ public class OptionsActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public void onBackPressed(){
+        this.finish();
+        startActivity(new Intent(this,MainActivity.class));
+    }
 }

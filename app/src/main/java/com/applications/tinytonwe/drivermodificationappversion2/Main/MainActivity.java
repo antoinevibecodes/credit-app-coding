@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     private RealServer server_;
 
     private LinearLayout promptCardsLayout_;
+    private EditText driverIdString;
     private LinearLayout errorCardLayout_;
 
     private final int QUERY_RFID = 0;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     private void registerListeners(){
 
         promptCardsLayout_ = (LinearLayout)findViewById(R.id.promptCardsLayout);
+        driverIdString = (EditText)findViewById(R.id.driverID);
         waitLayout_ = (LinearLayout)findViewById(R.id.waitLayout);
 
         Toolbar toolbar_ = (Toolbar)findViewById(R.id.tool_bar);
@@ -115,8 +117,6 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
 
     private void processDriverId() {
-
-        EditText driverIdString = (EditText)findViewById(R.id.driverID);
         //Dismissing the keyboard
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(driverIdString.getWindowToken(), 0);
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     public void onResume() {
 
         super.onResume();
-        AppData.getAppDataInstance_().reset();
+        resetApplication();
 
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
             //get the tag id
@@ -214,6 +214,14 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
         }
     }
 
+    private void resetApplication(){
+        AppData.getAppDataInstance_().reset();
+        driverIdString.setText("");
+        promptCardsLayout_.setVisibility(View.VISIBLE);
+        errorCardLayout_.setVisibility(View.GONE);
+        showWaitDialog(false);
+    }
+
     private void requestEndedResponseOk(){
         startActivity(new Intent(this, OptionsActivity.class));
     }
@@ -250,4 +258,5 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
     public void onBackPressed(){
         this.finish();
     }
+
 }
