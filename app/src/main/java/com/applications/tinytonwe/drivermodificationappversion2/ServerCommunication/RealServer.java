@@ -127,13 +127,13 @@ public class RealServer extends ServerInterface {
                         response.responseOk = true;
                         break;
                     case 404:
-                        response.responseMessage = "404 Not Found Error";
+                        response.responseMessage = "Technical Error code : 404";
                         break;
                     case 500:
-                        response.responseMessage = "500 Internal Server Error";
+                        response.responseMessage = "Technical Error code : 500";
                         break;
                     default:
-                        response.responseMessage = "Unknown Error";
+                        response.responseMessage = "Technical Error code : Unknown";
                         break;
                 }
             }
@@ -285,13 +285,13 @@ public class RealServer extends ServerInterface {
                         //
                         break;
                     case 404:
-                        response.responseMessage = "404 Not Found Error";
+                        response.responseMessage = "Technical error code : 404";
                         break;
                     case 500:
-                        response.responseMessage = "500 Internal Server Error";
+                        response.responseMessage = "Technical error code : 500";
                         break;
                     default:
-                        response.responseMessage = "Unknown Error";
+                        response.responseMessage = "Technical error code : Unknown";
                         break;
                 }
             }
@@ -422,11 +422,11 @@ public class RealServer extends ServerInterface {
                 }
                 //In case the status code is 404, you already know there was a negative response/problem, so set status to false
                 else if (statusCode == 404) {
-                    response.responseMessage = "404 error";
+                    response.responseMessage = "Technical error code : 404";
                 } else if (statusCode == 500) {
-                    response.responseMessage = "500 error";
+                    response.responseMessage = "Technical error code : 500";
                 } else {
-                    response.responseMessage = "other error";
+                    response.responseMessage = "Technical error code : Unknown";
                 }
 
             } catch (Exception ex) {

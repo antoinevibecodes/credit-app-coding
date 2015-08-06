@@ -26,10 +26,10 @@
     <string name="title_activity_validation">ValidationActivity</string>
 
 
-    <string name="serverUploadUrl">http://tt-server.azurewebsites.net/api/admission/UploadDriverPicture</string>
-    <string name="serverRequestDriverUrl">http://tt-server.azurewebsites.net/api/Entitlements/GetDriver</string>
-    <string name="serverRequestGetDriverPictureUrl">http://tt-server.azurewebsites.net/api/transactions/GetScaledDriverPicture?DriverId=</string>
-    <string name="serverChargeCardUrl">http://tt-server.azurewebsites.net/api/entitlements/chargecard</string>
+    <string name="serverUploadUrl">http://172.16.4.101:81/api/admission/UploadDriverPicture</string>
+    <string name="serverRequestDriverUrl">http://172.16.4.101:81/api/Entitlements/GetDriver</string>
+    <string name="serverRequestGetDriverPictureUrl">http://172.16.4.101:81/api/transactions/GetScaledDriverPicture?DriverId=</string>
+    <string name="serverChargeCardUrl">http://172.16.4.101:81/api/entitlements/chargecard</string>
 
     <string name="connectionTimeoutDuration">20000</string>
     <string name="responseTimeoutDuration">20000</string>
