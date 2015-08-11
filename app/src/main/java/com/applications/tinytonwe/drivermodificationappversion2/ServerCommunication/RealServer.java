@@ -374,7 +374,7 @@ public class RealServer extends ServerInterface {
                 HttpConnectionParams.setSoTimeout(parameters, request.responseTimeoutDuration);
 
                 //get the data
-                StringEntity dataToSend = prepareJsonObjects(request.rfidUidL, request.entitlementType, request.force);
+                StringEntity dataToSend = prepareJsonObjects(request.DriverId, request.entitlementType, request.force);
 
                 //send the data
                 HttpPost httpPost = new HttpPost(request.url);
@@ -440,13 +440,13 @@ public class RealServer extends ServerInterface {
         }
 
 
-        public StringEntity prepareJsonObjects(long rfidUidL, int entitlementType, boolean forceUseCredits) {
+        public StringEntity prepareJsonObjects(long driverId, int entitlementType, boolean forceUseCredits) {
             try {
                 JSONObject jsonEntitlementObject = new JSONObject();
-                jsonEntitlementObject.put("HasDriverId", false);
-                jsonEntitlementObject.put("DriverId", 0);
-                jsonEntitlementObject.put("HasRfidUidL", true);
-                jsonEntitlementObject.put("RfidUidL", rfidUidL);
+                jsonEntitlementObject.put("HasDriverId", true);
+                jsonEntitlementObject.put("DriverId", driverId);
+                jsonEntitlementObject.put("HasRfidUidL", false);
+                jsonEntitlementObject.put("RfidUidL", "");
                 jsonEntitlementObject.put("HasRfidUidS", false);
                 jsonEntitlementObject.put("RfidUidS", "");
 
