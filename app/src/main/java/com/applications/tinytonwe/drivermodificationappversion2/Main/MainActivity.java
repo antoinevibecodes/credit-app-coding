@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
+import com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraData;
 import com.applications.tinytonwe.drivermodificationappversion2.DisplayErrorMessages;
 import com.applications.tinytonwe.drivermodificationappversion2.SelectOption.OptionsActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
@@ -219,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements TaskListener{
 
     private void resetApplication(){
         AppData.getAppDataInstance_().reset();
+        CameraData.getInstance().reset();
         driverIdString.setText("");
         promptCardsLayout_.setVisibility(View.VISIBLE);
         errorCardLayout_.setVisibility(View.GONE);

@@ -100,11 +100,8 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
 
     public void pictureTaken(Bitmap originalImage, Bitmap croppedImage){
 
-        AppData appData = AppData.getAppDataInstance_();
-        appData.setCroppedImage_(croppedImage);
-        appData.setOriginalImage_(originalImage);
-
-        startActivity(new Intent(this, SendPictureActivity.class));
+        CameraData.getInstance().addImage(croppedImage);
+        startActivity(new Intent(this, GalleryActivity.class));
     }
 
     public void onBackPressed(){
