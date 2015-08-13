@@ -95,8 +95,8 @@
                     <ImageButton
                         android:layout_gravity="center"
                         android:id="@+id/retakePicture"
-                        android:layout_height="75dp"
-                        android:layout_width="75dp"
+                        android:layout_height="95dp"
+                        android:layout_width="95dp"
                         android:background="@drawable/imagebuttons"
                         android:src="@drawable/camera64px"/>
 
@@ -113,8 +113,8 @@
                     <ImageButton
                         android:layout_gravity="center"
                         android:id="@+id/selectPicture"
-                        android:layout_height="75dp"
-                        android:layout_width="75dp"
+                        android:layout_height="95dp"
+                        android:layout_width="95dp"
                         android:background="@drawable/imagebuttons"
                         android:src="@drawable/tick64px"/>
                 </LinearLayout>
