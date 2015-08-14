@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraActivity;
-import com.applications.tinytonwe.drivermodificationappversion2.Main.MainActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;

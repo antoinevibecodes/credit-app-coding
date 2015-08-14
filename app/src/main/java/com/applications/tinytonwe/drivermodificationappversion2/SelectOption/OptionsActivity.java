@@ -3,27 +3,20 @@ package com.applications.tinytonwe.drivermodificationappversion2.SelectOption;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraActivity;
-import com.applications.tinytonwe.drivermodificationappversion2.Main.MainActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.DriverInfo.DriverInfoActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.ProcessCredits.ProcessCreditsActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.EntitlementTypes;
-import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
-import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
-import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TaskListener;
 
 public class OptionsActivity extends AppCompatActivity {
 
@@ -139,7 +132,7 @@ public class OptionsActivity extends AppCompatActivity {
 
     public void onBackPressed(){
         this.finish();
-        startActivity(new Intent(this,MainActivity.class));
+        startActivity(new Intent(this,DriverInfoActivity.class));
     }
 
 }

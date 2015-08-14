@@ -1,83 +1,59 @@
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
-
-    <include
-        android:id="@+id/tool_bar"
-        layout="@layout/toolbar"/>
-
-
-    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+        <include
+            android:id="@+id/tool_bar"
+            layout="@layout/toolbar"/>
 
         <LinearLayout
-            android:id="@+id/promptCardsLayout"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <include
-                android:id="@+id/promptDriverIdCard"
-                layout="@layout/prompt_driver_id_card"
-                />
-
-            <include
-                android:id="@+id/promptCard"
-                layout="@layout/prompt_tap_card"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_gravity="center"
-            android:gravity="center"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/waitLayout">
-
-            <include
-                android:id="@+id/waitCard"
-                layout="@layout/wait_card"
-                />
-
-            <include
-                android:id="@+id/progressbar"
-                layout="@layout/progressbar"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/errorCardLayout"
-            android:gravity="center"
             android:layout_gravity="center"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="400dp">
+            android:gravity="center">
 
-            <include
-                android:id="@+id/errorCard"
-                layout="@layout/error_card"
-                />
 
-            <ImageButton
-                android:baselineAlignBottom="true"
-                android:id="@+id/backBtn"
-                android:layout_gravity="center"
-                android:layout_width="95dp"
-                android:layout_height="95dp"
-                android:text="@string/changePicture"
-                android:background="@drawable/image_button_style"
-                android:src="@drawable/back64px"/>
-        </LinearLayout>
 
-    </FrameLayout>
+            <android.support.v7.widget.CardView
+                android:layout_height="350dp"
+                android:layout_width="350dp"
+                android:layout_margin="10dp"
+                android:id="@+id/chargeCard">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="35sp"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:text="Charge Card"/>
+
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_height="350dp"
+                android:layout_width="350dp"
+                android:layout_margin="10dp"
+                android:id="@+id/driverInfo">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="35sp"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:text="Driver Information"/>
+
+            </android.support.v7.widget.CardView>
+
+    </LinearLayout>
 
 </LinearLayout>

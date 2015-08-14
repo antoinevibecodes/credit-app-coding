@@ -37,4 +37,5 @@
     <string name="title_activity_options">OptionsActivity</string>
     <string name="title_activity_process_credits">ProcessCreditsActivity</string>
     <string name="title_activity_gallery">GalleryActivity</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>
