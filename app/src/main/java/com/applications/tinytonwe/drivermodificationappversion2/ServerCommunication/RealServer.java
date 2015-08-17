@@ -36,6 +36,7 @@ public class RealServer extends ServerInterface {
     private String uploadPictureUrl;
     private String requestDriverUrl;
     private String chargeCardUrl;
+    private String checkCreditUrl;
 
     private Context context_;
 
@@ -53,6 +54,7 @@ public class RealServer extends ServerInterface {
         uploadPictureUrl = context_.getResources().getString(R.string.serverUploadUrl).toString();
         requestDriverUrl = context_.getResources().getString(R.string.serverRequestDriverUrl).toString();
         chargeCardUrl = context_.getResources().getString(R.string.serverChargeCardUrl).toString();
+        checkCreditUrl = context_.getResources().getString(R.string.serverCheckCreditUrl).toString();
     }
 
     public class Upload extends UploadPicture{
@@ -353,9 +355,22 @@ public class RealServer extends ServerInterface {
 
     public class ChargeCard extends ChargeDriverCard {
 
-        public ChargeCard(int entitlementType, boolean force) {
-            request.url = chargeCardUrl;
-            request.DriverId = appData.getDriverId_();
+        public ChargeCard(int entitlementType, boolean force, boolean checkCredits, boolean useDriverId) {
+
+            if(checkCredits) {
+                request.url = checkCreditUrl;
+                request.checkCredits = true;
+            }
+            else
+                request.url = chargeCardUrl;
+
+            if(useDriverId) {
+                request.DriverId = appData.getDriverId_();
+                request.useDriverId = true;
+            }
+            else
+                request.rfidUidL = appData.getCardIdReadLongValue_();
+
             request.force = force;
             request.entitlementType = entitlementType;
             this.execute(request);
@@ -373,8 +388,8 @@ public class RealServer extends ServerInterface {
                 HttpConnectionParams.setConnectionTimeout(parameters, request.connectionTimeoutDuration);
                 HttpConnectionParams.setSoTimeout(parameters, request.responseTimeoutDuration);
 
-                //get the data
-                StringEntity dataToSend = prepareJsonObjects(request.DriverId, request.entitlementType, request.force);
+                StringEntity dataToSend = prepareJsonObjects(request.DriverId, request.rfidUidL, request.entitlementType, request.force, request.useDriverId);
+
 
                 //send the data
                 HttpPost httpPost = new HttpPost(request.url);
@@ -440,13 +455,23 @@ public class RealServer extends ServerInterface {
         }
 
 
-        public StringEntity prepareJsonObjects(long driverId, int entitlementType, boolean forceUseCredits) {
+        public StringEntity prepareJsonObjects(long driverId, long rfidUidL, int entitlementType, boolean forceUseCredits, boolean useDriverId) {
             try {
                 JSONObject jsonEntitlementObject = new JSONObject();
-                jsonEntitlementObject.put("HasDriverId", true);
-                jsonEntitlementObject.put("DriverId", driverId);
-                jsonEntitlementObject.put("HasRfidUidL", false);
-                jsonEntitlementObject.put("RfidUidL", "");
+
+                if(useDriverId){
+                    jsonEntitlementObject.put("HasDriverId", true);
+                    jsonEntitlementObject.put("DriverId", driverId);
+                    jsonEntitlementObject.put("HasRfidUidL", false);
+                    jsonEntitlementObject.put("RfidUidL", "");
+                }
+                else{
+                    jsonEntitlementObject.put("HasDriverId", false);
+                    jsonEntitlementObject.put("DriverId", 0);
+                    jsonEntitlementObject.put("HasRfidUidL", true);
+                    jsonEntitlementObject.put("RfidUidL", rfidUidL);
+                }
+
                 jsonEntitlementObject.put("HasRfidUidS", false);
                 jsonEntitlementObject.put("RfidUidS", "");
 

@@ -46,9 +46,12 @@ public class ProcessCreditsActivity extends AppCompatActivity implements TaskLis
         setSupportActionBar(toolbar);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        boolean checkCredits = false;
+        boolean useDriverId = true;
+
         RealServer server_ = new RealServer(this);
         RealServer.ChargeCard chargeCard;
-        chargeCard = server_.new ChargeCard(entitlementType,force);
+        chargeCard = server_.new ChargeCard(entitlementType,force,checkCredits,useDriverId);
     }
 
 

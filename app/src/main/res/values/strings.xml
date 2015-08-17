@@ -15,6 +15,29 @@
     <color name="text_icons">#000000</color>
 
 
+    //Charge card
+    <string name="welcome">Welcome To TinyTowne</string>
+    <string name="trackButton">Track\n(5 credits)</string>
+    <string name="trackForceButton">Track Force\n(5 credits)</string>
+    <string name="trainButton">Train\n(3 credits)</string>
+    <string name="trainForceButton">Train Force\n(3 credits)</string>
+    <string name="creditsButton">Check Credits</string>
+    <string name="cancelButton">Cancel</string>
+
+
+    <string name="promptMessage">Please tap your card on the device</string>
+    <string name="waitMessage">Please wait while the server processes your request...</string>
+
+    //This is to keep track if the application has been idle
+    <string name="inactivityTimeoutDuration">10000</string>
+    <string name="timeoutInterval">1000</string>
+    //
+
+    //This is the length of time the "success message is being displayed"
+    <string name="successTimerDuration">5000</string>
+    <string name="successTimerInterval">1000</string>
+    //////
+
     <string name="changePicture">New Picture</string>
     <string name="savePicture">Save Picture</string>
 
@@ -31,6 +54,7 @@
     <string name="serverRequestDriverUrl">http://tt-server.azurewebsites.net/api/Entitlements/GetDriver</string>
     <string name="serverRequestGetDriverPictureUrl">http://tt-server.azurewebsites.net/api/transactions/GetScaledDriverPicture?DriverId=</string>
     <string name="serverChargeCardUrl">http://tt-server.azurewebsites.net/api/entitlements/chargecard</string>
+    <string name="serverCheckCreditUrl">http://tt-server.azurewebsites.net/api/entitlements/getdriverentitlements</string>
 
     <string name="connectionTimeoutDuration">20000</string>
     <string name="responseTimeoutDuration">20000</string>
@@ -38,4 +62,5 @@
     <string name="title_activity_process_credits">ProcessCreditsActivity</string>
     <string name="title_activity_gallery">GalleryActivity</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_charge_card">ChargeCardActivity</string>
 </resources>

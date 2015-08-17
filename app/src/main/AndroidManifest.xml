@@ -69,8 +69,7 @@
         <activity
             android:name=".Main.MainActivity"
             android:label="@string/title_activity_main"
-            android:launchMode="singleTask">
-
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -91,6 +90,11 @@
                     android:name="android.nfc.action.TECH_DISCOVERED"
                     android:resource="@xml/nfc_tech_filter" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ChargeCard.ChargeCardActivity"
+            android:label="@string/title_activity_charge_card"
+            android:launchMode="singleTask">
         </activity>
     </application>
 

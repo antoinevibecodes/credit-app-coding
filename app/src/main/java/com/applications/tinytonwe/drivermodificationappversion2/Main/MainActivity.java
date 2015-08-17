@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
+import com.applications.tinytonwe.drivermodificationappversion2.ChargeCard.ChargeCardActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.DriverInfo.DriverInfoActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 
@@ -84,7 +85,7 @@ public class MainActivity extends ActionBarActivity {
     private void buttonHandler(MActions mActions){
         switch (mActions){
             case CHARGE_CARD:
-                Toast.makeText(this,"Charge card selected",Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, ChargeCardActivity.class));
                 break;
             case DRIVER_INFO:
                 startActivity(new Intent(this, DriverInfoActivity.class));

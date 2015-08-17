@@ -14,4 +14,6 @@ public class Request {
     public boolean useRfid;
     public boolean force;
     public int entitlementType;
+    public boolean checkCredits = false;
+    public boolean useDriverId = false;
 }
