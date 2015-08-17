@@ -430,9 +430,14 @@ public class RealServer extends ServerInterface {
                     response.responseOk = (boolean) jsonObjectReceived.get("CanPlay");
                     response.responseMessage = jsonObjectReceived.getString("Message");
 
+
                     //Null is being returned whenever there are not enough credits
-                    if (response.responseMessage.equals("null"))
+                    if (response.responseMessage.equals("null")) {
+                        if(response.responseOk)
+                            response.responseMessage = "Can Play. TT Member";
+                        else
                         response.responseMessage = "Cannot Play. Not enough Credits";
+                    }
 
                 }
                 //In case the status code is 404, you already know there was a negative response/problem, so set status to false

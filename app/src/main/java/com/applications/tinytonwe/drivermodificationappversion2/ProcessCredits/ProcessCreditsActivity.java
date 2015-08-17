@@ -23,6 +23,9 @@ public class ProcessCreditsActivity extends AppCompatActivity implements TaskLis
     private CardView successCard;
     private CardView errorCard;
 
+    private TextView success;
+    private TextView error;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +41,9 @@ public class ProcessCreditsActivity extends AppCompatActivity implements TaskLis
         String lastName = bundle.getString("lastName");
         boolean force = bundle.getBoolean("force");
         int entitlementType = bundle.getInt("entitlementType");
+
+        success = (TextView)findViewById(R.id.successMessage);
+        error = (TextView)findViewById(R.id.errorMessage);
 
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.process_tool_bar);
@@ -61,12 +67,10 @@ public class ProcessCreditsActivity extends AppCompatActivity implements TaskLis
         waitLayout.setVisibility(View.GONE);
 
         if(response.responseOk){
-            TextView success = (TextView)findViewById(R.id.successMessage);
             success.setText(response.responseMessage);
             successCard.setVisibility(View.VISIBLE);
         }
         else {
-            TextView error = (TextView)findViewById(R.id.errorMessage);
             error.setText(response.responseMessage);
             errorCard.setVisibility(View.VISIBLE);
         }
