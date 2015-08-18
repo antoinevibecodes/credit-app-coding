@@ -388,7 +388,7 @@ public class RealServer extends ServerInterface {
                 HttpConnectionParams.setConnectionTimeout(parameters, request.connectionTimeoutDuration);
                 HttpConnectionParams.setSoTimeout(parameters, request.responseTimeoutDuration);
 
-                StringEntity dataToSend = prepareJsonObjects(request.DriverId, request.rfidUidL, request.entitlementType, request.force, request.useDriverId);
+                StringEntity dataToSend = prepareJsonObjects(request.DriverId, request.rfidUidL, request.entitlementType, request.force, request.useDriverId, request.checkCredits);
 
 
                 //send the data
@@ -400,7 +400,7 @@ public class RealServer extends ServerInterface {
                 //Getting the response
                 HttpResponse httpResponse = httpClient.execute(httpPost);
 
-                return analyzeServerResponse(httpResponse);
+                return analyzeServerResponse(httpResponse, request.checkCredits);
             } catch (Exception e) {
                 Response response = new Response();
                 response.responseOk = false;
@@ -410,7 +410,7 @@ public class RealServer extends ServerInterface {
         }
 
 
-        public Response analyzeServerResponse(HttpResponse httpResponse) {
+        public Response analyzeServerResponse(HttpResponse httpResponse, boolean checkCredits) {
             Response response = new Response();
 
             try {
@@ -425,10 +425,16 @@ public class RealServer extends ServerInterface {
                     String receivedJsonString = convertInputStreamToString(is);
                     is.close();
 
-                    //analyze Json
-                    JSONObject jsonObjectReceived = new JSONObject(receivedJsonString);
-                    response.responseOk = (boolean) jsonObjectReceived.get("CanPlay");
-                    response.responseMessage = jsonObjectReceived.getString("Message");
+                    if(!(checkCredits)) {
+                        //analyze Json
+                        JSONObject jsonObjectReceived = new JSONObject(receivedJsonString);
+                        response.responseOk = (boolean) jsonObjectReceived.get("CanPlay");
+                        response.responseMessage = jsonObjectReceived.getString("Message");
+                    }
+                    else{
+                        response.responseOk = true;
+                        response.responseMessage = formatResponseForCredit(receivedJsonString);
+                    }
 
 
                     //Null is being returned whenever there are not enough credits
@@ -460,7 +466,7 @@ public class RealServer extends ServerInterface {
         }
 
 
-        public StringEntity prepareJsonObjects(long driverId, long rfidUidL, int entitlementType, boolean forceUseCredits, boolean useDriverId) {
+        public StringEntity prepareJsonObjects(long driverId, long rfidUidL, int entitlementType, boolean forceUseCredits, boolean useDriverId, boolean checkCredits) {
             try {
                 JSONObject jsonEntitlementObject = new JSONObject();
 
@@ -480,13 +486,17 @@ public class RealServer extends ServerInterface {
                 jsonEntitlementObject.put("HasRfidUidS", false);
                 jsonEntitlementObject.put("RfidUidS", "");
 
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("DriverIdentification", jsonEntitlementObject);
-                jsonObject.put("Update", true);
-                jsonObject.put("EntitlementTypeId", entitlementType);
-                jsonObject.put("ForceUseOfCredits", forceUseCredits);
+                if(!(checkCredits)) {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("DriverIdentification", jsonEntitlementObject);
+                    jsonObject.put("Update", true);
+                    jsonObject.put("EntitlementTypeId", entitlementType);
+                    jsonObject.put("ForceUseOfCredits", forceUseCredits);
 
-                return new StringEntity(jsonObject.toString());
+                    return new StringEntity(jsonObject.toString());
+                }
+                else
+                    return new StringEntity(jsonEntitlementObject.toString());
 
             } catch (Exception ex) {
                 return null;
@@ -502,6 +512,23 @@ public class RealServer extends ServerInterface {
 
             inputStream.close();
             return result;
+        }
+
+        public String formatResponseForCredit(String creditResponse){
+
+            String formattedString = "";
+
+            creditResponse = creditResponse.substring(1,creditResponse.length()-2);
+
+            int indexOfNewLine = creditResponse.indexOf("\\");
+
+            while(indexOfNewLine != -1) {
+                formattedString += creditResponse.substring(0, indexOfNewLine) + "\n";
+                creditResponse = creditResponse.substring(indexOfNewLine+2,creditResponse.length()-1);
+                indexOfNewLine = creditResponse.indexOf("\\");
+            }
+
+            return formattedString;
         }
 
     }
