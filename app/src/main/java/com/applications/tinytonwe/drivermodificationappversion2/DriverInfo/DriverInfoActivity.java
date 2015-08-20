@@ -26,7 +26,7 @@ import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraData;
 import com.applications.tinytonwe.drivermodificationappversion2.DisplayErrorMessages;
 import com.applications.tinytonwe.drivermodificationappversion2.Main.MainActivity;
-import com.applications.tinytonwe.drivermodificationappversion2.SelectOption.OptionsActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.ShowDriverInfo.ShowDriverInfoActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
@@ -254,7 +254,7 @@ public class DriverInfoActivity extends AppCompatActivity implements TaskListene
     }
 
     private void requestEndedResponseOk(){
-        startActivity(new Intent(this, OptionsActivity.class));
+        startActivity(new Intent(this, ShowDriverInfoActivity.class));
     }
 
     private void requestEndedResponseError(String errorMessage){

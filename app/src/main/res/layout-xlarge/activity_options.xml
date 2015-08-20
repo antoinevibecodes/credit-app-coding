@@ -1,11 +1,15 @@
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.applications.tinytonwe.drivermodificationappversion2.ShowDriverInfo.ShowDriverInfoActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout
     android:id="@+id/layoutContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.applications.tinytonwe.drivermodificationappversion2.SelectOption.OptionsActivity">
+    android:orientation="vertical">
 
     <include
         android:id="@+id/tool_bar"
@@ -25,10 +29,27 @@
             <include
                 layout="@layout/driver_data_card"/>
 
-            <include
-                layout="@layout/credits_card"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
 
         </LinearLayout>
 
     </LinearLayout>
-</LinearLayout>
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include
+            layout="@layout/driver_info_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="5dp"/>
+    </RelativeLayout>
+
+    </FrameLayout>

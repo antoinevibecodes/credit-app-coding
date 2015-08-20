@@ -48,7 +48,7 @@
                 android:value=".DriverInfo.DriverInfoActivity" />
         </activity>
         <activity
-            android:name=".SelectOption.OptionsActivity"
+            android:name=".ShowDriverInfo.ShowDriverInfoActivity"
             android:label="@string/title_activity_options"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"

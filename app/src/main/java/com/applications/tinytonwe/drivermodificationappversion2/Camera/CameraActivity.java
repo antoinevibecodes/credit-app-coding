@@ -15,10 +15,8 @@ import com.applications.tinytonwe.cameralibrary.CameraSettings.CameraSettings;
 import com.applications.tinytonwe.cameralibrary.CapturedPictureCallback;
 import com.applications.tinytonwe.cameralibrary.CropView.CropWindow;
 import com.applications.tinytonwe.drivermodificationappversion2.AppActions;
-import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
-import com.applications.tinytonwe.drivermodificationappversion2.SelectOption.OptionsActivity;
-import com.applications.tinytonwe.drivermodificationappversion2.SendPicture.SendPictureActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.ShowDriverInfo.ShowDriverInfoActivity;
 
 public class CameraActivity extends AppCompatActivity implements CapturedPictureCallback{
 
@@ -85,7 +83,7 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
     private void buttonHandler(AppActions appActions){
         switch(appActions){
             case CANCEL:
-                startActivity(new Intent(this, OptionsActivity.class));
+                startActivity(new Intent(this, ShowDriverInfoActivity.class));
                 break;
             case FLIP_CAMERA:
                 cameraPreview_.flipCamera();
@@ -106,6 +104,6 @@ public class CameraActivity extends AppCompatActivity implements CapturedPicture
 
     public void onBackPressed(){
         this.finish();
-        startActivity(new Intent(this,OptionsActivity.class));
+        startActivity(new Intent(this,ShowDriverInfoActivity.class));
     }
 }

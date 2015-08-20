@@ -2,6 +2,8 @@ package com.applications.tinytonwe.drivermodificationappversion2;
 
 import android.graphics.Bitmap;
 
+import com.applications.tinytonwe.drivermodificationappversion2.ShowDriverInfo.DrivingSession;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
@@ -11,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 
 /**
@@ -37,6 +40,8 @@ public class AppData {
     private String trainCredits_ = null;
     private String arcadeCredits_ = null;
 
+    private ArrayList<DrivingSession> drivingHistory_ = new ArrayList<>();
+
 
     private long driverId_ = 0;
 
@@ -49,6 +54,10 @@ public class AppData {
 
     public void setDriverId(long driverId){
         driverId_ = driverId;
+    }
+
+    public void addDrivingSessions(DrivingSession drivingSession) {
+        drivingHistory_.add(drivingSession);
     }
 
     public long getDriverId_(){
@@ -196,6 +205,10 @@ public class AppData {
         return arcadeCredits_;
     }
 
+    public ArrayList<DrivingSession> getDrivingHistory(){
+        return drivingHistory_;
+    }
+
 
     public void reset(){
         croppedImage_ = null;
@@ -215,6 +228,8 @@ public class AppData {
         tinyTrackCredits_ = null;
         trainCredits_ = null;
         arcadeCredits_ = null;
+
+        drivingHistory_ = new ArrayList<>();
 
     }
 }
