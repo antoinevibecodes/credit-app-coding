@@ -1,4 +1,4 @@
-package com.applications.tinytonwe.drivermodificationappversion2.DriverInfo;
+package com.applications.tinytonwe.drivermodificationappversion2.DriverInfoApp;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -26,7 +26,7 @@ import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraData;
 import com.applications.tinytonwe.drivermodificationappversion2.DisplayErrorMessages;
 import com.applications.tinytonwe.drivermodificationappversion2.Main.MainActivity;
-import com.applications.tinytonwe.drivermodificationappversion2.ShowDriverInfo.ShowDriverInfoActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.ShowDriverInfo.SDIMainActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
@@ -254,7 +254,7 @@ public class DriverInfoActivity extends AppCompatActivity implements TaskListene
     }
 
     private void requestEndedResponseOk(){
-        startActivity(new Intent(this, ShowDriverInfoActivity.class));
+        startActivity(new Intent(this, SDIMainActivity.class));
     }
 
     private void requestEndedResponseError(String errorMessage){

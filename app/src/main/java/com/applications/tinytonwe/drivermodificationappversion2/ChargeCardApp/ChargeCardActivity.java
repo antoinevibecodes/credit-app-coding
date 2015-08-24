@@ -1,4 +1,4 @@
-package com.applications.tinytonwe.drivermodificationappversion2.ChargeCard;
+package com.applications.tinytonwe.drivermodificationappversion2.ChargeCardApp;
 
 import android.app.Activity;
 import android.app.PendingIntent;

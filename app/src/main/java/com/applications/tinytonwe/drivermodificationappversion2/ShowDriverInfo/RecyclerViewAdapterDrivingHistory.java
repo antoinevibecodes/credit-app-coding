@@ -15,12 +15,12 @@ import java.util.ArrayList;
 /**
  * Created by admin on 8/14/2015.
  */
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
+public class RecyclerViewAdapterDrivingHistory extends RecyclerView.Adapter<RecyclerViewAdapterDrivingHistory.ViewHolder>{
 
     private ArrayList<DrivingSession> drivingHistory_;
     private static RecyclerViewClickListener itemListener_;
 
-    public RecyclerViewAdapter(ArrayList<DrivingSession> drivingHistory, RecyclerViewClickListener itemListener) {
+    public RecyclerViewAdapterDrivingHistory(ArrayList<DrivingSession> drivingHistory, RecyclerViewClickListener itemListener) {
         drivingHistory_ = drivingHistory;
         itemListener_ = itemListener;
     }
@@ -56,7 +56,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public RecyclerViewAdapterDrivingHistory.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.driving_session_card, parent, false);

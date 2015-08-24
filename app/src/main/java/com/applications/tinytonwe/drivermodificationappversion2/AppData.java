@@ -60,6 +60,9 @@ public class AppData {
         drivingHistory_.add(drivingSession);
     }
 
+    public void resetDrivingHistory(){
+        drivingHistory_ = new ArrayList<>();
+    }
     public long getDriverId_(){
         return driverId_;
     }

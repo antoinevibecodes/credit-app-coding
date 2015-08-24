@@ -11,10 +11,10 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".DriverInfo.DriverInfoActivity"
+            android:name=".DriverInfoApp.DriverInfoActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
@@ -33,50 +33,41 @@
         <activity
             android:name=".Camera.CameraActivity"
             android:label="@string/title_activity_camera"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            android:noHistory="true" >
+            android:noHistory="true"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".SendPicture.SendPictureActivity"
             android:label="@string/title_activity_validation"
             android:noHistory="true"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".DriverInfo.DriverInfoActivity" >
+            android:parentActivityName=".DriverInfoApp.DriverInfoActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DriverInfo.DriverInfoActivity" />
+                android:value=".DriverInfoApp.DriverInfoActivity" />
         </activity>
         <activity
-            android:name=".ShowDriverInfo.ShowDriverInfoActivity"
+            android:name=".ShowDriverInfo.SDIMainActivity"
             android:label="@string/title_activity_options"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".DriverInfo.DriverInfoActivity" >
+            android:parentActivityName=".DriverInfoApp.DriverInfoActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DriverInfo.DriverInfoActivity" />
+                android:value=".DriverInfoApp.DriverInfoActivity" />
         </activity>
-        <activity
-            android:name=".ProcessCredits.ProcessCreditsActivity"
-            android:label="@string/title_activity_process_credits"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".DriverInfo.DriverInfoActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DriverInfo.DriverInfoActivity" />
-        </activity>
+
         <activity
             android:name=".Camera.GalleryActivity"
             android:label="@string/title_activity_gallery"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".Main.MainActivity"
             android:label="@string/title_activity_main"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -99,10 +90,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ChargeCard.ChargeCardActivity"
+            android:name=".ChargeCardApp.ChargeCardActivity"
             android:label="@string/title_activity_charge_card"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ShowDriverInfo.SDIDrivingSessionActivity"
+            android:label="@string/title_activity_sdidriving_session"
+            android:parentActivityName=".ShowDriverInfo.SDIMainActivity">
         </activity>
     </application>
 

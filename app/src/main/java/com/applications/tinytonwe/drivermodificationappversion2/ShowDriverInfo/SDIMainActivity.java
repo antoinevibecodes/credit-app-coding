@@ -15,10 +15,10 @@ import android.widget.Toast;
 
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.Camera.CameraActivity;
-import com.applications.tinytonwe.drivermodificationappversion2.DriverInfo.DriverInfoActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.DriverInfoApp.DriverInfoActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 
-public class ShowDriverInfoActivity extends AppCompatActivity implements RecyclerViewClickListener{
+public class SDIMainActivity extends AppCompatActivity implements RecyclerViewClickListener{
 
     private String firstName_;
     private String lastName_;
@@ -28,13 +28,10 @@ public class ShowDriverInfoActivity extends AppCompatActivity implements Recycle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_options);
+        setContentView(R.layout.activity_sdimain);
 
         initialize();
         registerListeners();
-
-
-        TestApiDrivingHistory.getDrivingHistory();
 
         drivingHistory_.setVisibility(View.GONE);
         driverData_.setVisibility(View.VISIBLE);
@@ -53,7 +50,7 @@ public class ShowDriverInfoActivity extends AppCompatActivity implements Recycle
         TestApiDrivingHistory.getDrivingHistory();
         drivingHistory_ = (RecyclerView)findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView.Adapter adapter = new RecyclerViewAdapter(AppData.getAppDataInstance_().getDrivingHistory(),this);
+        RecyclerView.Adapter adapter = new RecyclerViewAdapterDrivingHistory(AppData.getAppDataInstance_().getDrivingHistory(),this);
 
         drivingHistory_.setLayoutManager(layoutManager);
         drivingHistory_.setAdapter(adapter);
@@ -141,7 +138,10 @@ public class ShowDriverInfoActivity extends AppCompatActivity implements Recycle
     }
 
     public void recyclerViewListClicked(int position){
-        Toast.makeText(this, "card at position " + position + " clicked", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this,SDIDrivingSessionActivity.class);
+        intent.putExtra("sessionId",position);
+        startActivity(intent);
+        //Toast.makeText(this, "card at position " + position + " clicked", Toast.LENGTH_LONG).show();
     }
 
 }

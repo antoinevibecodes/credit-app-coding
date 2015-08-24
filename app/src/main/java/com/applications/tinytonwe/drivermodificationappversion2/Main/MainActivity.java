@@ -9,14 +9,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.applications.tinytonwe.drivermodificationappversion2.AppData;
-import com.applications.tinytonwe.drivermodificationappversion2.ChargeCard.ChargeCardActivity;
-import com.applications.tinytonwe.drivermodificationappversion2.DriverInfo.DriverInfoActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.ChargeCardApp.ChargeCardActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.DriverInfoApp.DriverInfoActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 
 public class MainActivity extends ActionBarActivity {
