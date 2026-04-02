@@ -19,16 +19,12 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="text/plain" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
             </intent-filter>
-
             <meta-data
                 android:name="android.nfc.action.TECH_DISCOVERED"
                 android:resource="@xml/nfc_tech_filter" />
@@ -82,21 +78,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-
-                <intent-filter>
-                    <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
-                    <category android:name="android.intent.category.DEFAULT" />
-
-                    <data android:mimeType="text/plain" />
-                </intent-filter>
-                <intent-filter>
-                    <action android:name="android.nfc.action.TECH_DISCOVERED" />
-                </intent-filter>
-
-                <meta-data
-                    android:name="android.nfc.action.TECH_DISCOVERED"
-                    android:resource="@xml/nfc_tech_filter" />
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc_tech_filter" />
         </activity>
         <activity
             android:exported="true"
@@ -110,6 +102,54 @@
             android:name=".ShowDriverInfo.SDIDrivingSessionActivity"
             android:label="@string/title_activity_sdidriving_session"
             android:parentActivityName=".ShowDriverInfo.SDIMainActivity">
+        </activity>
+
+        <!-- New Activities -->
+        <activity
+            android:exported="false"
+            android:name=".AdminApp.AdminActivity"
+            android:label="Admin Panel"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:exported="false"
+            android:name=".AdminApp.EditChargeButtonActivity"
+            android:label="Edit Button"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:exported="false"
+            android:name=".ReportingApp.ReportingMenuActivity"
+            android:label="Reports"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:exported="false"
+            android:name=".ReportingApp.CardHistoryActivity"
+            android:label="Card History"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:exported="false"
+            android:name=".ReportingApp.DailyReportActivity"
+            android:label="Daily Report"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:exported="false"
+            android:name=".KioskApp.KioskHomeActivity"
+            android:label="Kiosk"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar" >
+        </activity>
+        <activity
+            android:exported="false"
+            android:name=".KioskApp.KioskPurchaseActivity"
+            android:label="Purchase"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar" >
         </activity>
     </application>
 

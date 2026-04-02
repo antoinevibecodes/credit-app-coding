@@ -1,0 +1,120 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/toolbar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Button Name"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
+
+            <EditText
+                android:id="@+id/editBtnName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="e.g. Track, Bumper Cars"
+                android:inputType="text"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Entitlement Type"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
+
+            <Spinner
+                android:id="@+id/editBtnEntitlementType"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Credit Amount"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
+
+            <EditText
+                android:id="@+id/editBtnCreditAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="e.g. 5"
+                android:inputType="number"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sort Order"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
+
+            <EditText
+                android:id="@+id/editBtnSortOrder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="e.g. 1"
+                android:inputType="number"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Color (hex)"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
+
+            <EditText
+                android:id="@+id/editBtnColorHex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="#e3a21a"
+                android:inputType="text"
+                android:layout_marginBottom="16dp"/>
+
+            <CheckBox
+                android:id="@+id/editBtnForce"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Force option (bypass credit check)"
+                android:layout_marginBottom="8dp"/>
+
+            <CheckBox
+                android:id="@+id/editBtnActive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Active"
+                android:checked="true"
+                android:layout_marginBottom="24dp"/>
+
+            <Button
+                android:id="@+id/editBtnSave"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Save"
+                android:textColor="#FFFFFF"
+                android:background="#4a90d9"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

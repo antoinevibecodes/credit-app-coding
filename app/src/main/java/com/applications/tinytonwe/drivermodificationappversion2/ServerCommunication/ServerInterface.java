@@ -3,39 +3,88 @@ package com.applications.tinytonwe.drivermodificationappversion2.ServerCommunica
 import android.app.Activity;
 import android.os.AsyncTask;
 
-/**
- * Created by admin on 7/8/2015.
- */
 public abstract class ServerInterface {
 
     protected TaskListener callingActivity_;
 
-    public ServerInterface(Activity callingActivity){
-        callingActivity_ = (TaskListener)callingActivity;
+    public ServerInterface(Activity callingActivity) {
+        callingActivity_ = (TaskListener) callingActivity;
     }
 
-    public abstract class UploadPicture extends AsyncTask<Request,Void,Response>{
+    // Existing operations (unchanged)
 
-        protected void onPostExecute(Response response)
-        {
+    public abstract class UploadPicture extends AsyncTask<Request, Void, Response> {
+        protected void onPostExecute(Response response) {
             callingActivity_.onTaskFinished(response);
         }
     }
 
-    public abstract class RequestDriverInfoViaRfid extends AsyncTask<Request,Void, Response>{
-
-        protected void onPostExecute(Response response)
-        {
+    public abstract class RequestDriverInfoViaRfid extends AsyncTask<Request, Void, Response> {
+        protected void onPostExecute(Response response) {
             callingActivity_.onTaskFinished(response);
         }
     }
 
-    public abstract class ChargeDriverCard extends AsyncTask<Request,Void, Response>{
-
-        protected void onPostExecute(Response response)
-        {
+    public abstract class ChargeDriverCard extends AsyncTask<Request, Void, Response> {
+        protected void onPostExecute(Response response) {
             callingActivity_.onTaskFinished(response);
         }
     }
 
+    // New operations for extended features
+
+    public abstract class FetchChargeButtons extends AsyncTask<Request, Void, Response> {
+        protected void onPostExecute(Response response) {
+            response.operationType = OperationType.FETCH_CHARGE_BUTTONS;
+            callingActivity_.onTaskFinished(response);
+        }
+    }
+
+    public abstract class ManageChargeButton extends AsyncTask<Request, Void, Response> {
+        protected void onPostExecute(Response response) {
+            callingActivity_.onTaskFinished(response);
+        }
+    }
+
+    public abstract class FetchTransactionHistory extends AsyncTask<Request, Void, Response> {
+        protected void onPostExecute(Response response) {
+            response.operationType = OperationType.FETCH_TRANSACTION_HISTORY;
+            callingActivity_.onTaskFinished(response);
+        }
+    }
+
+    public abstract class FetchDailyReport extends AsyncTask<Request, Void, Response> {
+        protected void onPostExecute(Response response) {
+            response.operationType = OperationType.FETCH_DAILY_REPORT;
+            callingActivity_.onTaskFinished(response);
+        }
+    }
+
+    public abstract class FetchKioskOptions extends AsyncTask<Request, Void, Response> {
+        protected void onPostExecute(Response response) {
+            response.operationType = OperationType.FETCH_KIOSK_OPTIONS;
+            callingActivity_.onTaskFinished(response);
+        }
+    }
+
+    public abstract class ProcessKioskPurchase extends AsyncTask<Request, Void, Response> {
+        protected void onPostExecute(Response response) {
+            response.operationType = OperationType.PROCESS_KIOSK_PURCHASE;
+            callingActivity_.onTaskFinished(response);
+        }
+    }
+
+    public abstract class ValidatePin extends AsyncTask<Request, Void, Response> {
+        protected void onPostExecute(Response response) {
+            response.operationType = OperationType.VALIDATE_PIN;
+            callingActivity_.onTaskFinished(response);
+        }
+    }
+
+    public abstract class FetchEntitlementTypes extends AsyncTask<Request, Void, Response> {
+        protected void onPostExecute(Response response) {
+            response.operationType = OperationType.FETCH_ENTITLEMENT_TYPES;
+            callingActivity_.onTaskFinished(response);
+        }
+    }
 }

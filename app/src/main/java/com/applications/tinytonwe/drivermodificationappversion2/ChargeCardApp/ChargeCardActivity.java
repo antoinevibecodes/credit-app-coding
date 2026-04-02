@@ -6,61 +6,61 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.nfc.NfcAdapter;
-import android.nfc.Tag;
-import android.nfc.tech.NfcA;
 import android.os.CountDownTimer;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
+import com.applications.tinytonwe.drivermodificationappversion2.Common.NfcHelper;
 import com.applications.tinytonwe.drivermodificationappversion2.Main.MainActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
-import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.EntitlementTypes;
-import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Mock.MockServer;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Models.ChargeButtonConfig;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.OperationType;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.ServerFactory;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.ServerInterface;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TaskListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-public class ChargeCardActivity extends AppCompatActivity implements TaskListener{
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
+public class ChargeCardActivity extends AppCompatActivity implements TaskListener,
+        ChargeButtonAdapter.OnChargeButtonClickListener {
 
     private AppData appData;
-
-    //TextView for display
-    public TextView tv;
-
-    //Global variables used throught
-    private Activity activity = this;
-    private String promptMessage;
-    private String waitMessage;
+    private TextView tv;
     private LinearLayout linearLayout;
     private String cardReadByNFC = "";
     private String prevCardReadByNFC = "";
-    private String defaultColor =  "#1d1d1d";
+    private String defaultColor = "#1d1d1d";
 
+    // Dynamic buttons
+    private RecyclerView buttonGrid;
+    private ChargeButtonAdapter chargeButtonAdapter;
+    private List<ChargeButtonConfig> chargeButtons = new ArrayList<>();
 
-    //UI buttons
-    private Button trackBn;
-    private Button trackForceBn;
-    private Button trainBn;
-    private Button trainForceBn;
+    // Fixed buttons
     private Button creditsBn;
     private Button cancelBn;
 
-    //CountDown timer used to set, reset and cancel timeout throughout program
     private CountDownTimer countDownTimer;
-
-
-    private NfcAdapter mAdapter;
-    private PendingIntent mPendingIntent;
-    private IntentFilter[] mFilters;
-    private String[][] mTechLists;
-    private TextView mText;
-    private int mCount = 0;
-
+    private NfcHelper nfcHelper;
+    private Gson gson = new Gson();
+    private boolean buttonsLoaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,333 +69,188 @@ public class ChargeCardActivity extends AppCompatActivity implements TaskListene
 
         initialize();
         registerListeners();
+        loadDynamicButtons();
     }
 
-
-    private void initialize(){
-
-        mAdapter = NfcAdapter.getDefaultAdapter(this);
-
-        mPendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
-
-
-        // Setup an intent filter for all MIME based dispatches
-        IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
-        try {
-            ndef.addDataType("*/*");
-        } catch (IntentFilter.MalformedMimeTypeException e) {
-            throw new RuntimeException("fail", e);
-        }
-        mFilters = new IntentFilter[] {
-                ndef,
-        };
-
-        // Setup a tech list for all NfcF tags
-        mTechLists = new String[][] { new String[] { NfcA.class.getName() } };
-
+    private void initialize() {
+        nfcHelper = new NfcHelper(this);
         appData = AppData.getAppDataInstance_();
 
-        promptMessage = getApplicationContext().getResources().getText(R.string.promptMessage).toString();
-        waitMessage = getApplicationContext().getResources().getText(R.string.waitMessage).toString();
-
-        //Setting default layout
-        linearLayout = (LinearLayout)findViewById(R.id.layout);
+        linearLayout = (LinearLayout) findViewById(R.id.layout);
         linearLayout.setBackgroundColor(Color.parseColor(defaultColor));
-
     }
 
-    private void registerListeners(){
-
+    private void registerListeners() {
         tv = (TextView) findViewById(R.id.textView);
-        trackBn = (Button) findViewById(R.id.track);
-        trackForceBn = (Button) findViewById(R.id.trackForce);
-        trainBn = (Button) findViewById(R.id.train);
-        trainForceBn = (Button) findViewById(R.id.trainForce);
+
+        // Dynamic button grid
+        buttonGrid = (RecyclerView) findViewById(R.id.chargeButtonGrid);
+        buttonGrid.setLayoutManager(new GridLayoutManager(this, 2));
+        chargeButtonAdapter = new ChargeButtonAdapter(chargeButtons, this);
+        buttonGrid.setAdapter(chargeButtonAdapter);
+
+        // Fixed buttons
         creditsBn = (Button) findViewById(R.id.credits);
         cancelBn = (Button) findViewById(R.id.cancel);
 
+        creditsBn.setOnClickListener(v -> handleCheckCredits());
+        cancelBn.setOnClickListener(v -> resetApp());
+    }
 
-        //Handling our click events
+    private void loadDynamicButtons() {
+        ServerInterface server = ServerFactory.create(this);
+        if (server instanceof MockServer) {
+            ((MockServer) server).new GetChargeButtons();
+        }
+        // RealServer: will be wired when backend endpoints are ready
+    }
 
-        //Handler for Track button
-        trackBn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonHandler(CCActions.TRACK);
+    @Override
+    public void onChargeButtonClicked(ChargeButtonConfig button) {
+        cancelInactivityTimeout();
+
+        if (!cardReadByNFC.isEmpty()) {
+            String rfidUidS = cardReadByNFC.trim();
+            long rfidUidL = NfcHelper.hexToLong(rfidUidS);
+            appData.setCardIdReadLongValue_(rfidUidL);
+
+            // Use the server to charge
+            ServerInterface server = ServerFactory.create(this);
+            if (server instanceof MockServer) {
+                ((MockServer) server).new ChargeCard(
+                        button.getEntitlementTypeId(),
+                        button.isForceOption(),
+                        false,
+                        false
+                );
+            } else {
+                RealServer realServer = (RealServer) server;
+                realServer.new ChargeCard(
+                        button.getEntitlementTypeId(),
+                        button.isForceOption(),
+                        false,
+                        false
+                );
             }
-        });
 
-        //Handler for track force button
-        trackForceBn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonHandler(CCActions.TRACK_FORCE);
-            }
-        });
+            disableAllButtons();
+            tv.setText(getApplicationContext().getResources().getText(R.string.waitMessage).toString());
+        }
+    }
 
-        //Handler for train button
-        trainBn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonHandler(CCActions.TRAIN);
-            }
-        });
+    private void handleCheckCredits() {
+        cancelInactivityTimeout();
 
-        //Handler for train force button
-        trainForceBn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonHandler(CCActions.TRAIN_FORCE);
-            }
-        });
+        if (!cardReadByNFC.isEmpty()) {
+            long rfidUidL = NfcHelper.hexToLong(cardReadByNFC.trim());
+            appData.setCardIdReadLongValue_(rfidUidL);
 
-        //Handler for credits button
-        creditsBn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonHandler(CCActions.CREDITS);
+            ServerInterface server = ServerFactory.create(this);
+            if (server instanceof MockServer) {
+                ((MockServer) server).new ChargeCard(1, false, true, false);
+            } else {
+                RealServer realServer = (RealServer) server;
+                realServer.new ChargeCard(1, false, true, false);
             }
-        });
 
-        //Handler for cancel button
-        cancelBn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetApp();
-            }
-        });
+            disableAllButtons();
+            tv.setText(getApplicationContext().getResources().getText(R.string.waitMessage).toString());
+        }
     }
 
     public void onResume() {
-
         super.onResume();
-        mAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters, mTechLists);
-
-        //Prompt the user to make the card touch the device, disable buttons and erase any existing data
+        nfcHelper.enableForegroundDispatch(this);
         resetApp();
 
-
-        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
-
-            //Once the card has been read, start the timeout
-            setInactivityTimeout();
-
-            //get the tag id
-            Intent curIntent = getIntent();
-            Tag tagFromIntent = curIntent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-
-
-            try
-            {
-                byte[] tagUid = tagFromIntent.getId();
-
-                String b0X = String.format("%02x", tagUid[0] & 0xff);
-                String b1X = String.format("%02x", tagUid[1] & 0xff);
-                String b2X = String.format("%02x", tagUid[2] & 0xff);
-                String b3X = String.format("%02x", tagUid[3] & 0xff);
-
-                //set global variable
-                cardReadByNFC = b3X + b2X + b1X + b0X;
-
-                //To avoid intent firing with previous values when device wakes from sleep
-                if(prevCardReadByNFC.equals(cardReadByNFC)) {
-                    linearLayout.setBackgroundColor(Color.parseColor(defaultColor));
-                    tv.setTextColor(Color.parseColor(defaultColor));
-                    tv.setBackgroundColor(Color.WHITE);
-                    resetApp();
-                    return;
-                }
-
-                prevCardReadByNFC =cardReadByNFC;
-
-                //update display with card info read
-                tv.setText("Card UID read : " + cardReadByNFC + "\n" + "Please select an option");
-
-                //Make all options available
-                enableAllButtons();
-            }
-            catch(Exception ex)
-            {
-                tv.setText("Error Reading card");
-            }//end try catch
+        String cardHex = NfcHelper.readCardHex(getIntent());
+        if (cardHex != null) {
+            processCardRead(cardHex);
         }
+    }
+
+    private void processCardRead(String cardHex) {
+        cardReadByNFC = cardHex;
+
+        if (prevCardReadByNFC.equals(cardReadByNFC)) {
+            linearLayout.setBackgroundColor(Color.parseColor(defaultColor));
+            tv.setTextColor(Color.parseColor(defaultColor));
+            tv.setBackgroundColor(Color.WHITE);
+            resetApp();
+            return;
+        }
+
+        prevCardReadByNFC = cardReadByNFC;
+        setInactivityTimeout();
+        tv.setText("Card UID read : " + cardReadByNFC + "\n" + "Please select an option");
+        enableAllButtons();
     }
 
     public void onNewIntent(Intent intent) {
-        //I set the launch mode to singleTask in the manifest
-        //so this is why I am able to intecept a new instace
-        //of the activity which wishes to be created in this method
-
-
-        //I clear the stack of the current activity which wishes to be
-        //created so that android will permit its creation since I set
-        //my lauch mode to singeTask
         super.onNewIntent(intent);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        //I can now start the intent as I am sure all its old instances
-        // will first be destroyed
-        startActivity(intent);
-    }
-
-    private  long convertIdToLong(String hexId){
-        return (Long.parseLong(hexId,16));
-    }
-
-    private void buttonHandler(CCActions ccActions){
-        //Cancel the timeout when a user clicks on a button
-        cancelInactivityTimeout();
-
-        //Initialize all local variables
-        boolean update = true;
-        String rfidUidS = cardReadByNFC.trim();
-        long rfidUidL = convertIdToLong(rfidUidS);
-        appData.setCardIdReadLongValue_(rfidUidL);
-
-        if(!(cardReadByNFC.equals(""))) {
-            boolean checkCredits = false;
-            boolean forceCredits = false;
-            boolean useDriverId = false;
-            EntitlementTypes entitlementType = EntitlementTypes.GENERAL;
-
-
-            switch (ccActions) {
-                case TRACK:
-                    entitlementType = EntitlementTypes.TINYTRACK;
-                    break;
-                case TRACK_FORCE:
-                    entitlementType = EntitlementTypes.TINYTRACK;
-                    forceCredits = true;
-                    break;
-                case TRAIN:
-                    entitlementType = EntitlementTypes.TRAIN;
-                    break;
-                case TRAIN_FORCE:
-                    entitlementType = EntitlementTypes.TRAIN;
-                    forceCredits = true;
-                    break;
-                case CREDITS:
-                    entitlementType = EntitlementTypes.GENERAL;
-                    checkCredits = true;
-                    break;
-            }
-
-            RealServer server_ = new RealServer(this);
-            RealServer.ChargeCard chargeCard;
-            chargeCard = server_.new ChargeCard(entitlementType.getEnumValue(),forceCredits,checkCredits,useDriverId);
-
-            //Disabling all the buttons during the server call
-            disableAllButtons();
-
-            //Displaying wait message
-            tv.setText(waitMessage);
-
+        String cardHex = NfcHelper.readCardHex(intent);
+        if (cardHex != null) {
+            processCardRead(cardHex);
+        } else {
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                    Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
-
-
     }
 
-    private void setInactivityTimeout(){
-
+    private void setInactivityTimeout() {
         int timeoutDurationInMilli = Integer.parseInt(this.getResources().getText(R.string.inactivityTimeoutDuration).toString());
         int timeoutIntervalInMilli = Integer.parseInt(this.getResources().getText(R.string.timeoutInterval).toString());
 
-        countDownTimer = new CountDownTimer(timeoutDurationInMilli,timeoutIntervalInMilli) {
+        countDownTimer = new CountDownTimer(timeoutDurationInMilli, timeoutIntervalInMilli) {
             @Override
-            public void onTick(long millisUntilFinished) {
-                //Do nothing just tick
-            }
+            public void onTick(long millisUntilFinished) {}
 
             @Override
-            public void onFinish() {
-                resetApp();
-            }
+            public void onFinish() { resetApp(); }
         }.start();
-
     }
 
-    private void setSuccessTimeout(){
-
+    private void setSuccessTimeout() {
         int timeoutDurationInMilli = Integer.parseInt(this.getResources().getText(R.string.successTimerDuration).toString());
         int timeoutIntervalInMilli = Integer.parseInt(this.getResources().getText(R.string.successTimerInterval).toString());
 
-        countDownTimer = new CountDownTimer(timeoutDurationInMilli,timeoutIntervalInMilli) {
+        countDownTimer = new CountDownTimer(timeoutDurationInMilli, timeoutIntervalInMilli) {
             @Override
-            public void onTick(long millisUntilFinished) {
-                //Do nothing just tick
-            }
+            public void onTick(long millisUntilFinished) {}
 
             @Override
-            public void onFinish() {
-                resetApp();
-            }
+            public void onFinish() { resetApp(); }
         }.start();
-
     }
 
-    private void cancelInactivityTimeout(){
-
-        if(countDownTimer != null)
-            countDownTimer.cancel();
-
+    private void cancelInactivityTimeout() {
+        if (countDownTimer != null) countDownTimer.cancel();
         countDownTimer = null;
     }
 
-    private void disableAllButtons(){
-
-        //disable all buttons
-        trackBn.setEnabled(false);
-        trackForceBn.setEnabled(false);
-        trainBn.setEnabled(false);
-        trainForceBn.setEnabled(false);
+    private void disableAllButtons() {
+        chargeButtonAdapter.setButtonsEnabled(false);
         creditsBn.setEnabled(false);
         cancelBn.setEnabled(false);
-
-        //Make the text color gray to give disabled look to buttons
-        greyOutAllBtnColors();
-    }
-
-    private void enableAllButtons(){
-        //enable all buttons
-        trackBn.setEnabled(true);
-        trackForceBn.setEnabled(true);
-        trainBn.setEnabled(true);
-        trainForceBn.setEnabled(true);
-        creditsBn.setEnabled(true);
-        cancelBn.setEnabled(true);
-
-        //Brighten button colors to give them an enabled look
-        reviveAllBtnColors();
-    }
-
-    private void greyOutAllBtnColors(){
-
-        //Set the text color of the buttons to gray
-        trackBn.setTextColor(Color.GRAY);
-        trackForceBn.setTextColor(Color.GRAY);
-        trainBn.setTextColor(Color.GRAY);
-        trainForceBn.setTextColor(Color.GRAY);
         creditsBn.setTextColor(Color.GRAY);
         cancelBn.setTextColor(Color.GRAY);
     }
 
-    private void reviveAllBtnColors(){
-
-        //set the text color of buttons to white
-        trackBn.setTextColor(Color.WHITE);
-        trackForceBn.setTextColor(Color.WHITE);
-        trainBn.setTextColor(Color.WHITE);
-        trainForceBn.setTextColor(Color.WHITE);
+    private void enableAllButtons() {
+        chargeButtonAdapter.setButtonsEnabled(true);
+        creditsBn.setEnabled(true);
+        cancelBn.setEnabled(true);
         creditsBn.setTextColor(Color.WHITE);
         cancelBn.setTextColor(Color.WHITE);
     }
 
-    private void DisplayMessage(CCMessages messageType){
+    private void DisplayMessage(CCMessages messageType) {
+        String promptMessage = getApplicationContext().getResources().getText(R.string.promptMessage).toString();
 
-        switch (messageType){
+        switch (messageType) {
             case OK:
                 linearLayout.setBackgroundColor(Color.GREEN);
                 tv.setTextColor(Color.BLACK);
@@ -415,38 +270,46 @@ public class ChargeCardActivity extends AppCompatActivity implements TaskListene
                 tv.setBackgroundColor(Color.WHITE);
                 break;
         }
-
     }
 
-    private void resetApp(){
+    private void resetApp() {
         cardReadByNFC = "";
         disableAllButtons();
         appData.reset();
         DisplayMessage(CCMessages.DEFAULT);
     }
 
+    public void onTaskFinished(Response response) {
+        // Handle dynamic button loading
+        if (response.operationType == OperationType.FETCH_CHARGE_BUTTONS && response.responseOk) {
+            try {
+                Type listType = new TypeToken<List<ChargeButtonConfig>>() {}.getType();
+                List<ChargeButtonConfig> loaded = gson.fromJson(response.jsonData, listType);
+                chargeButtons.clear();
+                chargeButtons.addAll(loaded);
+                chargeButtonAdapter.notifyDataSetChanged();
+                buttonsLoaded = true;
+            } catch (Exception e) {
+                Toast.makeText(this, "Error loading buttons", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
 
-
-    public void onTaskFinished(Response response){
-
+        // Handle charge/credit response (same as original)
         tv.setText(response.responseMessage);
         disableAllButtons();
 
-        //In case a positive message was received, paint the background green
-        if(response.responseOk) {
+        if (response.responseOk) {
             DisplayMessage(CCMessages.OK);
             setSuccessTimeout();
-        }
-        else{
+        } else {
             DisplayMessage(CCMessages.ERROR);
             cancelBn.setEnabled(true);
             cancelBn.setTextColor(Color.WHITE);
         }
-
     }
 
-
-    public void onBackPressed(){
+    public void onBackPressed() {
         startActivity(new Intent(this, MainActivity.class));
     }
 }

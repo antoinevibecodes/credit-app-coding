@@ -58,6 +58,18 @@
 
     <string name="connectionTimeoutDuration">20000</string>
     <string name="responseTimeoutDuration">20000</string>
+
+    // New API endpoints
+    <string name="serverGetChargeButtonsUrl">http://ganottwebapi1.tinytowne.com/api/chargebuttons/GetAll</string>
+    <string name="serverCreateChargeButtonUrl">http://ganottwebapi1.tinytowne.com/api/chargebuttons/Create</string>
+    <string name="serverUpdateChargeButtonUrl">http://ganottwebapi1.tinytowne.com/api/chargebuttons/Update</string>
+    <string name="serverDeleteChargeButtonUrl">http://ganottwebapi1.tinytowne.com/api/chargebuttons/Delete</string>
+    <string name="serverGetEntitlementTypesUrl">http://ganottwebapi1.tinytowne.com/api/entitlementtypes/GetAll</string>
+    <string name="serverGetTransactionHistoryUrl">http://ganottwebapi1.tinytowne.com/api/reports/GetTransactionHistory</string>
+    <string name="serverGetDailyReportUrl">http://ganottwebapi1.tinytowne.com/api/reports/GetDailyReport</string>
+    <string name="serverGetKioskOptionsUrl">http://ganottwebapi1.tinytowne.com/api/kiosk/GetPurchaseOptions</string>
+    <string name="serverProcessKioskPurchaseUrl">http://ganottwebapi1.tinytowne.com/api/kiosk/ProcessPurchase</string>
+    <string name="serverValidatePinUrl">http://ganottwebapi1.tinytowne.com/api/auth/ValidatePin</string>
     <string name="title_activity_options">OptionsActivity</string>
     <string name="title_activity_process_credits">ProcessCreditsActivity</string>
     <string name="title_activity_gallery">GalleryActivity</string>

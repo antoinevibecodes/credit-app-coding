@@ -6,4 +6,6 @@ package com.applications.tinytonwe.drivermodificationappversion2.ServerCommunica
 public class Response {
     public String responseMessage = null;
     public boolean responseOk = false;
+    public String jsonData = null;
+    public int operationType = 0;
 }

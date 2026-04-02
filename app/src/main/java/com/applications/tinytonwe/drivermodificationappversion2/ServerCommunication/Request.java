@@ -16,4 +16,9 @@ public class Request {
     public int entitlementType;
     public boolean checkCredits = false;
     public boolean useDriverId = false;
+
+    // New fields for extended API
+    public String jsonPayload;
+    public String httpMethod = "POST";
+    public int operationType = 0;
 }

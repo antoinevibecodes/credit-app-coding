@@ -9,11 +9,15 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Models.ChargeButtonConfig;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Models.EntitlementCredit;
+
 import java.io.ByteArrayOutputStream;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -39,6 +43,11 @@ public class AppData {
     private String tinyTrackCredits_ = null;
     private String trainCredits_ = null;
     private String arcadeCredits_ = null;
+
+    // Dynamic entitlements and charge buttons
+    private List<EntitlementCredit> entitlements_ = new ArrayList<>();
+    private List<ChargeButtonConfig> chargeButtons_ = new ArrayList<>();
+    private boolean isAnonymousCard_ = false;
 
     private ArrayList<DrivingSession> drivingHistory_ = new ArrayList<>();
 
@@ -212,6 +221,17 @@ public class AppData {
         return drivingHistory_;
     }
 
+    // Dynamic entitlements
+    public List<EntitlementCredit> getEntitlements() { return entitlements_; }
+    public void setEntitlements(List<EntitlementCredit> entitlements) { this.entitlements_ = entitlements; }
+
+    // Dynamic charge buttons
+    public List<ChargeButtonConfig> getChargeButtons() { return chargeButtons_; }
+    public void setChargeButtons(List<ChargeButtonConfig> chargeButtons) { this.chargeButtons_ = chargeButtons; }
+
+    // Anonymous card flag
+    public boolean isAnonymousCard() { return isAnonymousCard_; }
+    public void setAnonymousCard(boolean anonymous) { this.isAnonymousCard_ = anonymous; }
 
     public void reset(){
         croppedImage_ = null;
@@ -233,6 +253,8 @@ public class AppData {
         arcadeCredits_ = null;
 
         drivingHistory_ = new ArrayList<>();
-
+        entitlements_ = new ArrayList<>();
+        chargeButtons_ = new ArrayList<>();
+        isAnonymousCard_ = false;
     }
 }

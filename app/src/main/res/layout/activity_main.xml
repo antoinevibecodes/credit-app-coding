@@ -11,47 +11,177 @@
         android:id="@+id/tool_bar"
         layout="@layout/toolbar"/>
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:gravity="center">
+        android:layout_height="match_parent">
 
-        <androidx.cardview.widget.CardView
-            android:layout_height="200dp"
-            android:layout_width="200dp"
-            android:layout_margin="5dp"
-            android:id="@+id/chargeCard">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="16dp">
 
-            <TextView
+            <!-- Row 1: Charge Card + Driver Info -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="20sp"
+                android:orientation="horizontal"
                 android:gravity="center"
-                android:textColor="#000000"
-                android:text="Charge Card"/>
+                android:layout_marginBottom="10dp">
 
-        </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_height="160dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:id="@+id/chargeCard">
 
-        <androidx.cardview.widget.CardView
-            android:layout_height="200dp"
-            android:layout_width="200dp"
-            android:layout_margin="5dp"
-            android:id="@+id/driverInfo">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="#e3a21a">
 
-            <TextView
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textSize="18sp"
+                            android:gravity="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold"
+                            android:text="Charge Card"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_height="160dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:id="@+id/driverInfo">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="#00aba9">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textSize="18sp"
+                            android:gravity="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold"
+                            android:text="Driver Information"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <!-- Row 2: Admin + Reports -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="20sp"
+                android:orientation="horizontal"
                 android:gravity="center"
-                android:textColor="#000000"
-                android:text="Driver Information"/>
-        </androidx.cardview.widget.CardView>
+                android:layout_marginBottom="10dp">
 
-    </LinearLayout>
+                <androidx.cardview.widget.CardView
+                    android:layout_height="160dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:id="@+id/adminPanel">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="#4a90d9">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textSize="18sp"
+                            android:gravity="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold"
+                            android:text="Admin Panel"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_height="160dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:id="@+id/reports">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="#8e44ad">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textSize="18sp"
+                            android:gravity="center"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold"
+                            android:text="Reports"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <!-- Row 3: Kiosk Mode -->
+            <androidx.cardview.widget.CardView
+                android:layout_height="160dp"
+                android:layout_width="match_parent"
+                android:layout_margin="5dp"
+                android:id="@+id/kioskMode">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="#e74c3c">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:text="Kiosk Mode"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="12sp"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginTop="4dp"
+                        android:text="Self-Checkout for Customers"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
