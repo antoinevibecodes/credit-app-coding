@@ -10,7 +10,7 @@ import android.nfc.Tag;
 import android.nfc.tech.NfcA;
 import android.os.CountDownTimer;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -77,7 +77,7 @@ public class ChargeCardActivity extends AppCompatActivity implements TaskListene
         mAdapter = NfcAdapter.getDefaultAdapter(this);
 
         mPendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
 
 
         // Setup an intent filter for all MIME based dispatches
@@ -222,16 +222,16 @@ public class ChargeCardActivity extends AppCompatActivity implements TaskListene
         }
     }
 
-    public void onNewIntent(Intent intent){
+    public void onNewIntent(Intent intent) {
         //I set the launch mode to singleTask in the manifest
         //so this is why I am able to intecept a new instace
         //of the activity which wishes to be created in this method
 
 
-
         //I clear the stack of the current activity which wishes to be
         //created so that android will permit its creation since I set
         //my lauch mode to singeTask
+        super.onNewIntent(intent);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_CLEAR_TASK |
                 Intent.FLAG_ACTIVITY_NEW_TASK);

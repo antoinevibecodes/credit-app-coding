@@ -25,7 +25,7 @@
             <include
                 layout="@layout/driver_data_card"/>
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"

@@ -8,10 +8,11 @@ import android.graphics.PorterDuff;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcA;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -70,9 +71,14 @@ public class DriverInfoActivity extends AppCompatActivity implements TaskListene
     private void initialize(){
         mAdapter = NfcAdapter.getDefaultAdapter(this);
 
-        mPendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            mPendingIntent = PendingIntent.getActivity(this, 0,
+                    new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE);
+        }else{
+            mPendingIntent = PendingIntent.getActivity(this, 0,
+                    new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_UPDATE_CURRENT);
 
+        }
 
         IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         try {
@@ -286,17 +292,17 @@ public class DriverInfoActivity extends AppCompatActivity implements TaskListene
 
     }
 
-    public void onNewIntent(Intent intent){
+    public void onNewIntent(Intent intent) {
 
         //I set the launch mode to singleTask in the manifest
         //so this is why I am able to intecept a new instace
         //of the activity which wishes to be created in this method
 
 
-
         //I clear the stack of the current activity which wishes to be
         //created so that android will permit its creation since I set
         //my lauch mode to singeTask
+        super.onNewIntent(intent);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_CLEAR_TASK |
                 Intent.FLAG_ACTIVITY_NEW_TASK);

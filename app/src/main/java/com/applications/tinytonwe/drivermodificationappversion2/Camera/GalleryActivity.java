@@ -2,9 +2,10 @@ package com.applications.tinytonwe.drivermodificationappversion2.Camera;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +20,7 @@ import com.applications.tinytonwe.gallerylibrary.RecyclerViewClickListener;
 
 import java.util.ArrayList;
 
-public class GalleryActivity extends ActionBarActivity implements RecyclerViewClickListener {
+public class GalleryActivity extends AppCompatActivity implements RecyclerViewClickListener {
 
 
     private final int NOT_INITIALIZED = -9999;

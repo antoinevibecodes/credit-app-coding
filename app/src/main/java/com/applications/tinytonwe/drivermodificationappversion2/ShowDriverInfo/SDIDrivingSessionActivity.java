@@ -1,22 +1,18 @@
 package com.applications.tinytonwe.drivermodificationappversion2.ShowDriverInfo;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 
 import java.util.ArrayList;
 
-public class SDIDrivingSessionActivity extends ActionBarActivity {
+public class SDIDrivingSessionActivity extends AppCompatActivity {
 
     private ArrayList<String> test;
     private ArrayList<Violation> violations_;
