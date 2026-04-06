@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiny Towne — Driver Info</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="dashboard.html">Tiny Towne</a>
+        <div class="ms-auto">
+            <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">Dashboard</a>
+            <button class="btn btn-outline-warning btn-sm" onclick="logout()">Logout</button>
+        </div>
+    </div>
+</nav>
+
+<div id="mockBanner" class="alert alert-mock mb-0">
+    Running in mock mode — data is simulated
+</div>
+
+<div class="container py-4">
+    <h2 class="fw-bold mb-4">Driver Info</h2>
+
+    <!-- Search -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="input-group">
+                <input type="text" class="form-control" id="searchInput"
+                       placeholder="Enter RFID hex (e.g. a1b2c3d4) or driver ID (e.g. 10000)">
+                <button class="btn btn-primary fw-bold" onclick="lookupDriver()">Look Up</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Driver profile card -->
+    <div id="driverCard" style="display:none">
+        <div class="row g-4">
+            <!-- Left: photo + basic info -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div id="driverPhoto" class="driver-photo-placeholder mb-3">
+                            <span>No Photo</span>
+                        </div>
+                        <h4 class="fw-bold mb-1" id="driverName"></h4>
+                        <p class="text-muted mb-1">Driver ID: <span id="driverIdDisplay"></span></p>
+                        <p class="text-muted mb-1">RFID: <code id="driverRfid"></code></p>
+                        <p class="text-muted mb-0">DOB: <span id="driverDob"></span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: credit breakdown -->
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white fw-bold">Credit Breakdown</div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Credit Type</th>
+                                        <th>Balance</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="entitlementTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total credits summary -->
+                <div class="row g-3 mt-2">
+                    <div class="col-6 col-md-4">
+                        <div class="stat-card bg-stat-blue">
+                            <div class="stat-value" id="totalCredits">0</div>
+                            <div class="stat-label">Total Credits</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="stat-card bg-stat-green">
+                            <div class="stat-value" id="creditTypes">0</div>
+                            <div class="stat-label">Credit Types</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="emptyState" class="text-center text-muted py-5">
+        Enter a card RFID or driver ID to look up driver information.
+    </div>
+
+    <div id="notFoundState" class="text-center py-5" style="display:none">
+        <div class="text-danger fw-bold mb-2">Driver not found</div>
+        <p class="text-muted">No driver matches that ID. Check the RFID or driver ID and try again.</p>
+    </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+<script>
+    requireAuth();
+    if (!CONFIG.USE_MOCK) document.getElementById('mockBanner').classList.add('d-none');
+
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') lookupDriver();
+    });
+
+    async function lookupDriver() {
+        const query = document.getElementById('searchInput').value.trim();
+        if (!query) {
+            alert('Please enter a card RFID or driver ID');
+            return;
+        }
+
+        // Hide all states
+        document.getElementById('driverCard').style.display = 'none';
+        document.getElementById('emptyState').style.display = 'none';
+        document.getElementById('notFoundState').style.display = 'none';
+
+        let searchQuery = {};
+        if (/^[0-9]+$/.test(query)) {
+            searchQuery = { HasDriverId: true, DriverId: parseInt(query), HasRfidUidHex: false };
+        } else {
+            searchQuery = { HasDriverId: false, HasRfidUidHex: true, RfidUidHex: query.toLowerCase() };
+        }
+
+        const result = await fetchDriverInfo(searchQuery);
+
+        if (!result.ok) {
+            document.getElementById('notFoundState').style.display = '';
+            return;
+        }
+
+        const driver = result.data;
+        document.getElementById('driverCard').style.display = '';
+
+        // Populate info
+        document.getElementById('driverName').textContent = driver.FirstName + ' ' + driver.LastName;
+        document.getElementById('driverIdDisplay').textContent = driver.DriverId;
+        document.getElementById('driverRfid').textContent = driver.RfidUidHex || '—';
+
+        // Format DOB
+        if (driver.DateOfBirth) {
+            const dob = new Date(driver.DateOfBirth);
+            document.getElementById('driverDob').textContent = dob.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        } else {
+            document.getElementById('driverDob').textContent = '—';
+        }
+
+        // Photo
+        const photoEl = document.getElementById('driverPhoto');
+        if (driver.PhotoUrl) {
+            photoEl.innerHTML = '<img src="' + driver.PhotoUrl + '" alt="Driver photo" style="width:100%;border-radius:8px">';
+        } else {
+            photoEl.innerHTML = '<span>No Photo</span>';
+        }
+
+        // Entitlements table
+        const ents = driver.Entitlements || [];
+        const tbody = document.getElementById('entitlementTable');
+
+        if (ents.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted py-3">No credits on this card</td></tr>';
+        } else {
+            tbody.innerHTML = ents.map(e => {
+                const statusClass = e.Credits > 10 ? 'text-success' : (e.Credits > 0 ? 'text-warning' : 'text-danger');
+                const statusText = e.Credits > 10 ? 'Good' : (e.Credits > 0 ? 'Low' : 'Empty');
+                return `
+                    <tr>
+                        <td class="fw-bold">${e.EntitlementTypeName}</td>
+                        <td class="fw-bold">${e.Credits}</td>
+                        <td><span class="${statusClass} fw-bold">${statusText}</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Summary stats
+        const totalCredits = ents.reduce((sum, e) => sum + e.Credits, 0);
+        document.getElementById('totalCredits').textContent = totalCredits;
+        document.getElementById('creditTypes').textContent = ents.length;
+    }
+</script>
+
+</body>
+</html>

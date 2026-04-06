@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiny Towne — Standard Cards</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="dashboard.html">Tiny Towne</a>
+        <div class="ms-auto">
+            <a href="dashboard.html" class="btn btn-outline-light btn-sm me-2">Dashboard</a>
+            <button class="btn btn-outline-warning btn-sm" onclick="logout()">Logout</button>
+        </div>
+    </div>
+</nav>
+
+<div id="mockBanner" class="alert alert-mock mb-0">
+    Running in mock mode — data is simulated
+</div>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Standard Cards</h2>
+            <p class="text-muted mb-0">Manage birthday, guest, and unnamed cards with default credit profiles</p>
+        </div>
+        <button class="btn btn-primary" onclick="showCreateModal()">+ Add Card</button>
+    </div>
+
+    <!-- Filter tabs -->
+    <ul class="nav nav-pills mb-3" id="cardFilter">
+        <li class="nav-item">
+            <button class="nav-link active" onclick="filterCards('all')">All</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" onclick="filterCards('birthday')">Birthday</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" onclick="filterCards('guest')">Guest</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" onclick="filterCards('event')">Event</button>
+        </li>
+    </ul>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>RFID</th>
+                            <th>Label</th>
+                            <th>Type</th>
+                            <th>Default Credits</th>
+                            <th>Credit Type</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cardsTable">
+                        <tr><td colspan="7" class="text-center py-4 text-muted">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create/Edit Modal -->
+<div class="modal fade" id="cardModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Add Standard Card</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editCardId">
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">RFID Hex</label>
+                    <input type="text" class="form-control" id="cardRfid" placeholder="e.g. ff000005">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Label</label>
+                    <input type="text" class="form-control" id="cardLabel" placeholder="e.g. Birthday Card #3">
+                </div>
+
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label class="form-label fw-bold">Card Type</label>
+                        <select class="form-select" id="cardType">
+                            <option value="birthday">Birthday</option>
+                            <option value="guest">Guest</option>
+                            <option value="event">Event</option>
+                        </select>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label class="form-label fw-bold">Default Credits</label>
+                        <input type="number" class="form-control" id="cardCredits" placeholder="20" min="1">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Credit Type</label>
+                    <select class="form-select" id="cardEntitlementType"></select>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="cardActive" checked>
+                    <label class="form-check-label">Active</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveCard()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+<script>
+    requireAuth();
+    if (!CONFIG.USE_MOCK) document.getElementById('mockBanner').classList.add('d-none');
+
+    let cardModal;
+    let entitlementTypes = [];
+    let allCards = [];
+    let currentFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        cardModal = new bootstrap.Modal(document.getElementById('cardModal'));
+
+        // Load entitlement types
+        const typesResult = await fetchEntitlementTypes();
+        if (typesResult.ok) {
+            entitlementTypes = typesResult.data;
+            const select = document.getElementById('cardEntitlementType');
+            entitlementTypes.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t.Id;
+                opt.textContent = t.Name;
+                select.appendChild(opt);
+            });
+        }
+
+        loadCards();
+    });
+
+    async function loadCards() {
+        const result = await fetchStandardCards();
+        const tbody = document.getElementById('cardsTable');
+
+        if (!result.ok) {
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger py-4">Error loading cards</td></tr>';
+            return;
+        }
+
+        allCards = result.data;
+        renderCards();
+    }
+
+    function renderCards() {
+        const tbody = document.getElementById('cardsTable');
+        let cards = allCards;
+
+        if (currentFilter !== 'all') {
+            cards = cards.filter(c => c.CardType === currentFilter);
+        }
+
+        if (cards.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">No cards found. Click "+ Add Card" to create one.</td></tr>';
+            return;
+        }
+
+        const typeLabels = { birthday: 'Birthday', guest: 'Guest', event: 'Event' };
+        const typeBadgeClass = { birthday: 'bg-info', guest: 'bg-primary', event: 'bg-secondary' };
+
+        tbody.innerHTML = cards.map(card => `
+            <tr>
+                <td><code>${card.RfidUidHex}</code></td>
+                <td class="fw-bold">${card.Label}</td>
+                <td><span class="badge ${typeBadgeClass[card.CardType] || 'bg-secondary'}">${typeLabels[card.CardType] || card.CardType}</span></td>
+                <td>${card.DefaultCredits}</td>
+                <td>${card.EntitlementTypeName}</td>
+                <td><span class="badge ${card.IsActive ? 'badge-active' : 'badge-inactive'}">${card.IsActive ? 'Active' : 'Inactive'}</span></td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="showEditModal(${card.Id})">Edit</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete(${card.Id}, '${card.Label}')">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function filterCards(type) {
+        currentFilter = type;
+        document.querySelectorAll('#cardFilter .nav-link').forEach(el => el.classList.remove('active'));
+        event.target.classList.add('active');
+        renderCards();
+    }
+
+    function showCreateModal() {
+        document.getElementById('modalTitle').textContent = 'Add Standard Card';
+        document.getElementById('editCardId').value = '';
+        document.getElementById('cardRfid').value = '';
+        document.getElementById('cardLabel').value = '';
+        document.getElementById('cardType').value = 'birthday';
+        document.getElementById('cardCredits').value = '20';
+        document.getElementById('cardEntitlementType').value = '1';
+        document.getElementById('cardActive').checked = true;
+        cardModal.show();
+    }
+
+    function showEditModal(id) {
+        const card = allCards.find(c => c.Id === id);
+        if (!card) return;
+
+        document.getElementById('modalTitle').textContent = 'Edit Card';
+        document.getElementById('editCardId').value = card.Id;
+        document.getElementById('cardRfid').value = card.RfidUidHex;
+        document.getElementById('cardLabel').value = card.Label;
+        document.getElementById('cardType').value = card.CardType;
+        document.getElementById('cardCredits').value = card.DefaultCredits;
+        document.getElementById('cardEntitlementType').value = card.EntitlementTypeId;
+        document.getElementById('cardActive').checked = card.IsActive;
+        cardModal.show();
+    }
+
+    async function saveCard() {
+        const editId = document.getElementById('editCardId').value;
+        const rfid = document.getElementById('cardRfid').value.trim();
+        const label = document.getElementById('cardLabel').value.trim();
+        const credits = parseInt(document.getElementById('cardCredits').value);
+
+        if (!rfid || !label || isNaN(credits)) {
+            alert('RFID, label, and credits are required');
+            return;
+        }
+
+        const typeId = parseInt(document.getElementById('cardEntitlementType').value);
+        const typeName = entitlementTypes.find(t => t.Id === typeId)?.Name || '';
+
+        const card = {
+            RfidUidHex: rfid,
+            Label: label,
+            CardType: document.getElementById('cardType').value,
+            DefaultCredits: credits,
+            EntitlementTypeId: typeId,
+            EntitlementTypeName: typeName,
+            IsActive: document.getElementById('cardActive').checked
+        };
+
+        let result;
+        if (editId) {
+            card.Id = parseInt(editId);
+            result = await updateStandardCard(card);
+        } else {
+            result = await createStandardCard(card);
+        }
+
+        if (result.ok) {
+            cardModal.hide();
+            loadCards();
+        } else {
+            alert('Error: ' + (result.message || 'Unknown error'));
+        }
+    }
+
+    async function confirmDelete(id, label) {
+        if (!confirm('Delete "' + label + '"?')) return;
+        const result = await deleteStandardCard(id);
+        if (result.ok) {
+            loadCards();
+        } else {
+            alert('Error deleting card');
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -72,9 +72,13 @@ body {
     font-size: 1.1rem;
 }
 
+.dash-card-charge { border-left: 5px solid #e74c3c; }
+.dash-card-driver { border-left: 5px solid #2ecc71; }
 .dash-card-buttons { border-left: 5px solid #4a90d9; }
+.dash-card-standard { border-left: 5px solid #f39c12; }
 .dash-card-daily { border-left: 5px solid #e67e22; }
 .dash-card-history { border-left: 5px solid #8e44ad; }
+.dash-card-kiosk { border-left: 5px solid #1abc9c; }
 
 /* Stat cards */
 .stat-card {
@@ -148,9 +152,78 @@ body {
     padding: 0.5rem;
 }
 
+/* Driver Info */
+.driver-photo-placeholder {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: #ecf0f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: #999;
+    font-size: 0.85rem;
+}
+
+.bg-stat-green { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+
+/* Charge Card button grid */
+.charge-button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+}
+
+.charge-btn {
+    border: none;
+    border-radius: 12px;
+    padding: 1.2rem 1rem;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.15s, box-shadow 0.15s;
+    border: 3px solid transparent;
+}
+
+.charge-btn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.charge-btn-selected {
+    border-color: #fff;
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.2);
+    transform: scale(1.04);
+}
+
+.charge-btn-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.2rem;
+}
+
+.charge-btn-credits {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.charge-btn-force {
+    font-size: 0.7rem;
+    background: rgba(255,255,255,0.25);
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin-top: 0.3rem;
+    display: inline-block;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .login-container {
         margin: 60px 16px;
+    }
+
+    .charge-button-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

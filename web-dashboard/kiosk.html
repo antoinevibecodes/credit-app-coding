@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiny Towne — Kiosk</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { background: linear-gradient(135deg, #1a1a2e, #16213e); min-height: 100vh; }
+        .kiosk-header { text-align: center; padding: 2rem 1rem 1rem; }
+        .kiosk-header h1 { color: #ffc000; font-weight: 800; font-size: 2.5rem; }
+        .kiosk-header p { color: rgba(255,255,255,0.7); font-size: 1.1rem; }
+        .kiosk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; padding: 0 1rem; max-width: 1200px; margin: 0 auto; }
+        .kiosk-card {
+            background: #fff; border-radius: 16px; padding: 1.8rem; cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s; border: 3px solid transparent;
+        }
+        .kiosk-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+        .kiosk-card.selected { border-color: #ffc000; box-shadow: 0 0 0 4px rgba(255,192,0,0.3); }
+        .kiosk-card-name { font-weight: 700; font-size: 1.3rem; margin-bottom: 0.3rem; }
+        .kiosk-card-desc { color: #666; font-size: 0.9rem; margin-bottom: 0.8rem; }
+        .kiosk-card-price { font-weight: 800; font-size: 1.8rem; color: #27ae60; }
+        .kiosk-card-credits { font-size: 0.85rem; color: #888; }
+
+        .kiosk-checkout { max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+        .kiosk-scan-box {
+            background: rgba(255,255,255,0.1); border: 2px dashed rgba(255,255,255,0.3);
+            border-radius: 16px; padding: 2rem; text-align: center; color: #fff;
+        }
+        .kiosk-scan-box .scan-icon { font-size: 4rem; margin-bottom: 1rem; }
+        .kiosk-success-box {
+            background: rgba(39,174,96,0.15); border: 2px solid #27ae60;
+            border-radius: 16px; padding: 2rem; text-align: center; color: #fff;
+        }
+        .kiosk-success-box .check-icon { font-size: 4rem; color: #27ae60; }
+
+        .kiosk-btn { background: #ffc000; color: #000; font-weight: 700; border: none; padding: 0.8rem 2rem; border-radius: 10px; font-size: 1.1rem; }
+        .kiosk-btn:hover { background: #e6ac00; }
+        .kiosk-btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.3); font-weight: 600; padding: 0.6rem 1.5rem; border-radius: 10px; }
+        .kiosk-btn-outline:hover { border-color: #fff; }
+
+        .admin-exit { position: fixed; bottom: 1rem; right: 1rem; }
+    </style>
+</head>
+<body>
+
+<!-- Admin exit button (small, bottom-right) -->
+<div class="admin-exit">
+    <a href="dashboard.html" class="btn btn-sm btn-outline-secondary" style="opacity:0.4; color:#fff; border-color:rgba(255,255,255,0.2)">Exit Kiosk</a>
+</div>
+
+<!-- Screen 1: Select Package -->
+<div id="screenSelect">
+    <div class="kiosk-header">
+        <h1>Tiny Towne</h1>
+        <p>Select a credit package to get started</p>
+    </div>
+    <div class="kiosk-grid" id="optionsGrid">
+        <div class="text-center text-light py-5">Loading options...</div>
+    </div>
+</div>
+
+<!-- Screen 2: Scan Card -->
+<div id="screenScan" style="display:none">
+    <div class="kiosk-header">
+        <h1>Tiny Towne</h1>
+    </div>
+    <div class="kiosk-checkout">
+        <div class="text-center mb-3">
+            <span class="badge bg-warning text-dark fs-5 px-4 py-2" id="selectedPackageName"></span>
+        </div>
+        <div class="kiosk-scan-box mb-4">
+            <div class="scan-icon">&#128179;</div>
+            <h3>Tap or Scan Your Card</h3>
+            <p class="mb-3" style="opacity:0.7">Hold your RFID card near the reader, or enter your card ID below</p>
+            <div class="input-group" style="max-width:350px; margin:0 auto">
+                <input type="text" class="form-control form-control-lg text-center" id="kioskCardInput"
+                       placeholder="Card ID / RFID hex" autofocus>
+                <button class="btn kiosk-btn" onclick="processKiosk()">Go</button>
+            </div>
+        </div>
+        <div class="text-center">
+            <button class="kiosk-btn-outline" onclick="backToSelect()">Back</button>
+        </div>
+    </div>
+</div>
+
+<!-- Screen 3: Success -->
+<div id="screenSuccess" style="display:none">
+    <div class="kiosk-header">
+        <h1>Tiny Towne</h1>
+    </div>
+    <div class="kiosk-checkout">
+        <div class="kiosk-success-box">
+            <div class="check-icon">&#10003;</div>
+            <h2 class="mt-2">Credits Added!</h2>
+            <p class="fs-5" id="successDetail"></p>
+            <button class="kiosk-btn mt-3" onclick="backToSelect()">Done</button>
+        </div>
+    </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+<script>
+    // Kiosk doesn't require auth — it's customer-facing
+    let selectedOption = null;
+
+    document.addEventListener('DOMContentLoaded', loadOptions);
+
+    document.getElementById('kioskCardInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') processKiosk();
+    });
+
+    async function loadOptions() {
+        const result = await fetchKioskOptions();
+        const grid = document.getElementById('optionsGrid');
+
+        if (!result.ok || result.data.length === 0) {
+            grid.innerHTML = '<div class="text-center text-light py-5">No packages available</div>';
+            return;
+        }
+
+        grid.innerHTML = result.data.map(opt => `
+            <div class="kiosk-card" onclick="selectPackage(${opt.Id})" id="kioskOpt${opt.Id}">
+                <div class="kiosk-card-name">${opt.Name}</div>
+                <div class="kiosk-card-desc">${opt.Description}</div>
+                <div class="kiosk-card-price">${opt.PriceDisplay}</div>
+                <div class="kiosk-card-credits">${opt.CreditAmount} credits</div>
+            </div>
+        `).join('');
+    }
+
+    function selectPackage(id) {
+        const result = MOCK_KIOSK_OPTIONS || [];
+        selectedOption = result.find(o => o.Id === id);
+        if (!selectedOption) return;
+
+        document.getElementById('selectedPackageName').textContent = selectedOption.Name + ' — ' + selectedOption.PriceDisplay;
+        document.getElementById('screenSelect').style.display = 'none';
+        document.getElementById('screenScan').style.display = '';
+        document.getElementById('kioskCardInput').value = '';
+        document.getElementById('kioskCardInput').focus();
+    }
+
+    function backToSelect() {
+        selectedOption = null;
+        document.getElementById('screenSelect').style.display = '';
+        document.getElementById('screenScan').style.display = 'none';
+        document.getElementById('screenSuccess').style.display = 'none';
+    }
+
+    async function processKiosk() {
+        const cardId = document.getElementById('kioskCardInput').value.trim();
+        if (!cardId || !selectedOption) return;
+
+        // Convert hex to number if needed
+        let rfidUidL;
+        if (/^[0-9]+$/.test(cardId)) {
+            rfidUidL = parseInt(cardId);
+        } else {
+            rfidUidL = parseInt(cardId, 16);
+        }
+
+        const result = await processKioskPurchase(rfidUidL, selectedOption.Id, 'card');
+
+        if (result.ok) {
+            document.getElementById('successDetail').textContent =
+                selectedOption.CreditAmount + ' credits have been added to your card.';
+            document.getElementById('screenScan').style.display = 'none';
+            document.getElementById('screenSuccess').style.display = '';
+        } else {
+            alert('Error: ' + (result.message || 'Purchase failed'));
+        }
+    }
+</script>
+
+</body>
+</html>
