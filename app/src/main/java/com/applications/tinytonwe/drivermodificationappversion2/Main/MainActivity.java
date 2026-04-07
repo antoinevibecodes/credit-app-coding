@@ -15,6 +15,7 @@ import com.applications.tinytonwe.drivermodificationappversion2.DriverInfoApp.Dr
 import com.applications.tinytonwe.drivermodificationappversion2.KioskApp.KioskHomeActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.ReportingApp.ReportingMenuActivity;
+import com.applications.tinytonwe.drivermodificationappversion2.StandardCardsApp.StandardCardsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         CardView adminPanel = (CardView) findViewById(R.id.adminPanel);
         CardView reports = (CardView) findViewById(R.id.reports);
         CardView kioskMode = (CardView) findViewById(R.id.kioskMode);
+        CardView standardCards = (CardView) findViewById(R.id.standardCards);
 
         chargeCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +76,15 @@ public class MainActivity extends AppCompatActivity {
                 buttonHandler(MActions.KIOSK);
             }
         });
+
+        if (standardCards != null) {
+            standardCards.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    buttonHandler(MActions.STANDARD_CARDS);
+                }
+            });
+        }
     }
 
 
@@ -93,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case KIOSK:
                 startActivity(new Intent(this, KioskHomeActivity.class));
+                break;
+            case STANDARD_CARDS:
+                startActivity(new Intent(this, StandardCardsActivity.class));
                 break;
         }
     }

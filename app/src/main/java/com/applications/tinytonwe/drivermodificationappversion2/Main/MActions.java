@@ -6,5 +6,6 @@ public enum MActions {
     DRIVER_INFO,
     ADMIN,
     REPORTS,
-    KIOSK
+    KIOSK,
+    STANDARD_CARDS
 }

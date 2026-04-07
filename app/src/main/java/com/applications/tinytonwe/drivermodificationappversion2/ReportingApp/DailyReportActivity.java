@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Mock.MockServer;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Models.ActivityUsageSummary;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.OperationType;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
@@ -90,6 +91,8 @@ public class DailyReportActivity extends AppCompatActivity implements TaskListen
         ServerInterface server = ServerFactory.create(this);
         if (server instanceof MockServer) {
             ((MockServer) server).new GetDailyReport(date);
+        } else {
+            ((RealServer) server).new GetDailyReport(date);
         }
     }
 

@@ -151,6 +151,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" >
         </activity>
+        <activity
+            android:exported="false"
+            android:name=".StandardCardsApp.StandardCardsActivity"
+            android:label="Standard Cards"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

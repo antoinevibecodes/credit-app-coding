@@ -87,4 +87,17 @@ public abstract class ServerInterface {
             callingActivity_.onTaskFinished(response);
         }
     }
+
+    public abstract class FetchStandardCards extends AsyncTask<Request, Void, Response> {
+        protected void onPostExecute(Response response) {
+            response.operationType = OperationType.FETCH_STANDARD_CARDS;
+            callingActivity_.onTaskFinished(response);
+        }
+    }
+
+    public abstract class ManageStandardCard extends AsyncTask<Request, Void, Response> {
+        protected void onPostExecute(Response response) {
+            callingActivity_.onTaskFinished(response);
+        }
+    }
 }

@@ -16,6 +16,7 @@ import com.applications.tinytonwe.drivermodificationappversion2.Common.NfcHelper
 import com.applications.tinytonwe.drivermodificationappversion2.Main.MainActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Mock.MockServer;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Models.TransactionRecord;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.OperationType;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
@@ -103,6 +104,8 @@ public class CardHistoryActivity extends AppCompatActivity implements TaskListen
             ServerInterface server = ServerFactory.create(this);
             if (server instanceof MockServer) {
                 ((MockServer) server).new GetTransactionHistory(json.toString());
+            } else {
+                ((RealServer) server).new GetTransactionHistory(json.toString());
             }
 
         } catch (Exception e) {

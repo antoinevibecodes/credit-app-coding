@@ -13,6 +13,7 @@ import com.applications.tinytonwe.drivermodificationappversion2.R;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -39,7 +40,25 @@ public class RealServer extends ServerInterface {
     private String chargeCardUrl;
     private String checkCreditUrl;
 
+    // New endpoint URLs
+    private String getChargeButtonsUrl;
+    private String createChargeButtonUrl;
+    private String updateChargeButtonUrl;
+    private String deleteChargeButtonUrl;
+    private String getEntitlementTypesUrl;
+    private String getTransactionHistoryUrl;
+    private String getDailyReportUrl;
+    private String getKioskOptionsUrl;
+    private String processKioskPurchaseUrl;
+    private String validatePinUrl;
+    private String getStandardCardsUrl;
+    private String createStandardCardUrl;
+    private String updateStandardCardUrl;
+    private String deleteStandardCardUrl;
+
     private Context context_;
+    private int connTimeout;
+    private int respTimeout;
 
     public RealServer(Activity callingActivity) {
         super(callingActivity);
@@ -49,13 +68,31 @@ public class RealServer extends ServerInterface {
         appData = AppData.getAppDataInstance_();
 
         request = new Request();
-        request.connectionTimeoutDuration = Integer.parseInt(context_.getResources().getText(R.string.connectionTimeoutDuration).toString());
-        request.responseTimeoutDuration = Integer.parseInt(context_.getResources().getText(R.string.responseTimeoutDuration).toString());
+        connTimeout = Integer.parseInt(context_.getResources().getText(R.string.connectionTimeoutDuration).toString());
+        respTimeout = Integer.parseInt(context_.getResources().getText(R.string.responseTimeoutDuration).toString());
+        request.connectionTimeoutDuration = connTimeout;
+        request.responseTimeoutDuration = respTimeout;
 
         uploadPictureUrl = context_.getResources().getString(R.string.serverUploadUrl).toString();
         requestDriverUrl = context_.getResources().getString(R.string.serverRequestDriverUrl).toString();
         chargeCardUrl = context_.getResources().getString(R.string.serverChargeCardUrl).toString();
         checkCreditUrl = context_.getResources().getString(R.string.serverCheckCreditUrl).toString();
+
+        // New endpoints
+        getChargeButtonsUrl = context_.getResources().getString(R.string.serverGetChargeButtonsUrl);
+        createChargeButtonUrl = context_.getResources().getString(R.string.serverCreateChargeButtonUrl);
+        updateChargeButtonUrl = context_.getResources().getString(R.string.serverUpdateChargeButtonUrl);
+        deleteChargeButtonUrl = context_.getResources().getString(R.string.serverDeleteChargeButtonUrl);
+        getEntitlementTypesUrl = context_.getResources().getString(R.string.serverGetEntitlementTypesUrl);
+        getTransactionHistoryUrl = context_.getResources().getString(R.string.serverGetTransactionHistoryUrl);
+        getDailyReportUrl = context_.getResources().getString(R.string.serverGetDailyReportUrl);
+        getKioskOptionsUrl = context_.getResources().getString(R.string.serverGetKioskOptionsUrl);
+        processKioskPurchaseUrl = context_.getResources().getString(R.string.serverProcessKioskPurchaseUrl);
+        validatePinUrl = context_.getResources().getString(R.string.serverValidatePinUrl);
+        getStandardCardsUrl = context_.getResources().getString(R.string.serverGetStandardCardsUrl);
+        createStandardCardUrl = context_.getResources().getString(R.string.serverCreateStandardCardUrl);
+        updateStandardCardUrl = context_.getResources().getString(R.string.serverUpdateStandardCardUrl);
+        deleteStandardCardUrl = context_.getResources().getString(R.string.serverDeleteStandardCardUrl);
     }
 
     public class Upload extends UploadPicture{
@@ -532,5 +569,262 @@ public class RealServer extends ServerInterface {
             return formattedString;
         }
 
+    }
+
+    // ==================== Helper: generic HTTP calls ====================
+
+    private Response doHttpPost(String url, String jsonBody) {
+        Response response = new Response();
+        response.responseOk = false;
+        try {
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpParams parameters = httpClient.getParams();
+            HttpConnectionParams.setConnectionTimeout(parameters, connTimeout);
+            HttpConnectionParams.setSoTimeout(parameters, respTimeout);
+
+            HttpPost httpPost = new HttpPost(url);
+            if (jsonBody != null) {
+                httpPost.setEntity(new StringEntity(jsonBody));
+            }
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
+
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+            int statusCode = httpResponse.getStatusLine().getStatusCode();
+
+            if (statusCode == 200) {
+                HttpEntity entity = httpResponse.getEntity();
+                InputStream is = entity.getContent();
+                String jsonString = convertInputStreamToString(is);
+                is.close();
+                response.responseOk = true;
+                response.jsonData = jsonString;
+                response.responseMessage = "Success";
+            } else {
+                response.responseMessage = "Server error code: " + statusCode;
+            }
+        } catch (Exception e) {
+            response.responseMessage = "Communication Error: " + e.getMessage();
+        }
+        return response;
+    }
+
+    private Response doHttpGet(String url) {
+        Response response = new Response();
+        response.responseOk = false;
+        try {
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpParams parameters = httpClient.getParams();
+            HttpConnectionParams.setConnectionTimeout(parameters, connTimeout);
+            HttpConnectionParams.setSoTimeout(parameters, respTimeout);
+
+            HttpGet httpGet = new HttpGet(url);
+            httpGet.setHeader("Accept", "application/json");
+
+            HttpResponse httpResponse = httpClient.execute(httpGet);
+            int statusCode = httpResponse.getStatusLine().getStatusCode();
+
+            if (statusCode == 200) {
+                HttpEntity entity = httpResponse.getEntity();
+                InputStream is = entity.getContent();
+                String jsonString = convertInputStreamToString(is);
+                is.close();
+                response.responseOk = true;
+                response.jsonData = jsonString;
+                response.responseMessage = "Success";
+            } else {
+                response.responseMessage = "Server error code: " + statusCode;
+            }
+        } catch (Exception e) {
+            response.responseMessage = "Communication Error: " + e.getMessage();
+        }
+        return response;
+    }
+
+    // ==================== New API operations ====================
+
+    public class GetChargeButtons extends FetchChargeButtons {
+        public GetChargeButtons() {
+            Request req = new Request();
+            req.operationType = OperationType.FETCH_CHARGE_BUTTONS;
+            this.execute(req);
+        }
+
+        protected Response doInBackground(Request... requests) {
+            Response response = doHttpGet(getChargeButtonsUrl + "?includeInactive=true");
+            response.operationType = OperationType.FETCH_CHARGE_BUTTONS;
+            return response;
+        }
+    }
+
+    public class ManageButton extends ManageChargeButton {
+        private int opType;
+        private String jsonPayload;
+
+        public ManageButton(int operationType, String jsonPayload) {
+            this.opType = operationType;
+            this.jsonPayload = jsonPayload;
+            Request req = new Request();
+            req.operationType = operationType;
+            req.jsonPayload = jsonPayload;
+            this.execute(req);
+        }
+
+        protected Response doInBackground(Request... requests) {
+            String url;
+            switch (requests[0].operationType) {
+                case OperationType.CREATE_CHARGE_BUTTON:
+                    url = createChargeButtonUrl;
+                    break;
+                case OperationType.UPDATE_CHARGE_BUTTON:
+                    url = updateChargeButtonUrl;
+                    break;
+                case OperationType.DELETE_CHARGE_BUTTON:
+                    url = deleteChargeButtonUrl;
+                    break;
+                default:
+                    Response err = new Response();
+                    err.responseOk = false;
+                    err.responseMessage = "Unknown operation";
+                    return err;
+            }
+            Response response = doHttpPost(url, requests[0].jsonPayload);
+            response.operationType = requests[0].operationType;
+            return response;
+        }
+    }
+
+    public class GetTransactionHistory extends FetchTransactionHistory {
+        public GetTransactionHistory(String jsonPayload) {
+            Request req = new Request();
+            req.operationType = OperationType.FETCH_TRANSACTION_HISTORY;
+            req.jsonPayload = jsonPayload;
+            this.execute(req);
+        }
+
+        protected Response doInBackground(Request... requests) {
+            Response response = doHttpPost(getTransactionHistoryUrl, requests[0].jsonPayload);
+            response.operationType = OperationType.FETCH_TRANSACTION_HISTORY;
+            return response;
+        }
+    }
+
+    public class GetDailyReport extends FetchDailyReport {
+        public GetDailyReport(String date) {
+            Request req = new Request();
+            req.operationType = OperationType.FETCH_DAILY_REPORT;
+            req.jsonPayload = "{\"Date\":\"" + date + "\"}";
+            this.execute(req);
+        }
+
+        protected Response doInBackground(Request... requests) {
+            Response response = doHttpPost(getDailyReportUrl, requests[0].jsonPayload);
+            response.operationType = OperationType.FETCH_DAILY_REPORT;
+            return response;
+        }
+    }
+
+    public class GetKioskOptions extends FetchKioskOptions {
+        public GetKioskOptions() {
+            Request req = new Request();
+            req.operationType = OperationType.FETCH_KIOSK_OPTIONS;
+            this.execute(req);
+        }
+
+        protected Response doInBackground(Request... requests) {
+            Response response = doHttpPost(getKioskOptionsUrl, "{}");
+            response.operationType = OperationType.FETCH_KIOSK_OPTIONS;
+            return response;
+        }
+    }
+
+    public class PurchaseKiosk extends ProcessKioskPurchase {
+        public PurchaseKiosk(String jsonPayload) {
+            Request req = new Request();
+            req.operationType = OperationType.PROCESS_KIOSK_PURCHASE;
+            req.jsonPayload = jsonPayload;
+            this.execute(req);
+        }
+
+        protected Response doInBackground(Request... requests) {
+            Response response = doHttpPost(processKioskPurchaseUrl, requests[0].jsonPayload);
+            response.operationType = OperationType.PROCESS_KIOSK_PURCHASE;
+            return response;
+        }
+    }
+
+    public class CheckPin extends ValidatePin {
+        public CheckPin(String pin, String role) {
+            Request req = new Request();
+            req.operationType = OperationType.VALIDATE_PIN;
+            req.jsonPayload = "{\"Pin\":\"" + pin + "\",\"Role\":\"" + role + "\"}";
+            this.execute(req);
+        }
+
+        protected Response doInBackground(Request... requests) {
+            Response response = doHttpPost(validatePinUrl, requests[0].jsonPayload);
+            response.operationType = OperationType.VALIDATE_PIN;
+            return response;
+        }
+    }
+
+    public class GetEntitlementTypesList extends FetchEntitlementTypes {
+        public GetEntitlementTypesList() {
+            Request req = new Request();
+            req.operationType = OperationType.FETCH_ENTITLEMENT_TYPES;
+            this.execute(req);
+        }
+
+        protected Response doInBackground(Request... requests) {
+            Response response = doHttpGet(getEntitlementTypesUrl);
+            response.operationType = OperationType.FETCH_ENTITLEMENT_TYPES;
+            return response;
+        }
+    }
+
+    public class GetStandardCards extends FetchStandardCards {
+        public GetStandardCards() {
+            Request req = new Request();
+            req.operationType = OperationType.FETCH_STANDARD_CARDS;
+            this.execute(req);
+        }
+
+        protected Response doInBackground(Request... requests) {
+            Response response = doHttpGet(getStandardCardsUrl);
+            response.operationType = OperationType.FETCH_STANDARD_CARDS;
+            return response;
+        }
+    }
+
+    public class ManageStdCard extends ManageStandardCard {
+        public ManageStdCard(int operationType, String jsonPayload) {
+            Request req = new Request();
+            req.operationType = operationType;
+            req.jsonPayload = jsonPayload;
+            this.execute(req);
+        }
+
+        protected Response doInBackground(Request... requests) {
+            String url;
+            switch (requests[0].operationType) {
+                case OperationType.CREATE_STANDARD_CARD:
+                    url = createStandardCardUrl;
+                    break;
+                case OperationType.UPDATE_STANDARD_CARD:
+                    url = updateStandardCardUrl;
+                    break;
+                case OperationType.DELETE_STANDARD_CARD:
+                    url = deleteStandardCardUrl;
+                    break;
+                default:
+                    Response err = new Response();
+                    err.responseOk = false;
+                    err.responseMessage = "Unknown operation";
+                    return err;
+            }
+            Response response = doHttpPost(url, requests[0].jsonPayload);
+            response.operationType = requests[0].operationType;
+            return response;
+        }
     }
 }

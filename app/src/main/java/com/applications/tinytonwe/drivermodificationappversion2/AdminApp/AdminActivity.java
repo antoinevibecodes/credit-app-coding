@@ -19,6 +19,7 @@ import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunicat
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.ServerFactory;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.ServerInterface;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.TaskListener;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Mock.MockServer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -90,8 +91,9 @@ public class AdminActivity extends AppCompatActivity implements TaskListener {
         ServerInterface server = ServerFactory.create(this);
         if (server instanceof MockServer) {
             ((MockServer) server).new GetChargeButtons();
+        } else {
+            ((RealServer) server).new GetChargeButtons();
         }
-        // RealServer version will be added when backend endpoints are ready
     }
 
     public void deleteButton(int buttonId) {
@@ -99,6 +101,8 @@ public class AdminActivity extends AppCompatActivity implements TaskListener {
         String json = "{\"Id\":" + buttonId + "}";
         if (server instanceof MockServer) {
             ((MockServer) server).new ManageButton(OperationType.DELETE_CHARGE_BUTTON, json);
+        } else {
+            ((RealServer) server).new ManageButton(OperationType.DELETE_CHARGE_BUTTON, json);
         }
     }
 

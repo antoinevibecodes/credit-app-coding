@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.applications.tinytonwe.drivermodificationappversion2.AppData;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Mock.MockServer;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Models.KioskPurchaseOption;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.OperationType;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
@@ -95,6 +96,8 @@ public class KioskPurchaseActivity extends AppCompatActivity implements TaskList
         ServerInterface server = ServerFactory.create(this);
         if (server instanceof MockServer) {
             ((MockServer) server).new GetKioskOptions();
+        } else {
+            ((RealServer) server).new GetKioskOptions();
         }
     }
 
@@ -125,6 +128,8 @@ public class KioskPurchaseActivity extends AppCompatActivity implements TaskList
             ServerInterface server = ServerFactory.create(this);
             if (server instanceof MockServer) {
                 ((MockServer) server).new PurchaseKiosk(json.toString());
+            } else {
+                ((RealServer) server).new PurchaseKiosk(json.toString());
             }
         } catch (Exception e) {
             Toast.makeText(this, "Error processing purchase", Toast.LENGTH_SHORT).show();

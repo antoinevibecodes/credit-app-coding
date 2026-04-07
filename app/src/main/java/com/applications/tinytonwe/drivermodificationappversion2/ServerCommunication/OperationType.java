@@ -14,4 +14,9 @@ public class OperationType {
     public static final int PROCESS_KIOSK_PURCHASE = 301;
 
     public static final int VALIDATE_PIN = 400;
+
+    public static final int FETCH_STANDARD_CARDS = 500;
+    public static final int CREATE_STANDARD_CARD = 501;
+    public static final int UPDATE_STANDARD_CARD = 502;
+    public static final int DELETE_STANDARD_CARD = 503;
 }

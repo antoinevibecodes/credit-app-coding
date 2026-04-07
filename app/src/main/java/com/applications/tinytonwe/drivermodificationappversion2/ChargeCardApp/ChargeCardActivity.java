@@ -101,8 +101,9 @@ public class ChargeCardActivity extends AppCompatActivity implements TaskListene
         ServerInterface server = ServerFactory.create(this);
         if (server instanceof MockServer) {
             ((MockServer) server).new GetChargeButtons();
+        } else {
+            ((RealServer) server).new GetChargeButtons();
         }
-        // RealServer: will be wired when backend endpoints are ready
     }
 
     @Override

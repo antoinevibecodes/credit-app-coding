@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Mock.MockServer;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.OperationType;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.ServerFactory;
@@ -128,6 +129,8 @@ public class EditChargeButtonActivity extends AppCompatActivity implements TaskL
             ServerInterface server = ServerFactory.create(this);
             if (server instanceof MockServer) {
                 ((MockServer) server).new ManageButton(opType, json.toString());
+            } else {
+                ((RealServer) server).new ManageButton(opType, json.toString());
             }
 
         } catch (Exception e) {

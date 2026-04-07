@@ -336,4 +336,64 @@ public class MockServer extends ServerInterface {
             return response;
         }
     }
+
+    // ---- Standard Cards ----
+
+    public class GetStandardCards extends FetchStandardCards {
+        public GetStandardCards() {
+            Request request = new Request();
+            request.operationType = OperationType.FETCH_STANDARD_CARDS;
+            this.execute(request);
+        }
+
+        protected Response doInBackground(Request... requests) {
+            simulateDelay();
+            Response response = new Response();
+            response.responseOk = true;
+            response.operationType = OperationType.FETCH_STANDARD_CARDS;
+
+            String json = "["
+                + "{\"id\":1,\"rfidUidHex\":\"ff000001\",\"label\":\"Birthday Card #1\",\"cardType\":\"birthday\",\"defaultCredits\":20,\"entitlementTypeId\":1,\"entitlementTypeName\":\"General\",\"isActive\":true},"
+                + "{\"id\":2,\"rfidUidHex\":\"ff000002\",\"label\":\"Birthday Card #2\",\"cardType\":\"birthday\",\"defaultCredits\":20,\"entitlementTypeId\":1,\"entitlementTypeName\":\"General\",\"isActive\":true},"
+                + "{\"id\":3,\"rfidUidHex\":\"ff000003\",\"label\":\"Guest Pass #1\",\"cardType\":\"guest\",\"defaultCredits\":10,\"entitlementTypeId\":1,\"entitlementTypeName\":\"General\",\"isActive\":true},"
+                + "{\"id\":4,\"rfidUidHex\":\"ff000004\",\"label\":\"Event Card #1\",\"cardType\":\"event\",\"defaultCredits\":30,\"entitlementTypeId\":1,\"entitlementTypeName\":\"General\",\"isActive\":false}"
+                + "]";
+
+            response.jsonData = json;
+            response.responseMessage = "Standard cards loaded (mock)";
+            return response;
+        }
+    }
+
+    public class ManageStdCard extends ManageStandardCard {
+        public ManageStdCard(int operationType, String jsonPayload) {
+            Request request = new Request();
+            request.operationType = operationType;
+            request.jsonPayload = jsonPayload;
+            this.execute(request);
+        }
+
+        protected Response doInBackground(Request... requests) {
+            simulateDelay();
+            Response response = new Response();
+            response.responseOk = true;
+            response.operationType = requests[0].operationType;
+
+            switch (requests[0].operationType) {
+                case OperationType.CREATE_STANDARD_CARD:
+                    response.jsonData = "{\"Id\":99,\"Success\":true}";
+                    response.responseMessage = "Card created (mock)";
+                    break;
+                case OperationType.UPDATE_STANDARD_CARD:
+                    response.jsonData = "{\"Success\":true}";
+                    response.responseMessage = "Card updated (mock)";
+                    break;
+                case OperationType.DELETE_STANDARD_CARD:
+                    response.jsonData = "{\"Success\":true}";
+                    response.responseMessage = "Card deleted (mock)";
+                    break;
+            }
+            return response;
+        }
+    }
 }
