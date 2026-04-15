@@ -101,6 +101,55 @@
                    </TableRow>
             </TableLayout>
 
+            <!-- Credit Breakdown -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Credit Breakdown"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:gravity="center"
+                android:paddingTop="12dp"
+                android:paddingBottom="4dp"/>
+
+            <TableLayout
+                android:id="@+id/creditBreakdownTable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*"
+                android:padding="8dp">
+
+                <TableRow android:background="#f5f5f5" android:padding="4dp">
+                    <TextView android:text="General" android:textSize="13sp" android:textColor="#666" android:gravity="center"/>
+                    <TextView android:text="Food" android:textSize="13sp" android:textColor="#666" android:gravity="center"/>
+                    <TextView android:text="Track" android:textSize="13sp" android:textColor="#666" android:gravity="center"/>
+                    <TextView android:text="TinyTrack" android:textSize="13sp" android:textColor="#666" android:gravity="center"/>
+                    <TextView android:text="Train" android:textSize="13sp" android:textColor="#666" android:gravity="center"/>
+                    <TextView android:text="Arcade" android:textSize="13sp" android:textColor="#666" android:gravity="center"/>
+                </TableRow>
+
+                <TableRow android:padding="4dp">
+                    <TextView android:id="@+id/creditGeneral" android:text="0" android:textSize="16sp" android:textStyle="bold" android:textColor="#27ae60" android:gravity="center"/>
+                    <TextView android:id="@+id/creditFood" android:text="0" android:textSize="16sp" android:textStyle="bold" android:textColor="#27ae60" android:gravity="center"/>
+                    <TextView android:id="@+id/creditTrafficTrack" android:text="0" android:textSize="16sp" android:textStyle="bold" android:textColor="#27ae60" android:gravity="center"/>
+                    <TextView android:id="@+id/creditTinyTrack" android:text="0" android:textSize="16sp" android:textStyle="bold" android:textColor="#27ae60" android:gravity="center"/>
+                    <TextView android:id="@+id/creditTrain" android:text="0" android:textSize="16sp" android:textStyle="bold" android:textColor="#27ae60" android:gravity="center"/>
+                    <TextView android:id="@+id/creditArcade" android:text="0" android:textSize="16sp" android:textStyle="bold" android:textColor="#27ae60" android:gravity="center"/>
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/creditTotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total: 0"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:gravity="center"
+                android:paddingBottom="8dp"/>
+
            </LinearLayout>
 
 

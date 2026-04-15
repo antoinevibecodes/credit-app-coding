@@ -102,6 +102,25 @@ public class SDIMainActivity extends AppCompatActivity implements RecyclerViewCl
         dobValue.setText(appData.getDob());
         driverImage.setImageBitmap(appData.getDriverImage());
 
+        // Credit breakdown
+        TextView creditGeneral = (TextView)findViewById(R.id.creditGeneral);
+        TextView creditFood = (TextView)findViewById(R.id.creditFood);
+        TextView creditTrafficTrack = (TextView)findViewById(R.id.creditTrafficTrack);
+        TextView creditTinyTrack = (TextView)findViewById(R.id.creditTinyTrack);
+        TextView creditTrain = (TextView)findViewById(R.id.creditTrain);
+        TextView creditArcade = (TextView)findViewById(R.id.creditArcade);
+        TextView creditTotal = (TextView)findViewById(R.id.creditTotal);
+
+        if (creditGeneral != null) {
+            creditGeneral.setText(appData.getGeneralCredits() != null ? appData.getGeneralCredits() : "0");
+            creditFood.setText(appData.getFoodCredits() != null ? appData.getFoodCredits() : "0");
+            creditTrafficTrack.setText(appData.getTrafficTrackCredits() != null ? appData.getTrafficTrackCredits() : "0");
+            creditTinyTrack.setText(appData.getTinyTrackCredits() != null ? appData.getTinyTrackCredits() : "0");
+            creditTrain.setText(appData.getTrainCredits() != null ? appData.getTrainCredits() : "0");
+            creditArcade.setText(appData.getArcadeCredits() != null ? appData.getArcadeCredits() : "0");
+            creditTotal.setText("Total: " + (appData.getTotalCredits() != null ? appData.getTotalCredits() : "0"));
+        }
+
     }
 
     private void buttonHandler(SDIActions sdiActions){

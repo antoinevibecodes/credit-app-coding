@@ -17,6 +17,7 @@ import com.applications.tinytonwe.drivermodificationappversion2.Common.NfcHelper
 import com.applications.tinytonwe.drivermodificationappversion2.Main.MainActivity;
 import com.applications.tinytonwe.drivermodificationappversion2.R;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Mock.MockServer;
+import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.RealServer;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.Response;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.ServerFactory;
 import com.applications.tinytonwe.drivermodificationappversion2.ServerCommunication.ServerInterface;
@@ -122,6 +123,8 @@ public class KioskHomeActivity extends AppCompatActivity implements TaskListener
             ServerInterface server = ServerFactory.create(this);
             if (server instanceof MockServer) {
                 ((MockServer) server).new GetDriverInformation(true);
+            } else {
+                ((RealServer) server).new GetDriverInformation(true);
             }
         }
     }
